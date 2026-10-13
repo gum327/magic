@@ -1,4 +1,4 @@
-# <Team name>: WACC for <Client firm>
+# Magic: WACC for Chipotle
 
 > **CEO:** fill in every `<...>` below, then commit this file to `main`. It's the plan everyone (and every agent) works from.
 
