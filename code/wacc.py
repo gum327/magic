@@ -10,7 +10,7 @@ then run it and check the numbers make sense before you open a pull request.
 import pandas as pd
 import yfinance as yf
 
-CLIENT = 'TICKER'  # TODO: the client's ticker (the CEO picks it in README.md)
+CLIENT = 'CMG'
 MKT = 'SPY'
 YEARS = 5
 
@@ -18,22 +18,48 @@ YEARS = 5
 def get_returns(ticker, mkt=MKT, years=YEARS):
     """Daily returns for the client and the market over the last `years` years.
     Returns a DataFrame with two columns, named ticker and mkt, and no missing values."""
-    # TODO: yf.download both tickers (auto_adjust=True), keep 'Close', pct_change(), dropna()
-    raise NotImplementedError
+    end = pd.Timestamp.today().normalize()
+    start = end - pd.DateOffset(years=years)
+
+    client = yf.download(ticker, start=start, end=end, auto_adjust=True, progress=False)
+    market = yf.download(mkt, start=start, end=end, auto_adjust=True, progress=False)
+
+    if client.empty or market.empty:
+        raise ValueError(f'No data available for {ticker} or {mkt}.')
+
+    rets = pd.concat(
+        {
+            ticker: client['Close'],
+            mkt: market['Close'],
+        },
+        axis=1,
+    ).pct_change().dropna()
+
+    rets.columns = [ticker, mkt]
+    return rets
 
 
 def estimate_beta(rets, ticker, mkt=MKT):
     """Equity beta: cov(stock, market) / var(market)."""
-    # TODO
-    raise NotImplementedError
+    return rets[ticker].cov(rets[mkt]) / rets[mkt].var()
 
 
 def compute_wacc(beta, a):
     """a is a dict of assumptions: rf, mrp, rd, tax, w_e, w_d.
     Returns a dict with cost_of_equity and wacc (and the inputs), matching the README's columns."""
-    # TODO: cost_of_equity = rf + beta * mrp
-    #       wacc = w_e * cost_of_equity + w_d * rd * (1 - tax)
-    raise NotImplementedError
+    cost_of_equity = a['rf'] + beta * a['mrp']
+    wacc = a['w_e'] * cost_of_equity + a['w_d'] * a['rd'] * (1 - a['tax'])
+
+    return {
+        'rf': a['rf'],
+        'mrp': a['mrp'],
+        'cost_of_equity': cost_of_equity,
+        'rd': a['rd'],
+        'tax': a['tax'],
+        'w_e': a['w_e'],
+        'w_d': a['w_d'],
+        'wacc': wacc,
+    }
 
 
 if __name__ == '__main__':
