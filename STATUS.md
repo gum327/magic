@@ -1,0 +1,7 @@
+# Project status
+
+We chose the traditional post-earnings-announcement-drift question: whether EPS surprises are followed by benchmark-adjusted returns. It is the strongest first step because the proposal identifies the core event-level fields and this version can be tested without assuming transcript access. The pilot uses AAPL, MSFT, TSLA, and NVDA, with SPY as the benchmark, and writes one complete 60-session observation per firm.
+
+The proof of concept generated four real rows from Yahoo Finance. The latest complete event dates were AAPL 2026-07-30, MSFT 2026-07-29, NVDA 2026-05-20, and TSLA 2026-07-22; their 20-session abnormal returns were -9.54%, +22.32%, -6.61%, and -9.02%, respectively. Four newer events were skipped because their 60-session windows were not yet observable. The pipeline, CSV, dashboard skeleton, audit, and five unit tests are in place. The first run exposed that `yfinance` needs `lxml` for earnings-date retrieval; it is now listed in `requirements.txt`. Yahoo data and this four-firm convenience sample still need independent validation, so these numbers are a pipeline check, not a conclusion.
+
+Questions for the project lead: Should the v0 keep SPY arithmetic buy-and-hold abnormal returns, or switch now to Kenneth French factor-adjusted returns? Which historically appropriate firm universe and transcript source should we use for the larger sample, and do we have permission and access to use those transcripts? Should we keep AI sentiment as an explicitly deferred extension until transcript coverage is verified?
