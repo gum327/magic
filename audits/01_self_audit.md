@@ -1,40 +1,83 @@
-# Self-audit: PEAD v0
+# Self-audit: PEAD pilot and revised study
 
-## Scope and reproducibility
+## Current pilot
 
-The pilot covers AAPL, MSFT, TSLA, and NVDA, using the latest available earnings
-event per ticker with a complete 60-trading-session forward window. The pipeline
-retrieves earnings dates, reported and consensus EPS, and auto-adjusted daily
-closing prices from Yahoo Finance through `yfinance`; SPY is the market
-benchmark. Retrieval time and source labels are included in each output row.
-Run `python code/pead_pipeline.py` from the repository root to regenerate
-`outputs/pead_sample.csv`. Yahoo Finance can revise historical estimates and
-coverage, so the CSV records this pull but is not a permanent source archive.
+The pilot covers AAPL, MSFT, TSLA, and NVDA using one latest event per ticker
+with a complete 20-trading-session forward window. It retrieves earnings
+dates, reported and consensus EPS, and auto-adjusted daily closing prices from
+Yahoo Finance through `yfinance`; SPY is the comparison benchmark. Run
+`python code/pead_pipeline.py --as-of 2026-11-06` from the repository root to
+regenerate `outputs/pead_sample.csv`. Yahoo may revise historical estimates
+and coverage, and the CSV is not a permanent source archive.
 
-## Timing and return construction
+The output contains two methods. The SPY comparison is the arithmetic
+difference between adjusted stock and SPY buy-and-hold returns. The new
+factor-proxy method regresses stock excess returns on market excess
+(SPY-BIL), size (IWM-SPY), and value (IWD-IWF) using 252 pre-event daily
+observations. Its announcement reaction is the residual for the first
+tradable session; forward horizons start on the next session and sum daily
+residuals. These are ETF proxies, not official French factors. The four-row
+snapshot retrieved November 6, 2026 has complete 20-session outcomes and one
+incomplete 60-session factor outcome, which remains blank rather than being
+discarded or imputed.
 
-The observation is a firm-earnings announcement. EPS surprise is
-`(reported EPS - consensus EPS) / abs(consensus EPS) * 100`; zero or missing
-estimates are excluded. Adjusted buy-and-hold returns are measured against SPY
-over one, five, twenty, and sixty subsequent trading sessions. Abnormal return
-is the stock return minus the benchmark return, not a factor-model alpha. For
-announcements timestamped at or after 4:00 p.m. Eastern, the baseline is that
-session's close; for earlier or unknown times, the baseline is the prior
-trading session's close. The first post-announcement session is therefore
-included in each forward window. Events lacking a complete 60-session window
-are skipped.
+## Revised target study
 
-## Threats to validity and next checks
+The target is a dated S&P 500 roster as of June 30, 2026, with fiscal-quarter
+ends in calendar Q2 2026. This is a fixed, recent cohort rather than a
+multi-year sample selected from current index members, so the earlier
+long-horizon survivorship criticism does not describe the intended design.
+Use the dated roster, retain departures after the roster date, and document
+any unavailable events. The pilot remains a convenience sample and cannot
+support conclusions about this cohort.
 
-Four well-known firms are a demonstration sample, not a historical universe;
-they introduce severe selection and survivorship bias and cannot support
-statistical conclusions. Yahoo's earnings-date history and consensus EPS
-coverage may be incomplete or revised, and its displayed event timestamps
-should be independently checked before a larger study. The pilot does not
-include Kenneth French factor returns, transaction costs, market
-capitalization controls, or the announced-period abnormal-return series needed
-for a full event study. No transcripts were collected and no AI sentiment
-scores were generated, so the proposed AI extension remains untested. Before
-inference, expand to a historically appropriate universe, verify dates and EPS
-against a second source, add factor-based abnormal returns and out-of-sample
-testing, and audit point-in-time transcript availability.
+The primary outcome is a 20-session cumulative abnormal return after and
+excluding the separately measured announcement-reaction session, estimated
+with ETF proxies for market excess, size, and value; the official Kenneth
+French data lag the newest events. This estimator is implemented and tested
+on the pilot, but not yet run on the target S&P 500 cohort. The proxies
+(SPY-BIL, IWM-SPY, and IWD-IWF) are not official factor portfolios. Use 5- and
+60-session windows as secondary outcomes only when fully observed.
+
+## Transcript and model access
+
+The Seeking Alpha transcript index is publicly viewable, but its current
+terms limit content to personal, non-commercial use and prohibit automated
+retrieval, scraping, and data mining. The team has not downloaded transcripts
+or established permission for research-scale reuse. Publicly visible pages
+are not evidence of reuse rights. Obtain written permission or a suitable
+institutional/explicitly permitted source before collecting or scoring any
+text.
+
+FactSet has an [Academic ID request page](https://support.factset.com/academic/),
+which is a plausible institution-mediated access route. The page itself does
+not establish access to transcripts, coverage, or AI-use rights. The
+course lead/library must verify those entitlements; no transcripts have yet
+been collected.
+
+Quartr's published consumer terms prohibit data-mining tools and limit its
+service content to internal use; third-party furnishing requires written
+approval or another permission provided under the terms. Permission to retain
+transcript text for this project or submit it to an external model is not
+established. Log only coverage and rights metadata in
+`inputs/transcript_access_audit_template.csv` until permission is verified.
+
+Before any AI extension, audit at least 10–20 authorized Q2 2026 calls for
+transcript coverage, event alignment, and usable text. This is a feasibility
+check, not a sufficient prediction sample. Document the model version and its
+provider-documented cutoff; do not claim that the cohort was absent from
+training data based on a published cutoff alone. Keep subsequent returns and
+post-call information out of the scoring process.
+
+## Remaining threats and checks
+
+- Verify point-in-time S&P 500 membership and retain post-roster removals.
+- Independently verify event timestamps and EPS actual/consensus definitions.
+- Account for announcement timing, confounding same-day news, overlapping
+  return windows, and incomplete forward outcomes.
+- If rights and broader transcript coverage are established, compare
+  performance on the same events using an earlier-60%/later-40% chronological
+  split; report transcript coverage and uncertainty, not only a score or
+  p-value. Otherwise, defer the AI predictive comparison.
+- Do not infer strategy profitability from statistical association; the pilot
+  has no transaction-cost model and is not an investment recommendation.

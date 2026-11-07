@@ -1,304 +1,237 @@
 # Beyond the Earnings Surprise
-## Can AI help explain post-earnings stock returns?
+## Do earnings-call signals improve predictions of post-earnings returns?
 
 **A research proposal by Team Magic**  
 Abby Fischler · Gus Maass · Cammy Marks · Michelle Orloff
 
----
+## Research question
 
-### Investment question
+For S&P 500 constituents as of June 30, 2026, do pre-specified signals from
+management's earnings-call language improve chronological holdout prediction
+of 20-trading-session factor-proxy-adjusted returns beyond EPS surprise and
+the announcement reaction for fiscal quarters ending in calendar Q2 2026?
 
-When a public company reports earnings that differ from expectations, do its
-shares continue to earn abnormal returns in the following weeks? And, if
-reliable earnings-call transcripts are available, can language about outlook,
-guidance, and uncertainty help explain which firms keep rising and which
-reverse?
-
-### Executive summary
-
-This project will test for post-earnings announcement drift (PEAD), the
-possibility that stock prices continue moving in the direction of an earnings
-surprise after the initial announcement. We will build an event-level dataset
-that links quarterly earnings announcements to subsequent benchmark-adjusted
-stock returns. The baseline analysis will compare future returns across
-earnings-surprise groups and test whether surprise magnitude predicts
-subsequent returns.
-
-If sufficient, time-aligned transcripts can be obtained, we will extend the
-analysis with consistently defined measures of management sentiment, guidance,
-and uncertainty. This extension will be treated as a separate test, not a
-substitute for the baseline: transcripts may be incomplete, and generated
-scores must not use information that became available after the call.
-
-The deliverable will be a reproducible research pipeline and an interactive
-dashboard that explains the sample, methods, results, and limitations. A
-four-company Yahoo Finance pilot demonstrates the proposed event-level output
-and dashboard flow; it is a feasibility check, not evidence that PEAD exists.
-
-## Why this question matters
-
-Markets react to both reported numbers and investors' expectations. A company
-can exceed its consensus earnings estimate while management describes weaker
-demand or cautious guidance. If prices adjust gradually, that mismatch may
-help explain why some positive surprises are followed by stronger returns
-than others.
-
-The project connects course concepts in return measurement, event studies,
-benchmark adjustment, statistical inference, predictive modeling, and
-out-of-sample evaluation. It also examines a practical question about
-responsible AI use in finance: whether text-derived signals improve
-predictions beyond information already contained in quantitative earnings
-data.
-
-Our primary question is deliberately testable without AI:
-
-> **Do stocks earn abnormal returns after earnings surprises, and does the
-> size or direction of the surprise relate to subsequent returns?**
-
-Our secondary, conditional question is:
-
-> **Among announcements with comparable earnings surprises, do
-> pre-specified measures of earnings-call sentiment, guidance, or uncertainty
-> add out-of-sample predictive value?**
+Post-earnings announcement drift (PEAD) is well established. The project is
+not framed as asking whether positive earnings surprises tend to be followed
+by positive returns. Instead, we will test whether contemporaneous management
+commentary adds predictive value over a quantitative baseline. The surprise-
+only model is necessary as a comparator, not the novel result.
 
 ## Hypotheses
 
-1. **Drift:** Firms with more positive earnings surprises will, on average,
-   have higher subsequent abnormal returns than firms with more negative
-   surprises.
-2. **Information in the call (conditional):** If transcript coverage is
-   sufficient, call signals will improve out-of-sample predictions beyond an
-   earnings-surprise-only baseline.
+1. EPS surprise and the announcement reaction contain information about
+   subsequent abnormal returns, providing a benchmark model.
+2. Among events with authorized, usable transcripts, pre-specified call
+   language measures improve chronological holdout prediction over the same
+   baseline events.
 
-These are hypotheses to test, not assumed findings. Results may be weak,
-unstable, or absent in the proposed sample.
+The second hypothesis is conditional on transcript coverage, reuse rights, and
+reproducible model scoring. We will report null or negative results and will
+not treat these hypotheses as established outcomes.
 
-## Data design
+## Sample and unit of observation
 
-### Unit of observation
+One row represents one S&P 500 company earnings announcement for a fiscal
+quarter ending from April 1 through June 30, 2026. The target universe is the
+dated constituent roster as of June 30, 2026, archived in
+`inputs/sp500_constituents_20260630.csv`. Retain firms that leave the index
+after the roster date. Since this is one recent cohort rather than a multi-year
+sample selected from current constituents, the earlier long-horizon
+survivorship-bias concern does not apply to the target design.
 
-One row represents **one firm's quarterly earnings announcement**. Each row
-links the announcement timestamp and earnings surprise to returns measured
-over specified trading sessions after the information became public.
+Record each company's fiscal-quarter end separately from the public earnings
+release and call dates. Include an event in the quantitative sample when the
+company, earnings data, release timing, and required price/factor data can be
+verified. Record exclusions and missingness by reason. The transcript
+extension uses only events with authorized, time-aligned transcripts; do not
+silently compare it with a different sample.
 
-### Proposed sample
+The existing AAPL/MSFT/TSLA/NVDA sample is a four-company pipeline
+demonstration using Yahoo Finance. It is not representative, is not the target
+sample, and must not be used to claim evidence for either hypothesis.
 
-- **Period:** Announcements from January 2021 through the latest date for
-  which the full 60-trading-session forward-return window is observable.
-- **Universe:** Approximately 100 publicly traded U.S. firms, subject to data
-  availability. We will define the universe using historical membership or a
-  documented point-in-time selection rule where possible, rather than only
-  current index constituents.
-- **Pilot:** A small convenience sample of AAPL, MSFT, TSLA, and NVDA used to
-  validate collection, event timing, return construction, and dashboard
-  behavior. The pilot is not representative and will not be used to claim
-  statistical significance.
+## Data and provenance
 
-An event is included in the baseline analysis if the firm was publicly traded,
-the earnings date and actual and expected EPS can be identified, stock and
-benchmark prices are available around the event, and all required forward
-return windows can be calculated. Events with a missing or zero EPS estimate
-will be excluded from the percentage-surprise measure and counted in the
-coverage audit. For the AI extension, a time-aligned transcript must also be
-available.
-
-### Proposed final dataset
-
-| Field | Definition | Status |
+| Data | Intended use | Status / constraint |
 |---|---|---|
-| `ticker` | Firm identifier | Required |
-| `earnings_timestamp` | Announcement date and time, with time zone | Required |
-| `eps_actual` | Reported quarterly EPS | Required |
-| `eps_estimate` | Consensus EPS estimate for the same quarter | Required |
-| `eps_surprise_pct` | `(actual - estimate) / abs(estimate) * 100` | Required |
-| `announcement_abnormal_return_pct` | Benchmark-adjusted return for the announcement reaction | Required |
-| `abnormal_5d_return_pct` | Benchmark-adjusted return over five post-event sessions | Required |
-| `abnormal_20d_return_pct` | Benchmark-adjusted return over 20 post-event sessions | Required |
-| `abnormal_60d_return_pct` | Benchmark-adjusted return over 60 post-event sessions | Required |
-| `benchmark` | Benchmark or factor model used | Required |
-| `market_cap`, `industry` | Firm controls and grouping variables | Desired |
-| `transcript_id`, `sentiment_score` | Transcript reference and reproducible score | Conditional |
-| `guidance_score`, `uncertainty_score` | Rubric-based management language measures | Conditional |
-| `source`, `retrieved_at` | Provenance and retrieval timestamp | Required |
+| June 30, 2026 S&P 500 roster | Define a fixed point-in-time universe | Archived Wikipedia revision `1361794875` (503 stocks); not an official S&P file |
+| Fiscal quarter, actual and consensus EPS | Define event and surprise | Audit coverage, definitions, revisions, and source |
+| Earnings release/call timestamp | Align the information event to trading sessions | Verify with a second source where possible |
+| Adjusted daily prices | Stock and ETF returns | The current pilot uses Yahoo Finance; validate before scale-up |
+| SPY, BIL, IWM, IWD, IWF adjusted prices | Provisional daily factor proxies | ETF proxies, not official Kenneth French factors |
+| Earnings-call transcript | Construct text measures | Not acquired; access and reuse rights must be confirmed |
+| Model version and rubric | Reproduce transcript measures | Proposed pinned checkpoint `gpt-5.2-2025-12-11`; verify transcript/API terms |
 
-The team will also retain event-level raw inputs, including original EPS
-records, price histories, benchmark or factor returns, timestamp evidence, and
-transcripts where permitted. Processed data and analysis outputs will be
-separate from raw inputs so that transformations can be reviewed and
-reproduced.
+Store source name, retrieval time, source URL or identifier, definitions,
+adjustment settings, and missing-data decisions for each dataset. Do not
+commit licensed data, restricted transcript text, or credentials. Public
+visibility of a transcript does not establish a right to download, retain, or
+use it for model input.
 
-### Sources and collection plan
+### Transcript feasibility
 
-The pilot uses Yahoo Finance through `yfinance` for earnings dates, EPS
-estimates and reports, and adjusted daily prices. This provides a rapid
-prototype, but its historical coverage, consensus definitions, and event
-timestamps need to be independently checked before making research claims.
+Seeking Alpha's transcript index is publicly viewable. Its current terms of
+use limit site content to personal, non-commercial use and prohibit automated
+retrieval, scraping, and data mining. The team has not downloaded transcripts
+or confirmed project-scale reuse permission. Do not scrape Seeking Alpha.
+Request written authorization or verify an institutional license/another
+explicitly permitted source before collecting text. Then audit 10–20 Q2 2026
+calls for coverage, event alignment, and usable content. This audit is a
+feasibility check only, not a sufficient predictive-analysis sample. If
+rights or broader cohort coverage fail, complete the quantitative baseline
+and defer AI sentiment.
 
-For the larger study, we will audit coverage and seek the most consistent
-available sources for historical earnings surprises and announcement times.
-Potential sources include licensed academic/financial databases available
-through the course or institution, company investor-relations releases, and
-other documented public datasets. We will use the Kenneth French Data Library
-for market and risk-factor returns if those factors are selected for the
-abnormal-return model. We will record each field's source, retrieval date,
-definition, and known gaps. We will not imply that data access is secured
-before confirming it.
+Quartr's free mobile app advertises transcripts and in-app AI chat; its
+transcript API and MCP offerings require paid access, and the MCP docs state
+student plans are not eligible. The published
+[mobile-app terms](https://quartr.com/terms-and-conditions) prohibit data
+mining and limit service content to internal use; furnishing it to a third
+party requires prior written approval or other permission under the terms.
+Permission to retain text for this study or send it to an external model is
+not established. Use
+`inputs/transcript_access_audit_template.csv` to log metadata-only coverage
+checks; do not copy transcript text until the applicable rights are confirmed.
+FactSet's Academic ID request process is another route to ask the course
+lead/library about, but transcript access and text-use rights have not been
+confirmed.
 
-### Raw-input organization
+The proposed model checkpoint is `gpt-5.2-2025-12-11`. OpenAI's
+[model documentation](https://developers.openai.com/api/docs/models/gpt-5.2)
+lists a fixed snapshot dated December 11, 2025 and an August 31, 2025
+knowledge cutoff, both before the Q2 2026 cohort. Use the exact snapshot, not a
+floating model alias; record the model ID, API date, prompts, and output
+schema. A published knowledge cutoff is not a complete audit of training
+data, so preserve the snapshot documentation and do not claim stronger
+provenance than the provider states. The model cutoff is distinct from the
+statistical holdout; it does not establish that the LLM's predictions or
+training process are valid for this study.
 
-```text
-data/
-├── raw/
-│   ├── company_universe/
-│   ├── earnings/
-│   ├── prices/
-│   ├── factors/
-│   └── transcripts/       # only where access and terms permit
-├── processed/
-│   ├── events.csv
-│   └── event_returns.csv
-└── sample/
-    └── pilot_events.csv
-outputs/
-├── tables/
-└── figures/
-audits/
-code/
-dashboard/
-```
+## Variables and outcomes
 
-Large or licensed raw files will not be committed to the repository. The
-project will document retrieval and transformation steps so authorized users
-can reproduce the data without redistributing restricted materials.
+### Earnings surprise
 
-## Empirical plan
+The pilot defines percentage EPS surprise as
+`(reported EPS - consensus EPS) / abs(consensus EPS) * 100`. Near-zero
+consensus can make this ratio unstable; report coverage and use a
+pre-specified scaled-surprise alternative when a reliable denominator is
+available. Preserve original actual and consensus values and their sources.
 
-### 1. Validate and construct events
+### Event time
 
-Normalize dates and time zones, match each earnings release to the correct
-trading session, and retain an auditable event record. An announcement after
-the market close is assigned to the next trading session as the first session
-in which investors can trade on the information. Earlier announcements use
-that same session. Unknown or ambiguous release times will be flagged and
-excluded from the primary timing-sensitive analysis, with a sensitivity
-analysis using conservative timing assumptions.
+Use the first trading session in which the public information could be acted
+on. Pre-market releases map to that day's session; after-close releases map to
+the next trading session. Use a documented market-hours convention for
+during-session announcements. Flag ambiguous or unverified times and exclude
+them from the primary analysis, with a sensitivity check under conservative
+timing. Retain the release timestamp and assigned first tradable session.
+Measure the announcement reaction as the close-to-close return ending on that
+first tradable session. The forward 5-, 20-, and 60-session windows begin on
+the following session, so the baseline's announcement-reaction predictor does
+not overlap the return outcome.
 
-### 2. Measure earnings surprises and returns
+### ETF-proxy factor-adjusted return
 
-The pilot computes percentage EPS surprise as
-`(reported EPS - consensus EPS) / abs(consensus EPS)`. Because percentage
-surprises can be unstable when expected EPS is near zero, the larger study
-will report coverage and test a scaled-surprise alternative where data permit.
+The official Kenneth French factor data have a publication lag for the most
+recent events. The provisional daily proxies are:
 
-The pilot reports adjusted buy-and-hold stock return minus SPY buy-and-hold
-return over the same sessions. For the main study, we will compare this
-transparent benchmark-adjusted measure with a factor-adjusted event-study
-measure, estimated using daily market/factor returns over a pre-event window.
-The announcement reaction and subsequent 5-, 20-, and 60-session windows will
-be kept distinct and consistently defined.
+- Market excess: SPY total return minus BIL total return.
+- Size (SMB-like): IWM total return minus SPY total return.
+- Value (HML-like): IWD total return minus IWF total return.
 
-### 3. Test for drift
+These are not the official Fama-French portfolios. Use distribution-adjusted
+daily returns and fit each firm's exposure on 252 pre-event trading-session
+returns ending before the first tradable session. For each post-reaction day,
+calculate abnormal return as stock excess return minus the fitted intercept
+and factor component:
 
-- Sort events into earnings-surprise quintiles and plot average cumulative
-  abnormal returns by group.
-- Compare returns between the highest- and lowest-surprise groups with
-  confidence intervals and appropriate tests of mean differences.
-- Estimate regressions of subsequent abnormal returns on surprise magnitude,
-  adding pre-specified firm and time controls when data support them.
-- Account for repeated observations per firm and common event dates in
-  inference; document the selected standard-error method.
-- Report effect sizes and uncertainty, not only statistical significance.
+`r_stock - r_BIL - alpha - beta_mkt*(r_SPY-r_BIL) - beta_size*(r_IWM-r_SPY) - beta_value*(r_IWD-r_IWF)`
 
-### 4. Evaluate the AI extension
+Sum daily abnormal returns over the 20 sessions after the announcement-
+reaction session. The 5- and 60-session estimates use the same convention and
+are secondary. The current pilot's arithmetic difference between adjusted
+stock and SPY buy-and-hold returns is a transparent pipeline/robustness
+reference, not the factor-adjusted outcome. Record ETF symbols, price source,
+estimation window, and observations used for every fit.
 
-If transcript coverage is verified, use a fixed rubric to score sentiment,
-forward guidance, and uncertainty from the original call text. Preserve
-transcript source, call date, and scoring version. A model or human reviewer
-must not use later stock returns or post-announcement information when
-assigning scores.
-
-Compare a baseline model using earnings surprises and pre-specified controls
-with a model adding transcript measures. Evaluate both chronologically
-out-of-sample using the same events and report performance differences and
-coverage changes. If transcript access or timestamp reliability is inadequate,
-defer this extension rather than fill gaps with invented or selectively
-available scores.
-
-### 5. Robustness and limitations
-
-We will test alternative return windows and abnormal-return specifications,
-inspect sensitivity to event timing, and report how missing observations alter
-the sample. We will discuss overlapping return windows, confounding firm news,
-survivorship and selection bias, measurement error in consensus expectations,
-and the limits of daily prices for isolating the immediate announcement
-reaction. Any strategy interpretation will be separated from statistical
-association and will not be presented as an investment recommendation.
-
-## Dashboard concept
-
-The dashboard is a research explainer, not a trading tool. It will let users
-inspect the sample and methods before exploring the estimated relationships.
-
-```text
-┌─────────────────────────────────────────────────────────────────────┐
-│ BEYOND THE EARNINGS SURPRISE                         Methods | Data │
-│ Do earnings surprises predict post-announcement returns?           │
-├──────────────────┬──────────────────┬───────────────────────────────┤
-│ Events in sample │ Firms             │ Return model                 │
-│ 1,000*            │ ~100*             │ Factor adjusted*             │
-├──────────────────┴──────────────────┴───────────────────────────────┤
-│ FILTERS: date range [2021–latest]  firm [All]  horizon [20 days]    │
-├─────────────────────────────────────┬───────────────────────────────┤
-│ Cumulative abnormal return          │ Surprise vs. future return    │
-│ by earnings-surprise quintile       │ scatter + fitted relationship │
-│                                     │                               │
-│       [line chart with CI bands]     │       [event-level points]    │
-├─────────────────────────────────────┴───────────────────────────────┤
-│ Event explorer: ticker | date | surprise | 5d | 20d | 60d | source  │
-├─────────────────────────────────────────────────────────────────────┤
-│ AI extension (if available) | Model comparison | Limitations        │
-│ Data coverage, timestamp rules, definitions, download/repro steps   │
-└─────────────────────────────────────────────────────────────────────┘
-```
-
-`*` Values shown here are layout placeholders, not results. The pilot
-dashboard currently displays four event rows and an event-level scatter plot;
-the quintile chart and model-comparison panel are for the larger-sample
+As of November 6, 2026, some 60-session windows for the Q2 cohort are not yet
+observable. Keep these outcomes missing until the full window exists; do not
+replace them with zero or require 60 sessions for the 20-session primary
 analysis.
 
-## Feasibility, milestones, and decisions
+## Analysis plan
 
-The four-firm pilot has produced complete event-level rows for the latest
-events with observable 60-session windows. It demonstrates that the pipeline
-and dashboard can be run end to end. Four newer events were skipped because a
-full 60-session forward window was not yet available at retrieval. The pilot's
-Yahoo data have not been independently validated.
+1. Validate the dated constituent roster, fiscal quarter ends, EPS fields,
+   event timestamps, prices, and source coverage before estimating results.
+2. Compute the announcement reaction and 5-, 20-, and 60-session factor-proxy
+   abnormal returns under the same event-time rules.
+3. Describe the sample, exclusions, missingness, EPS-surprise distribution,
+   transcript coverage, and outcome availability.
+4. Fit a baseline prediction model using EPS surprise, announcement reaction,
+   and only pre-specified available controls.
+5. If transcript access and coverage are adequate, score each call with a
+   fixed rubric for sentiment, forward guidance, and uncertainty. Record
+   transcript identifiers, model/checkpoint, prompt or scoring rubric, and
+   score version. The model must not receive later returns or post-call
+   information.
+6. If authorized transcript coverage is adequate, sort events by public
+   announcement timestamp, fit ordinary least squares on the earlier 60%,
+   and evaluate once on the later 40%. The baseline uses EPS surprise and the
+   announcement reaction; the augmented model adds the pre-specified
+   language scores. Compare the models on the same transcript-covered events;
+   do not randomly mix later events into training or tune on the holdout.
+7. Report held-out performance differences, uncertainty, sample size, and
+   coverage changes, including mean absolute error, root mean squared error,
+   and out-of-sample R-squared relative to the training-set outcome mean. The
+   10–20-call feasibility audit is not by itself enough to establish
+   predictive performance. If the usable cohort or holdout is too small for
+   stable inference, label results exploratory or defer them.
+8. Test sensitivity to event timing, alternative return windows, proxy-factor
+   choices, and sample exclusions. Discuss overlapping return windows and
+   contemporaneous confounding news.
 
-The next work is to confirm a suitable larger-sample data source and
-historical universe, audit event-time and EPS coverage, then expand the
-pipeline and analysis. Transcript collection and AI scoring remain conditional
-on coverage, access, and a defensible point-in-time process.
+No trading strategy or profitability claim follows from a predictive
+association. A trading interpretation would require a separately specified
+portfolio, costs, and implementation assumptions.
 
-Key decisions for the project lead are:
+## Output and dashboard
 
-1. Which licensed or public source should be the authoritative source for
-   historical actual/consensus EPS and announcement timestamps?
-2. Is an institutionally accessible historical firm universe available to
-   reduce survivorship bias?
-3. Should the primary abnormal-return model be a factor model, with SPY
-   benchmark-adjusted returns reported as a robustness check?
-4. Are transcripts accessible and permitted for this project, or should the
-   AI extension be formally deferred?
+The deliverable is a reproducible dataset, analysis, and research dashboard
+that makes the sample, factor-proxy definitions, transcript coverage, model
+comparison, and limitations visible. The current Streamlit app is only a
+four-row pilot explorer. It can now display the pilot's ETF-proxy estimates,
+but those four convenience-sample rows are not results for the S&P 500 cohort.
+Do not display placeholder sample sizes.
 
-## Reproducibility
+## Current implementation and next steps
 
-The pilot pipeline, its tests, dashboard, and self-audit are maintained in the
-repository. From the repository root:
+The Yahoo Finance pilot pipeline now computes EPS surprise, SPY
+buy-and-hold abnormal returns, and ETF-proxy factor-adjusted returns with
+252 pre-event observations. It also includes a tested chronological OLS
+comparison helper. The refreshed four-company CSV has complete 20-session
+outcomes and preserves an incomplete 60-session value as missing. The event
+manifest is still empty, so no S&P 500 Q2 cohort output or transcript scores
+exist. FactSet provides an
+[Academic ID request page](https://support.factset.com/academic/), but course
+access to transcripts and associated text-use rights remain unverified.
 
-```bash
-python code/pead_pipeline.py
-streamlit run dashboard/pead_app.py
-```
+Next:
 
-The pilot file is `outputs/pead_sample.csv`. Its small and convenience-based
-nature must be kept visible in any presentation of its values.
+1. Use the archived June 30, 2026 roster in
+   `inputs/sp500_constituents_20260630.csv`; validate its symbols against the
+   chosen event sources.
+2. Ask the course lead/library to check FactSet Academic access and transcript
+   reuse rights, or obtain written permission from another source.
+3. If access is confirmed, audit 10–20 Q2 2026 transcripts and record
+   coverage. Treat this as a feasibility check, not a sufficient model
+   sample; otherwise defer transcript scoring.
+4. Audit EPS, timestamps, stock returns, and ETF coverage for the fixed
+   cohort.
+5. Apply the tested factor-proxy outcome to the verified target cohort. If
+   transcript rights and cohort coverage are adequate, implement the
+   pre-specified chronological 60/40 holdout comparison; otherwise report
+   the AI extension as deferred or exploratory.
+6. Proceed with transcript scoring only if rights, coverage, alignment, and
+   model training cutoff are verified.
+
+See `STATUS.md` for current decisions and open dependencies, and
+`audits/01_self_audit.md` for the pilot's limitations.

@@ -1,61 +1,62 @@
-# Candidate research designs
+# Research design decisions
 
-These are three versions of the question already in the team proposal. Example
-rows from the proposal are hypothetical; the selected design also has a
-separate real-data pilot in `outputs/pead_sample.csv`.
+The project has moved from a broad PEAD question to a specific test of whether
+earnings-call language adds predictive information beyond standard earnings
+metrics.
 
-## 1. PEAD baseline, then an optional AI extension — selected
+## Selected design
 
-- **Question:** Do firms with larger positive EPS surprises earn higher
-  benchmark-adjusted returns over the next 5, 20, and 60 trading sessions?
-  If transcript coverage permits, do earnings-call signals add predictive
-  value?
-- **One final-dataset row:** AAPL, 2026-07-30, actual EPS 2.02, estimate 1.89,
-  surprise +6.88%, 5-session abnormal return -9.93%, 20-session -9.54%,
-  60-session +1.66% (pilot observation; Yahoo Finance).
-- **Inputs:** Earnings dates, actual and consensus EPS, adjusted daily stock
-  prices, and SPY returns; transcripts and AI scores are optional follow-on
-  inputs.
-- **Chart sketch:** Average cumulative abnormal returns by earnings-surprise
-  quintile; for the small pilot, show event-level surprise versus 20-session
-  abnormal return instead of implying meaningful quintiles.
-- **First auditor attack:** Survivorship bias and look-ahead from incorrect
-  announcement timing, revised consensus data, or AI scores generated with
-  information not available at the event.
+- **Question:** Among S&P 500 constituents as of June 30, 2026, do
+  pre-specified earnings-call language signals improve chronological holdout
+  prediction of 20-session factor-proxy-adjusted returns beyond EPS surprise
+  and the announcement reaction for fiscal quarters ending in calendar Q2
+  2026?
+- **Unit:** One firm-quarter announcement.
+- **Sample:** The archived June 30, 2026 Wikipedia revision (`1361794875`,
+  503 stocks; not an official S&P file) and one Q2 2026
+  reporting cohort, subject to verified source coverage. This short,
+  point-in-time cohort avoids the long-horizon current-constituent
+  survivorship problem; keep firms that leave the index after the roster date.
+- **Primary outcome:** Twenty-session cumulative abnormal return after and
+  excluding the separately measured announcement-reaction session, from a
+  three-factor regression using ETF proxies. Report 5- and 60-session windows
+  only when complete.
+- **Baseline:** EPS surprise, announcement reaction, and pre-specified
+  controls.
+- **Extension:** Add fixed, reproducible transcript-language scores only if
+  lawful access and adequate cohort coverage are established. The 10–20-call
+  audit is a feasibility check, not the predictive-analysis sample.
+  Proposed snapshot: `gpt-5.2-2025-12-11` (published before the cohort, with
+  provider-documented August 31, 2025 knowledge cutoff); verify terms and
+  preserve the exact model/version documentation.
+- **Main comparison:** Fit on the earlier 60% of transcript-covered events
+  and evaluate once on the later 40%; compare models on the same events and
+  report coverage differences. Treat results as exploratory if the holdout is
+  too small.
 
-## 2. Do AI call signals add predictive value?
+## Return model
 
-- **Question:** Among announcements with similar EPS surprises, do call
-  sentiment, guidance, or uncertainty scores improve out-of-sample forecasts
-  of 20-session abnormal returns?
-- **One final-dataset row:** AAPL, 2025 Q1, EPS surprise +8.2%, hypothetical AI
-  sentiment 0.75, hypothetical 5-session return +2.1%, 20-session +4.3%, and
-  60-session +6.5% (the proposal's illustrative row, not observed data).
-- **Inputs:** Candidate 1's inputs plus time-stamped transcripts and a
-  documented, reproducible scoring rubric.
-- **Chart sketch:** Chronological out-of-sample predicted versus realized
-  abnormal returns for a surprise-only model and a surprise-plus-AI model.
-- **First auditor attack:** Transcript selection bias, scoring inconsistency,
-  and leakage if the model sees later stock performance or future information.
+The official Kenneth French files lag the newest events. The provisional
+daily ETF proxies are SPY minus BIL (market excess), IWM minus SPY
+(size/SMB-like), and IWD minus IWF (value/HML-like). Estimate factor loadings
+from the 252 trading sessions ending before the first tradable session. Report
+the announcement reaction separately; aggregate daily residuals only over
+forward sessions after that reaction session. Call these ETF proxies, not
+official French factors. The pipeline now emits both this estimate and the
+SPY buy-and-hold pilot comparison.
 
-## 3. Announcement-period reaction to surprise magnitude
+## Transcript sourcing decision
 
-- **Question:** Does the sign or size of an EPS surprise explain the immediate
-  market-adjusted return around the earnings announcement?
-- **One final-dataset row:** AAPL, 2026-07-30, EPS surprise +6.88%, and
-  announcement-period abnormal return -8.07% (pilot observation; Yahoo
-  Finance).
-- **Inputs:** Actual and consensus EPS, verified release dates and times, and
-  daily or intraday stock and benchmark prices.
-- **Chart sketch:** Announcement-period abnormal return by surprise decile,
-  with a zero-return reference line.
-- **First auditor attack:** Imprecise release timestamps can assign the price
-  response to the wrong session; other same-day news can confound the reaction.
+Seeking Alpha exposes a public transcript index, but its current terms prohibit
+automated retrieval and restrict content to personal, non-commercial use.
+Project-scale collection or model use is not authorized by public visibility
+alone. Obtain written permission or use a licensed/explicitly permitted
+provider before collecting. If access is not confirmed, defer AI sentiment
+and complete the quantitative baseline without it.
 
-## Selection
+## Why the question changed
 
-Candidate 1 is the primary design because it directly tests the proposal's
-post-earnings-drift hypothesis and can be built with price and EPS data before
-transcript access is confirmed. Candidate 2 remains conditional on reliable
-transcript coverage. Candidate 3 is a useful near-term comparison, but does not
-answer whether any drift persists after the announcement.
+Whether PEAD exists is not the project's novel contribution. The quantitative
+surprise-only model is a necessary benchmark; the project asks whether
+management's contemporaneous call language improves held-out predictions
+beyond that benchmark.

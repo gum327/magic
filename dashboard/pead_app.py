@@ -8,8 +8,8 @@ import streamlit as st
 DATA_PATH = Path(__file__).resolve().parents[1] / "outputs" / "pead_sample.csv"
 
 st.set_page_config(page_title="Earnings Drift Explorer", layout="wide")
-st.title("Post-Earnings Announcement Drift")
-st.caption("Pilot dataset: earnings surprises and benchmark-adjusted returns")
+st.title("Earnings Surprise and Post-Announcement Returns")
+st.caption("Four-company pilot; not the S&P 500 Q2 2026 study")
 
 if not DATA_PATH.exists():
     st.warning("The sample dataset has not been generated yet.")
@@ -31,23 +31,33 @@ if missing:
     st.stop()
 
 st.warning(
-    "This is a small convenience sample, not a statistically representative test. "
-    "Earnings-call transcripts and AI sentiment scores are not included."
+    "This is a small convenience sample, not a statistically representative test "
+    "or a result for the S&P 500 Q2 2026 cohort."
 )
 
+factor_return = "factor_proxy_abnormal_20d_return_pct"
+has_factor_returns = factor_return in data.columns
+return_column = factor_return if has_factor_returns else "abnormal_20d_return_pct"
 c1, c2, c3 = st.columns(3)
 c1.metric("Firm-event observations", len(data))
 c2.metric("Firms", data["ticker"].nunique())
-c3.metric("Benchmark", ", ".join(data["benchmark"].dropna().unique()))
+c3.metric(
+    "Return method",
+    "ETF factor proxies" if has_factor_returns else ", ".join(data["benchmark"].dropna().unique()),
+)
 
 st.subheader("Earnings surprise vs. 20-session abnormal return")
 st.scatter_chart(
     data,
     x="eps_surprise_pct",
-    y="abnormal_20d_return_pct",
+    y=return_column,
     color="ticker",
     x_label="EPS surprise (%)",
-    y_label="20-session abnormal return (%)",
+    y_label=(
+        "20-session ETF-proxy abnormal return (%)"
+        if has_factor_returns
+        else "20-session SPY buy-and-hold abnormal return (%)"
+    ),
 )
 
 st.subheader("Event-level results")
@@ -58,9 +68,12 @@ st.markdown(
     """
 - Each row is one firm's quarterly earnings announcement.
 - EPS surprise is `(reported EPS - consensus EPS) / abs(consensus EPS)`.
-- Abnormal return is the firm's adjusted buy-and-hold return minus SPY's
-  adjusted buy-and-hold return over the same trading sessions.
-- The announcement window is included in the forward horizons; exact
-  timing rules and data limitations are documented in `audits/01_self_audit.md`.
+- SPY buy-and-hold abnormal return is the firm's adjusted buy-and-hold return
+  minus SPY's return over the same sessions.
+- ETF-proxy abnormal returns use market excess (SPY-BIL), size (IWM-SPY), and
+  value (IWD-IWF) daily returns. The announcement reaction is reported
+  separately; forward horizons start at the following close.
+- ETF proxies are not official Kenneth French factors. See
+  `audits/01_self_audit.md` for assumptions and limitations.
 """
 )
