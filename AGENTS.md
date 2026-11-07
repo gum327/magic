@@ -7,8 +7,7 @@ are documented there and in the audit.
 
 ## Scope and data integrity
 
-- Keep changes limited to the earnings-event study; do not revive the old WACC
-  application or treat its files as project inputs.
+- Keep changes limited to the earnings-event study and its documented inputs.
 - Preserve the pilot as a clearly labeled pipeline check. Do not present its
   four convenience-sample observations as representative findings.
 - The target sample is the S&P 500 roster dated June 30, 2026, with fiscal
