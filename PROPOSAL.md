@@ -97,8 +97,10 @@ unresolved. Microsoft IR displays its Q4 FY2026 transcript; only an initial
 preview was viewed and no text saved. Visa IR lists a transcript for its July
 28 Q3 2026 event, but the direct file and terms are unverified. Amazon's and
 Mastercard's official Q2 event pages list no transcript. No rights-cleared
-transcript has been collected; the 10–20-call coverage audit remains
-incomplete.
+transcript has been collected. The 15-row metadata audit includes five
+additional third-party listing leads (AAPL, GS, MS, INTC, and IBM) whose
+issuer transcript pages and event alignment remain unverified; this is not a
+completed 10–20-call transcript-coverage audit.
 
 Quartr's free mobile app advertises transcripts and in-app AI chat; its
 transcript API and MCP offerings require paid access, and the MCP docs state

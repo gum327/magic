@@ -122,12 +122,15 @@ not been verified. FactSet provides an
 institutional transcript access and reuse terms are unknown. Get written
 authorization or verify an institutional license before obtaining, retaining,
 or submitting transcript text to any model. Seven first-party transcript
-sources are identified, plus a Visa IR transcript listing whose direct file
-has not been verified; none is cleared for this study's retention or model use. No
-10–20-call coverage audit is complete. Track coverage
-and rights checks in `inputs/transcript_access_audit_template.csv`; record
-metadata only until permission is established. Do not commit transcript text
-or other restricted raw data.
+sources are identified (six PDFs and Microsoft's transcript page), plus a
+Visa IR transcript listing whose direct file has not been verified; none is
+cleared for this study's retention or model use. The metadata audit has 15
+candidate-company rows, but it does not establish 10–20-call transcript
+coverage: the five additional rows are unverified third-party listing leads.
+Track coverage and rights checks in
+`inputs/transcript_access_audit_template.csv`; record metadata only until
+permission is established. Do not commit transcript text or other restricted
+raw data.
 
 [Quartr's mobile app](https://quartr.com/products/mobile-app) advertises
 transcripts and in-app AI chat at no cost on mobile, while its transcript API

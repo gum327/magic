@@ -55,7 +55,10 @@ Microsoft IR displays its Q4 call transcript; only the initial preview was
 viewed and no text saved. Thus eight candidate transcript sources are
 identified, but zero are cleared for retention/model input. Amazon's and
 Mastercard's official event pages confirm their Q2 calls but list no
-transcript; third-party listings remain leads only.
+transcript; third-party listings remain leads only. The metadata audit now
+has one row for each of the 15 screened companies. Five rows (AAPL, GS, MS,
+INTC, and IBM) remain third-party search-result leads only; their issuer
+transcript pages and event alignment have not been verified.
 The Microsoft Investor Relations page for [FY26 Q4](https://www.microsoft.com/en-us/Investor/events/FY-2026/earnings-fy-2026-q4)
 confirms a July 29, 2026 call and displays transcript text; only the initial
 preview was viewed, and no transcript text was saved or analyzed. Microsoft's

@@ -56,9 +56,12 @@ Visa IR lists a transcript link for its July 28 Q3 2026 event, but its direct
 file and terms are unverified. Microsoft's website terms generally restrict
 copying and do not establish research-retention or external-model rights. See
 `inputs/transcript_candidate_screen_q2_2026.csv` and
-`inputs/transcript_access_audit_template.csv`. Public visibility is not
-evidence of reuse rights; obtain written permission or a suitable
-institutional/explicitly permitted source before collecting or scoring text.
+`inputs/transcript_access_audit_template.csv`. The metadata audit has 15
+company rows, including five unverified third-party listing leads (AAPL, GS,
+MS, INTC, and IBM); it does not establish 10–20-call transcript coverage.
+Public visibility is not evidence of reuse rights; obtain written permission
+or a suitable institutional/explicitly permitted source before collecting or
+scoring text.
 
 FactSet has an [Academic ID request page](https://support.factset.com/academic/),
 which is a plausible institution-mediated access route. The page itself does
