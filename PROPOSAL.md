@@ -81,8 +81,8 @@ feasibility check only, not a sufficient predictive-analysis sample. If
 rights or broader cohort coverage fail, complete the quantitative baseline
 and defer AI sentiment.
 
-A November 7, 2026 metadata screen identified 15 candidate listing leads in
-`inputs/transcript_candidate_screen_q2_2026.csv`; these do not constitute 15
+A November 7, 2026 metadata screen identified 16 candidate-company rows in
+`inputs/transcript_candidate_screen_q2_2026.csv`; these do not constitute 16
 verified transcripts. The Microsoft Investor Relations page for
 [FY26 Q4](https://www.microsoft.com/en-us/Investor/events/FY-2026/earnings-fy-2026-q4)
 confirms the July 29, 2026 call and displays transcript text. Only an initial
@@ -94,13 +94,20 @@ Coca-Cola, JPMorganChase, Meta, and Netflix through IR/Q4CDN pages or indexed
 first-party links. The PDFs were opened or their direct URLs verified, but
 transcript text was not reviewed or retained, and reuse rights remain
 unresolved. Microsoft IR displays its Q4 FY2026 transcript; only an initial
-preview was viewed and no text saved. Visa IR lists a transcript for its July
-28 Q3 2026 event, but the direct file and terms are unverified. Amazon's and
-Mastercard's official Q2 event pages list no transcript. No rights-cleared
-transcript has been collected. The 15-row metadata audit includes five
-additional third-party listing leads (AAPL, GS, MS, INTC, and IBM) whose
-issuer transcript pages and event alignment remain unverified; this is not a
-completed 10–20-call transcript-coverage audit.
+preview was viewed and no text saved. Visa's IR event page links its July 28
+Q3 2026 transcript PDF directly; the PDF was not opened and reuse rights
+remain unknown. Citigroup's [official quarterly earnings page](https://www.citigroup.com/global/investors/quarterly-earnings)
+links its [July 14 Q2 transcript PDF](https://www.citigroup.com/rcs/citigpa/storage/public/2026psqtr2-transcript.pdf);
+only the PDF metadata was inspected, no transcript text was extracted or
+retained, and rights remain unresolved. Amazon's and
+Mastercard's official Q2 event pages list no
+transcript. Goldman Sachs, Morgan Stanley, and IBM Q2 call pages were also
+checked and list no transcript. Intel search results show unverified
+third-party leads; its issuer transcript page was not verified. No
+rights-cleared transcript has been collected. AAPL and Intel remain
+unverified at the issuer/source level, and the third-party transcript leads
+for GS, MS, and IBM remain unverified. This is not a completed 10–20-call
+transcript-coverage audit.
 
 Quartr's free mobile app advertises transcripts and in-app AI chat; its
 transcript API and MCP offerings require paid access, and the MCP docs state

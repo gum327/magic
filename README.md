@@ -96,10 +96,10 @@ that a reporting date automatically corresponds to a calendar Q2 fiscal end.
 Seeking Alpha's transcript index is publicly viewable, but its current terms
 limit use to personal, non-commercial purposes and prohibit automated
 retrieval, scraping, and data mining. Do not scrape it. A November 7, 2026
-metadata screen found 15 candidate listing leads; see
-`inputs/transcript_candidate_screen_q2_2026.csv`. They are not 15 verified or
+metadata screen found 16 candidate-company rows; see
+`inputs/transcript_candidate_screen_q2_2026.csv`. They are not 16 verified or
 rights-cleared transcripts. First-party transcript PDFs have been located for
-Alphabet, Bank of America, Coca-Cola, JPMorganChase, Meta, and Netflix through
+Alphabet, Bank of America, Citigroup, Coca-Cola, JPMorganChase, Meta, and Netflix through
 their IR/Q4CDN pages or indexed first-party links. They were opened or their
 direct URLs verified, but transcript text was not reviewed or retained and
 reuse/model rights remain unverified. Microsoft IR displays its Q4 FY2026
@@ -115,18 +115,26 @@ Quartr's [mobile-app terms](https://a.storyblok.com/f/182663/x/49876bbd8f/terms-
 prohibit data-mining tools and restrict service content to internal use;
 furnishing it to a third party requires prior written approval or another
 express permission in the terms. Whether an external model or this course
-research is permitted has not been confirmed. Visa's IR listing shows a
-transcript for its July 28 Q3 2026 event, but the direct file and terms have
-not been verified. FactSet provides an
+research is permitted has not been confirmed. Visa's IR event page links the transcript PDF for its July 28 Q3 2026 event;
+the PDF was not opened and rights remain unknown. Citigroup's official
+quarterly earnings page links its July 14 Q2 transcript PDF; only the PDF
+metadata was inspected, not transcript text, and retention/model rights remain
+unresolved. Official Goldman Sachs,
+Morgan Stanley, and IBM event pages confirm Q2 calls but list no transcript.
+Intel search results identify a third-party transcript listing, but neither
+an Intel transcript page nor the destination transcript page was verified.
+FactSet provides an
 [Academic ID request page](https://support.factset.com/academic/), but actual
 institutional transcript access and reuse terms are unknown. Get written
 authorization or verify an institutional license before obtaining, retaining,
-or submitting transcript text to any model. Seven first-party transcript
-sources are identified (six PDFs and Microsoft's transcript page), plus a
-Visa IR transcript listing whose direct file has not been verified; none is
-cleared for this study's retention or model use. The metadata audit has 15
+or submitting transcript text to any model. Nine first-party source links
+are identified (eight transcript PDFs and Microsoft's transcript page),
+including Citi's Q2 and Visa's Q3 2026 PDFs linked from their IR pages. No
+source is cleared for this study's retention or model use. The metadata audit has 16
 candidate-company rows, but it does not establish 10–20-call transcript
-coverage: the five additional rows are unverified third-party listing leads.
+coverage: AAPL and Intel remain unverified at the issuer/source level; third-
+party transcript leads for GS, MS, and IBM remain unverified even though their
+issuer call pages have been checked.
 Track coverage and rights checks in
 `inputs/transcript_access_audit_template.csv`; record metadata only until
 permission is established. Do not commit transcript text or other restricted
