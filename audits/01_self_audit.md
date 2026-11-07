@@ -45,14 +45,16 @@ The Seeking Alpha transcript index is publicly viewable, but its current
 terms limit content to personal, non-commercial use and prohibit automated
 retrieval, scraping, and data mining. Do not scrape it. A November 7, 2026
 metadata screen found 15 candidate listing leads; these are not verified
-transcripts or cleared coverage. A first-party JPMorganChase 2Q26 earnings
-transcript PDFs for JPMorganChase Q2 2026 and Meta Q2 2026 are verified at
-their issuer/IR CDN URLs. Both were opened in a browser, but transcript text
-was not reviewed or retained and rights remain unknown. One Microsoft Investor Relations page
-confirms its July 29, 2026 call and displays transcript text; only an initial
-preview was viewed, and no text was saved or analyzed. Microsoft's website
-terms generally restrict copying and do not establish research-retention or
-external-model rights. See
+transcripts or cleared coverage. First-party transcript PDFs have been
+located for Alphabet, Bank of America, Coca-Cola, JPMorganChase, Meta, and
+Netflix through IR/Q4CDN pages or indexed first-party links. They were opened
+or their direct URLs verified, but their
+text was not reviewed or retained and rights remain unknown. A Microsoft
+Investor Relations page confirms its July 29, 2026 call and displays transcript
+text; only an initial preview was viewed, and no text was saved or analyzed.
+Visa IR lists a transcript link for its July 28 Q3 2026 event, but its direct
+file and terms are unverified. Microsoft's website terms generally restrict
+copying and do not establish research-retention or external-model rights. See
 `inputs/transcript_candidate_screen_q2_2026.csv` and
 `inputs/transcript_access_audit_template.csv`. Public visibility is not
 evidence of reuse rights; obtain written permission or a suitable

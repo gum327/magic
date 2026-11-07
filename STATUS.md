@@ -45,13 +45,17 @@ from a transcript provider.
 
 A focused metadata screen on November 7, 2026 identified 15 S&P-roster
 candidate listings in `inputs/transcript_candidate_screen_q2_2026.csv`.
-These are not 15 verified or rights-cleared transcripts. Two first-party
-transcript PDFs have been verified: JPMorganChase's 2Q26 PDF and Meta's Q4CDN
-PDF linked/indexed with Meta IR materials. Both PDFs were opened in a browser,
-but their transcript text was not reviewed or retained; retention and
-external-model rights are unknown. Amazon's official event page confirms its
-July 30 call but lists a webcast, release, and slides—not a transcript. Its
-third-party transcript listings remain leads only.
+These are not 15 verified or rights-cleared transcripts. Six first-party
+transcript PDFs have been located through issuer IR/Q4CDN pages or indexed
+first-party links: Alphabet, Bank of America, Coca-Cola, JPMorganChase, Meta,
+and Netflix. Their text was not reviewed or retained; retention and
+external-model rights remain unknown. Visa IR also lists a transcript for its
+Q3 2026 call, but the direct document URL and terms have not been verified.
+Microsoft IR displays its Q4 call transcript; only the initial preview was
+viewed and no text saved. Thus eight candidate transcript sources are
+identified, but zero are cleared for retention/model input. Amazon's and
+Mastercard's official event pages confirm their Q2 calls but list no
+transcript; third-party listings remain leads only.
 The Microsoft Investor Relations page for [FY26 Q4](https://www.microsoft.com/en-us/Investor/events/FY-2026/earnings-fy-2026-q4)
 confirms a July 29, 2026 call and displays transcript text; only the initial
 preview was viewed, and no transcript text was saved or analyzed. Microsoft's
@@ -59,7 +63,8 @@ preview was viewed, and no transcript text was saved or analyzed. Microsoft's
 restrict copying and do not establish permission to retain this transcript or
 submit it to an external model. Intel search results identify a Seeking Alpha
 transcript listing, but no transcript source page was opened and no text was
-retained. The attached
+retained. Candidate listings and first-party materials are itemized in the
+screen and metadata audit files. The attached
 [Quartr B2C terms PDF](https://a.storyblok.com/f/182663/x/49876bbd8f/terms-of-service-quartr-b2c-version-2025-11-27.pdf)
 is the November 27, 2025 version; as already noted, its terms do not establish
 permission to retain transcripts for this study or send them to an external

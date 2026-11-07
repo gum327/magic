@@ -89,15 +89,16 @@ confirms the July 29, 2026 call and displays transcript text. Only an initial
 preview was viewed; no transcript text was retained or analyzed. Microsoft's
 [website terms](https://www.microsoft.com/en-us/legal/terms-of-use) generally
 restrict copying and do not establish permission for study retention or
-external-model input. First-party transcript PDFs for JPMorganChase Q2 2026
-and Meta Q2 2026 have been verified at their
-[JPMorganChase](https://www.jpmorganchase.com/content/dam/jpmc/jpmorgan-chase-and-co/investor-relations/documents/quarterly-earnings/2026/2nd-quarter/2Q26-earnings-transcript.pdf)
-and
-[Meta/Q4CDN](https://s21.q4cdn.com/399680738/files/doc_financials/2026/q2/META-Q2-2026-Earnings-Call-Transcript.pdf)
-URLs. Both PDFs were opened in a browser, but no transcript text was reviewed
-or retained, and reuse rights remain unresolved. Amazon's official event page
-lists no transcript. No rights-cleared transcript has been collected; the
-10–20-call coverage audit remains incomplete.
+external-model input. First-party transcript PDFs have been located for Alphabet, Bank of America,
+Coca-Cola, JPMorganChase, Meta, and Netflix through IR/Q4CDN pages or indexed
+first-party links. The PDFs were opened or their direct URLs verified, but
+transcript text was not reviewed or retained, and reuse rights remain
+unresolved. Microsoft IR displays its Q4 FY2026 transcript; only an initial
+preview was viewed and no text saved. Visa IR lists a transcript for its July
+28 Q3 2026 event, but the direct file and terms are unverified. Amazon's and
+Mastercard's official Q2 event pages list no transcript. No rights-cleared
+transcript has been collected; the 10–20-call coverage audit remains
+incomplete.
 
 Quartr's free mobile app advertises transcripts and in-app AI chat; its
 transcript API and MCP offerings require paid access, and the MCP docs state

@@ -98,17 +98,15 @@ limit use to personal, non-commercial purposes and prohibit automated
 retrieval, scraping, and data mining. Do not scrape it. A November 7, 2026
 metadata screen found 15 candidate listing leads; see
 `inputs/transcript_candidate_screen_q2_2026.csv`. They are not 15 verified or
-rights-cleared transcripts. First-party transcript PDFs for
-[JPMorganChase 2Q26](https://www.jpmorganchase.com/content/dam/jpmc/jpmorgan-chase-and-co/investor-relations/documents/quarterly-earnings/2026/2nd-quarter/2Q26-earnings-transcript.pdf)
-and [Meta Q2 2026](https://s21.q4cdn.com/399680738/files/doc_financials/2026/q2/META-Q2-2026-Earnings-Call-Transcript.pdf)
-are verified at their IR/Q4CDN URLs and were opened in a browser, but their
-text was not reviewed or retained and reuse/model rights remain unverified.
+rights-cleared transcripts. First-party transcript PDFs have been located for
+Alphabet, Bank of America, Coca-Cola, JPMorganChase, Meta, and Netflix through
+their IR/Q4CDN pages or indexed first-party links. They were opened or their
+direct URLs verified, but transcript text was not reviewed or retained and
+reuse/model rights remain unverified. Microsoft IR displays its Q4 FY2026
+transcript; only the initial preview was viewed and no text was saved.
 [Amazon's official event page](https://ir.aboutamazon.com/events/event-details/2026/Q2-2026-Amazoncom-Inc-Earnings-Conference-Call/default.aspx)
-confirms a July 30 call but lists no transcript. One
-official Microsoft Investor Relations page for
-[FY26 Q4](https://www.microsoft.com/en-us/Investor/events/FY-2026/earnings-fy-2026-q4)
-was opened and confirms the July 29, 2026 call; an initial transcript preview
-was visible, but no text was saved or analyzed. Microsoft's
+and [Mastercard's official event page](https://investor.mastercard.com/events-and-presentations/events/event-details/2026/Q2-2026-Mastercard-Inc-Earnings-Conference-Call/default.aspx)
+confirm their Q2 calls but list no transcript. Microsoft's
 [website terms](https://www.microsoft.com/en-us/legal/terms-of-use) generally
 restrict copying and do not establish project-retention or external-model
 permission. Seeking Alpha's public transcript listings are not a lawful
@@ -117,12 +115,16 @@ Quartr's [mobile-app terms](https://a.storyblok.com/f/182663/x/49876bbd8f/terms-
 prohibit data-mining tools and restrict service content to internal use;
 furnishing it to a third party requires prior written approval or another
 express permission in the terms. Whether an external model or this course
-research is permitted has not been confirmed. FactSet provides an
+research is permitted has not been confirmed. Visa's IR listing shows a
+transcript for its July 28 Q3 2026 event, but the direct file and terms have
+not been verified. FactSet provides an
 [Academic ID request page](https://support.factset.com/academic/), but actual
 institutional transcript access and reuse terms are unknown. Get written
 authorization or verify an institutional license before obtaining, retaining,
-or submitting transcript text to any model. No rights-cleared transcript has
-been collected, and no 10–20-call coverage audit is complete. Track coverage
+or submitting transcript text to any model. Seven first-party transcript
+sources are identified, plus a Visa IR transcript listing whose direct file
+has not been verified; none is cleared for this study's retention or model use. No
+10–20-call coverage audit is complete. Track coverage
 and rights checks in `inputs/transcript_access_audit_template.csv`; record
 metadata only until permission is established. Do not commit transcript text
 or other restricted raw data.
