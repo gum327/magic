@@ -1,48 +1,27 @@
-# Repository instructions
+# Rules for this repo (humans and coding agents)
 
-Read `README.md`, `STATUS.md`, and the relevant proposal/audit before changing
-the research design or data pipeline. README is the project plan; the
-event-level output is not considered final until its definitions and sources
-are documented there and in the audit.
+Coding agents (Codex, Claude Code, Copilot) read this file before they work. Humans should too.
 
-## Scope and data integrity
+## The project
 
-- Keep changes limited to the earnings-event study and its documented inputs.
-- Preserve the pilot as a clearly labeled pipeline check. Do not present its
-  four convenience-sample observations as representative findings.
-- The target sample is the S&P 500 roster dated June 30, 2026, with fiscal
-  quarters ending in calendar Q2 2026. Never substitute current constituents
-  without documenting the date and selection rule.
-- Distinguish the existing SPY buy-and-hold abnormal returns from the planned
-  ETF-proxy factor-adjusted outcome. Do not label ETF proxies as official
-  Kenneth French factors.
-- Preserve missing, incomplete, or inaccessible observations explicitly;
-  never turn them into zero or silently imply full coverage.
-- Record sources, retrieval dates, timestamp assumptions, units, and
-  transformations. Do not invent data, access, or permissions.
+`README.md` is the plan. Read it first. The output contract is the table of columns for `outputs/wacc.csv`. Don't change those columns unless the README changes first.
 
-## Transcripts and restricted data
+## Git
 
-- Do not scrape Seeking Alpha or bypass access controls. Its current terms
-  prohibit automated retrieval and restrict reuse; obtain written permission
-  before project-scale use.
-- For any other transcript provider, check the applicable user/API terms
-  before copying, retaining, or sending transcript text to a separate model.
-- Do not commit transcript text, licensed data, credentials, or other
-  restricted raw material. Store only data the team is authorized to retain.
-- Keep AI scoring reproducible: version the model and prompt/rubric, document
-  its training-data cutoff, and prevent later information or returns from
-  entering the score.
+- **Never commit directly to `main`.** Work in your own branch (see the README's roles table), then open a pull request.
+- **Never force-push** (`git push --force`) and never rewrite shared history (`git reset --hard` on a pushed branch, `git rebase` of a shared branch) without a human's OK. Those can erase a teammate's work.
+- Commit small, logical steps with messages that say what changed ("Estimate beta from 5y daily returns", not "update").
+- Before you start work each session: `git switch main`, `git pull`, then `git switch <your-branch>` and `git merge main`.
+- Only edit the files your role owns. If you need a change in someone else's file, ask them (or open an issue).
 
-## Development
+## Code
 
-- Work on the assigned feature branch; never commit directly to `main`, force
-  push, or rewrite shared history without approval.
-- Run all commands from the repository root and use relative paths.
-- Keep the dashboard presentation-only: data collection and estimation belong
-  in the pipeline, not in Streamlit code.
-- Add assertions or tests for data contracts and silent failure risks.
-- Run the smallest relevant test suite after a change. The pilot tests run
-  with `python -m unittest discover -s tests`.
-- The supported dashboard entry point is
-  `streamlit run dashboard/pead_app.py`.
+- Relative paths only (`inputs/assumptions.csv`), never `C:/Users/...`.
+- In `inputs/assumptions.csv`, keep every `source` in double quotes. Sources often contain commas, and an unquoted comma breaks the file for `wacc.py` and the app.
+- Run everything from the repo root.
+- Keep `app.py` light: it only reads files from `outputs/` and `inputs/`. No downloads and no model estimation inside the app.
+- Add checks (`assert`) for things that would silently break the answer: missing returns, weights that don't sum to 1, a WACC outside 0–25%.
+
+## Secrets
+
+- **Never commit an API key.** Keys go in `.env` (already in `.gitignore`) or in Streamlit's secrets. This project shouldn't need any.
