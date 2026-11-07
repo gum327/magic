@@ -1,182 +1,123 @@
-# Team Magic: Earnings Calls and Post-Earnings Returns
+Beyond the Earnings Surprise: Can AI Predict Post-Earnings Stock Returns?
 
-## Project question
+Team Magic: Abby Fischler, Gus Maass, Cammy Marks, Michelle Orloff FIN 331: Data Science & AI for Finance, Lehigh University, Fall 2026
 
-For S&P 500 companies reporting fiscal quarters that ended in calendar Q2
-2026, do pre-specified signals from earnings-call language improve
-chronological holdout prediction of 20-trading-session factor-proxy-adjusted
-returns beyond EPS surprise and the announcement reaction?
+Dashboard: <link to Streamlit app or GitHub Page>
+Dashboard code: dashboard/app.py
+Presentation: presentation/
 
-Post-earnings announcement drift (PEAD) is established in prior research, so
-the project is not premised on rediscovering that positive surprises predict
-positive returns. The contribution we will test is whether information in
-management commentary adds useful predictive value beyond conventional
-earnings data.
+Status: v0 (Checkpoint 2). The pipeline runs end to end on a small sample. Numbers in outputs/ are preliminary until Checkpoint 3 (full sample).
 
-## Scope and design
+The question
 
-- **Observation:** One company-quarter earnings announcement.
-- **Universe:** S&P 500 constituents as of June 30, 2026, using a dated
-  constituent list. The archived [snapshot CSV](inputs/sp500_constituents_20260630.csv)
-  contains 503 listed stocks from the Wikipedia revision made June 30, 2026
-  (revision `1361794875`); this is a point-in-time research roster, not an
-  official S&P file. Keep that roster fixed for the cohort.
-- **Earnings cohort:** Fiscal-quarter end dates from April 1 through June 30,
-  2026, with the corresponding earnings calls and announcements. Record both
-  the fiscal period end and public announcement timestamp.
-- **Primary outcome:** Cumulative abnormal return over the 20 full trading
-  sessions after the announcement-reaction session, estimated with three
-  ETF-based factor proxies. Keep the announcement reaction separate from
-  those forward sessions. The pipeline now computes these proxies for the
-  four-company pilot; that convenience sample is still not the target study.
-- **Later outcomes:** Report 5- and 60-session estimates as secondary results
-  when complete forward windows are available. Do not treat not-yet-observed
-  returns as zero or silently drop them.
-- **Transcript/AI extension:** Compare a surprise-and-reaction baseline with
-  a model adding pre-specified call-language scores. The proposed scoring
-  checkpoint is `gpt-5.2-2025-12-11`, published before the cohort; its
-  [official documentation](https://developers.openai.com/api/docs/models/gpt-5.2)
-  lists an August 31, 2025 knowledge cutoff. Use this pinned snapshot, not a
-  floating alias, and verify provider availability and transcript/API terms
-  before use. A 10–20-call audit is only a feasibility check, not enough by
-  itself to support the predictive comparison. Include the extension only if
-  rights and adequate coverage are verified.
+Do stocks keep drifting in the direction of an earnings surprise after the announcement (post-earnings announcement drift, or PEAD), and does an AI reading of the earnings call predict those returns better than the surprise alone?
 
-### Prediction test
+Hypotheses
 
-The target is one reporting cohort, so the planned holdout is chronological
-within that cohort: sort eligible events by public earnings timestamp, fit on
-the earlier 60%, and evaluate once on the later 40%. Use the same
-transcript-covered events for the baseline and language-augmented model; do
-not tune on the holdout. If transcript coverage or the resulting samples are
-too small for a meaningful comparison, report the language analysis as
-exploratory or defer it. A model's published knowledge cutoff does not prove
-that specific events were absent from its training data.
+Positive EPS (earnings per share) surprises are followed by positive abnormal returns over the next 5, 20, and 60 trading days; negative surprises by negative ones.
+AI-scored management tone adds predictive power. A beat with cautious commentary (e.g. lowered guidance) should drift less than a beat with confident commentary.
+The output: one row per firm-earnings announcement
 
-Use ordinary least squares for both models. The baseline uses EPS surprise
-and the announcement reaction; the augmented model adds the pre-specified
-language scores. Compare mean absolute error, root mean squared error, and
-out-of-sample R-squared relative to the training-set outcome mean. The helper
-`compare_chronological_predictions` in `code/pead_pipeline.py` enforces a
-shared complete-case sample and returns holdout predictions and metrics.
+code/05_build_dataset.py writes outputs/final_dataset.csv. This column list is the contract between the data, analysis, and dashboard code. Do not rename or drop a column without updating this table first.
 
-### Provisional ETF factor proxies
+column	meaning
+ticker	company ticker
+fiscal_qtr	fiscal quarter reported (e.g. 2025Q1)
+announce_ts	announcement timestamp (US/Eastern)
+timing	BMO (before market open) or AMC (after market close)
+day0	first trading day the market could react: same day if BMO, next trading day if AMC
+eps_actual, eps_est	reported EPS and consensus estimate as of the announcement
+surprise_pct	(eps_actual − eps_est) / abs(eps_est)
+surprise_quintile	1 (worst) to 5 (best), sorted within each calendar quarter
+car_ann	cumulative abnormal return, days −1 to +1 (the announcement reaction)
+car_5, car_20, car_60	cumulative abnormal return, day +2 through +6, +21, +61 (the drift)
+mktcap	market cap on day −2, in $ millions
+ai_sentiment, ai_guidance, ai_uncertainty	AI scores from the call transcript (blank if no transcript)
 
-The official Kenneth French factor files are not current enough for the newest
-events. Until those files become available, the proposed daily proxy series
-are:
+Abnormal return = stock return − market return (SPY). Fama-French factor-adjusted returns are a robustness check.
 
-- Market excess return: SPY total return minus BIL total return.
-- Size (SMB-like): IWM total return minus SPY total return.
-- Value (HML-like): IWD total return minus IWF total return.
+data/sample/final_dataset_FAKE.csv has the same columns with made-up numbers so the dashboard can be built before real data exists.
 
-These are ETF-based proxies, not Kenneth French factors. Estimate event-level
-loadings on the 252 trading sessions before each announcement-reaction
-session, then sum daily regression residuals over the subsequent outcome
-window. The announcement reaction is reported separately. Record the ETF
-series, estimation window, and missing-data rules; report SPY buy-and-hold
-abnormal returns as a robustness comparison.
-
-## Data and access
-
-The existing four-company Yahoo Finance sample validates event timing, return
-construction, and the dashboard only. It is not representative and is not
-evidence for the research question. Larger-sample sources for point-in-time
-index membership, EPS actuals/consensus, event timestamps, prices, and ETF
-returns still require coverage checks and source documentation.
-
-The dated S&P 500 roster is saved in `inputs/sp500_constituents_20260630.csv`.
-Yahoo Finance's earnings-date history does not reliably identify fiscal
-period ends or provide a preserved point-in-time consensus record. Build the
-target cohort from the verified event manifest
-`inputs/q2_2026_events_template.csv`; each event needs a fiscal period end,
-release timestamp, actual/consensus EPS, and source references. Do not infer
-that a reporting date automatically corresponds to a calendar Q2 fiscal end.
-
-Seeking Alpha's transcript index is publicly viewable, but its current terms
-limit use to personal, non-commercial purposes and prohibit automated
-retrieval, scraping, and data mining. Do not scrape it. A November 7, 2026
-metadata screen found 15 candidate listing leads; see
-`inputs/transcript_candidate_screen_q2_2026.csv`. They are not 15 verified or
-rights-cleared transcripts. First-party transcript PDFs for
-[JPMorganChase 2Q26](https://www.jpmorganchase.com/content/dam/jpmc/jpmorgan-chase-and-co/investor-relations/documents/quarterly-earnings/2026/2nd-quarter/2Q26-earnings-transcript.pdf)
-and [Meta Q2 2026](https://s21.q4cdn.com/399680738/files/doc_financials/2026/q2/META-Q2-2026-Earnings-Call-Transcript.pdf)
-are verified at their IR/Q4CDN URLs and were opened in a browser, but their
-text was not reviewed or retained and reuse/model rights remain unverified.
-[Amazon's official event page](https://ir.aboutamazon.com/events/event-details/2026/Q2-2026-Amazoncom-Inc-Earnings-Conference-Call/default.aspx)
-confirms a July 30 call but lists no transcript. One
-official Microsoft Investor Relations page for
-[FY26 Q4](https://www.microsoft.com/en-us/Investor/events/FY-2026/earnings-fy-2026-q4)
-was opened and confirms the July 29, 2026 call; an initial transcript preview
-was visible, but no text was saved or analyzed. Microsoft's
-[website terms](https://www.microsoft.com/en-us/legal/terms-of-use) generally
-restrict copying and do not establish project-retention or external-model
-permission. Seeking Alpha's public transcript listings are not a lawful
-permission substitute; do not scrape or retain its content.
-Quartr's [mobile-app terms](https://a.storyblok.com/f/182663/x/49876bbd8f/terms-of-service-quartr-b2c-version-2025-11-27.pdf)
-prohibit data-mining tools and restrict service content to internal use;
-furnishing it to a third party requires prior written approval or another
-express permission in the terms. Whether an external model or this course
-research is permitted has not been confirmed. FactSet provides an
-[Academic ID request page](https://support.factset.com/academic/), but actual
-institutional transcript access and reuse terms are unknown. Get written
-authorization or verify an institutional license before obtaining, retaining,
-or submitting transcript text to any model. No rights-cleared transcript has
-been collected, and no 10–20-call coverage audit is complete. Track coverage
-and rights checks in `inputs/transcript_access_audit_template.csv`; record
-metadata only until permission is established. Do not commit transcript text
-or other restricted raw data.
-
-[Quartr's mobile app](https://quartr.com/products/mobile-app) advertises
-transcripts and in-app AI chat at no cost on mobile, while its transcript API
-and MCP require paid or Pro access. The published app terms do not establish
-permission to retain transcript text or send it to a separate model. This is a
-possible source to ask about, but neither a systematic coverage audit nor
-research use is confirmed by the published terms.
-
-## Repository guide
-
-- `Magic_TeamProposal.ipynb` — project proposal and revised research design.
-- `PROPOSAL.md` — detailed sample, methods, and validation plan.
-- `STATUS.md` — decisions, completed work, and open dependencies.
-- `code/pead_pipeline.py` — current small Yahoo Finance pilot pipeline.
-- `outputs/pead_sample.csv` — four-firm pilot output; not the final sample.
-- `inputs/q2_2026_events_template.csv` — required verified event-manifest
-  columns; currently unpopulated.
-- `inputs/transcript_access_audit_template.csv` — metadata-only transcript
-  coverage and rights log; do not store transcript text here.
-- `inputs/transcript_candidate_screen_q2_2026.csv` — preliminary, metadata-only
-  screen of transcript listing leads; not verified coverage or permission.
-- `dashboard/pead_app.py` — pilot Streamlit dashboard.
-- `audits/01_self_audit.md` — current pilot limitations and validation needs.
-- `tests/test_pead_pipeline.py` — pipeline unit tests.
-
-## Run the pilot
-
-Run commands from the repository root:
-
-```bash
+How to run it
+bash
 pip install -r requirements.txt
-python code/pead_pipeline.py --as-of 2026-11-06
-python -m unittest discover -s tests
-streamlit run dashboard/pead_app.py
-```
+python run_all.py              # rebuilds every file in data/processed/ and outputs/ from scratch
+streamlit run dashboard/app.py # opens the dashboard at localhost:8501
 
-The output contains both SPY buy-and-hold abnormal returns and ETF-proxy
-factor-adjusted returns. It remains a four-company pilot; it is not the S&P
-500 Q2 2026 analysis.
+run_all.py runs the scripts in code/ in order:
 
-After verifying source data, construct the cohort with:
+step	script	reads	writes
+1	01_get_data.py	data/raw/tickers.csv	data/raw/prices.csv, earnings.csv, factors.csv
+2	02_clean_data.py	data/raw/	data/processed/earnings_clean.csv
+3	03_calculate_returns.py	data/processed/, data/raw/prices.csv	data/processed/car.csv
+4	04_ai_sentiment.py	data/raw/transcripts/	data/processed/ai_scores.csv
+5	05_build_dataset.py	data/processed/	outputs/final_dataset.csv
+6	06_analysis.py	outputs/final_dataset.csv	outputs/tables/, outputs/figures/
 
-```bash
-python code/pead_pipeline.py \
-  --events-csv inputs/q2_2026_events.csv \
-  --universe-csv inputs/sp500_constituents_20260630.csv \
-  --as-of 2026-11-06 \
-  --output outputs/q2_2026_cohort.csv
-```
+Step 4 calls an AI model and needs an API key in .env (never committed). If no key is set, it skips scoring and loads the saved scores in data/processed/ai_scores.csv, so the rest of the pipeline still reruns.
 
-`q2_2026_events.csv` must follow the header in the template. The pipeline
-validates that fiscal period ends fall in Q2 2026 and tickers belong to the
-dated roster. It computes returns but does not validate the truth or license
-of source EPS/timestamp data.
+Data sources
+data	source	retrieved
+Stock prices, earnings dates, EPS actual and estimate	Yahoo Finance via yfinance	<date>
+Market and factor returns	Kenneth French Data Library	<date>
+Earnings call transcripts	<source>	<date>
+Company universe	<e.g. S&P 100 constituents as of Jan 2021>	<date>
+
+Sample: about 100 large U.S. firms, announcements from 2021 through the last date with a complete 60-day forward window (roughly mid-August 2026).
+
+Method
+Assign each announcement to day0 using its BMO/AMC timing.
+Compute abnormal returns around and after day0.
+Sort announcements into surprise quintiles; compare average drift (car_5, car_20, car_60) across quintiles. PEAD shows up as quintile 5 minus quintile 1 > 0.
+Regress drift on surprise, then on surprise + AI scores, with standard errors clustered by announcement date.
+Test out of sample: fit on 2021–2024, predict 2025–2026. Compare against the surprise-only model.
+Check whether a long-short strategy survives transaction costs.
+
+Every specification we run, including the ones that fail, is logged in specs_tried.md.
+
+Threats to validity
+Look-ahead bias. An AMC announcement can't be traded until the next day. Mitigation: day0 uses the timestamp; drift windows start at day +2.
+Survivorship bias. Using today's index members drops firms that fell out since 2021. Mitigation: build the universe from constituents as of the start of the sample.
+Stale or revised EPS estimates. Yahoo's consensus may not be the estimate available on the announcement day, and coverage is uneven. Mitigation: spot-check a sample against company releases; report coverage in audits/.
+Small denominators. surprise_pct explodes when the estimate is near $0. Mitigation: winsorize at 1%/99%; robustness check scaling by share price instead.
+LLM leakage. The AI model may already "know" how the stock did after the call. Mitigation: remove ticker, company name, and dates from transcripts before scoring; score with a fixed prompt and rubric saved in the repo.
+Factor data lag. The French library updates with a delay, so the latest months may be missing. Mitigation: market-adjusted returns are the main measure; factor-adjusted only where data exists.
+Overlapping windows and clustering. Many firms report the same week, so observations are not independent. Mitigation: cluster standard errors by date.
+P-hacking. Many windows × many scores = something will look significant by chance. Mitigation: windows and hypotheses fixed in the proposal; every spec logged in specs_tried.md.
+Statistical vs. economic significance. A 0.3% drift may vanish after trading costs. Mitigation: report returns net of an assumed cost.
+Limited transcripts. The AI test may cover fewer firms or years than the PEAD test. Mitigation: report both samples' sizes and rerun PEAD on the transcript subsample.
+Repository layout
+text
+magic/
+├── README.md            # this file
+├── STATUS.md            # Checkpoint 1 memo
+├── specs_tried.md       # every specification run
+├── run_all.py           # rebuilds everything
+├── requirements.txt
+├── AGENTS.md            # rules for humans and coding agents
+├── data/
+│   ├── raw/             # downloads (large files git-ignored; 01_get_data.py recreates them)
+│   ├── processed/       # cleaned and merged intermediate files
+│   └── sample/          # fake and small test data
+├── code/                # 01–06 pipeline scripts
+├── outputs/
+│   ├── final_dataset.csv
+│   ├── tables/
+│   └── figures/
+├── dashboard/app.py
+├── audits/              # self-audits and responses to instructor audits
+├── presentation/
+└── dev/                 # scratch work and the old WACC exercise
+Who does what
+Role	Name	GitHub	Owns
+CEO	Gus	gum327	README, reviewing and merging every pull request, 04_ai_sentiment.py
+Developer	Michelle	michelleorloff	02–03, 05–06, run_all.py
+Product manager	Cammy	cammymarks	dashboard/app.py
+Analyst	Abby	abbyfischler	01_get_data.py, data sources, specs_tried.md
+
+Rules for working in the repo (branches, pull requests, no API keys): see AGENTS.md.
+
+References
+Ball, R., & Brown, P. (1968). An empirical evaluation of accounting income numbers. Journal of Accounting Research, 6(2), 159–178.
+Bernard, V. L., & Thomas, J. K. (1989). Post-earnings-announcement drift: Delayed price response or risk premium? Journal of Accounting Research, 27, 1–36.
+Fama, E. F., & French, K. R. (1993). Common risk factors in the returns on stocks and bonds. Journal of Financial Economics, 33(1), 3–56.
