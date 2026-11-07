@@ -43,17 +43,23 @@ on the pilot, but not yet run on the target S&P 500 cohort. The proxies
 
 The Seeking Alpha transcript index is publicly viewable, but its current
 terms limit content to personal, non-commercial use and prohibit automated
-retrieval, scraping, and data mining. The team has not downloaded transcripts
-or established permission for research-scale reuse. Publicly visible pages
-are not evidence of reuse rights. Obtain written permission or a suitable
-institutional/explicitly permitted source before collecting or scoring any
-text.
+retrieval, scraping, and data mining. Do not scrape it. A November 7, 2026
+metadata screen found 15 candidate listing leads; these are not verified
+transcripts or cleared coverage. One Microsoft Investor Relations page
+confirms its July 29, 2026 call and displays transcript text; only an initial
+preview was viewed, and no text was saved or analyzed. Microsoft's website
+terms generally restrict copying and do not establish research-retention or
+external-model rights. See
+`inputs/transcript_candidate_screen_q2_2026.csv` and
+`inputs/transcript_access_audit_template.csv`. Public visibility is not
+evidence of reuse rights; obtain written permission or a suitable
+institutional/explicitly permitted source before collecting or scoring text.
 
 FactSet has an [Academic ID request page](https://support.factset.com/academic/),
 which is a plausible institution-mediated access route. The page itself does
 not establish access to transcripts, coverage, or AI-use rights. The
-course lead/library must verify those entitlements; no transcripts have yet
-been collected.
+course lead/library must verify those entitlements; no rights-cleared
+transcripts have been collected and the 10–20-call audit is incomplete.
 
 Quartr's published consumer terms prohibit data-mining tools and limit its
 service content to internal use; third-party furnishing requires written

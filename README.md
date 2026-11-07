@@ -95,7 +95,17 @@ that a reporting date automatically corresponds to a calendar Q2 fiscal end.
 
 Seeking Alpha's transcript index is publicly viewable, but its current terms
 limit use to personal, non-commercial purposes and prohibit automated
-retrieval, scraping, and data mining. No transcript text was collected.
+retrieval, scraping, and data mining. Do not scrape it. A November 7, 2026
+metadata screen found 15 candidate listing leads; see
+`inputs/transcript_candidate_screen_q2_2026.csv`. They are not 15 verified or
+rights-cleared transcripts. One official Microsoft Investor Relations page
+for [FY26 Q4](https://www.microsoft.com/en-us/Investor/events/FY-2026/earnings-fy-2026-q4)
+was opened and confirms the July 29, 2026 call; an initial transcript preview
+was visible, but no text was saved or analyzed. Microsoft's
+[website terms](https://www.microsoft.com/en-us/legal/terms-of-use) generally
+restrict copying and do not establish project-retention or external-model
+permission. The Meta and JPM Q4 CDN PDF leads are search-result metadata only,
+not verified transcript access.
 Quartr's [mobile-app terms](https://quartr.com/terms-and-conditions) also
 prohibit data-mining tools and restrict service content to internal use;
 furnishing it to a third party requires prior written approval or another
@@ -104,10 +114,11 @@ research is permitted has not been confirmed. FactSet provides an
 [Academic ID request page](https://support.factset.com/academic/), but actual
 institutional transcript access and reuse terms are unknown. Get written
 authorization or verify an institutional license before obtaining, retaining,
-or submitting transcript text to any model. Track coverage and rights checks
-in `inputs/transcript_access_audit_template.csv`; record metadata only until
-permission is established. Do not commit transcript text or other restricted
-raw data.
+or submitting transcript text to any model. No rights-cleared transcript has
+been collected, and no 10–20-call coverage audit is complete. Track coverage
+and rights checks in `inputs/transcript_access_audit_template.csv`; record
+metadata only until permission is established. Do not commit transcript text
+or other restricted raw data.
 
 [Quartr's mobile app](https://quartr.com/products/mobile-app) advertises
 transcripts and in-app AI chat at no cost on mobile, while its transcript API
@@ -127,6 +138,8 @@ research use is confirmed by the published terms.
   columns; currently unpopulated.
 - `inputs/transcript_access_audit_template.csv` — metadata-only transcript
   coverage and rights log; do not store transcript text here.
+- `inputs/transcript_candidate_screen_q2_2026.csv` — preliminary, metadata-only
+  screen of transcript listing leads; not verified coverage or permission.
 - `dashboard/pead_app.py` — pilot Streamlit dashboard.
 - `audits/01_self_audit.md` — current pilot limitations and validation needs.
 - `tests/test_pead_pipeline.py` — pipeline unit tests.

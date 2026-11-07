@@ -29,22 +29,34 @@ transparent ETF proxies, not the official French factors. Use 5- and
 60-session windows as secondary outcomes when observable; some 60-session
 windows for the Q2 cohort are not yet complete as of November 6, 2026.
 
-## Transcript access: initial feasibility check
+## Transcript access: candidate screen, rights unresolved
 
 Seeking Alpha's transcript index is publicly viewable and lists earnings-call
 transcripts. Its [current terms of use](https://about.seekingalpha.com/terms)
 state that content is for personal, non-commercial use and prohibit robots,
 scraping, data mining, or similar automated retrieval. No transcripts were
-downloaded or retained, and project-scale reuse permission has not been
-confirmed. Do not scrape it. A legitimate access route to check is
+downloaded or retained from Seeking Alpha, and project-scale reuse permission
+has not been confirmed. Do not scrape it. A legitimate access route to check is
 [FactSet's Academic ID request page](https://support.factset.com/academic/).
 The page confirms an academic access request process, but does not confirm
 that our course has access to transcripts or permission for AI use. Ask the
 course lead/library to verify that entitlement or request a written license
-from a transcript provider. Then audit 10–20 Q2 2026 calls for coverage and
-usability. As of November 6, 2026, no 10–20-call coverage audit has been
-conducted, no provider access has been established, and no transcript
-collection has started.
+from a transcript provider.
+
+A focused metadata screen on November 7, 2026 identified 15 S&P-roster
+candidate listings in `inputs/transcript_candidate_screen_q2_2026.csv`.
+These are search-result leads, not 15 verified or rights-cleared transcripts.
+The Microsoft Investor Relations page for [FY26 Q4](https://www.microsoft.com/en-us/Investor/events/FY-2026/earnings-fy-2026-q4)
+confirms a July 29, 2026 call and displays transcript text; only the initial
+preview was viewed, and no transcript text was saved or analyzed. Microsoft's
+[website terms](https://www.microsoft.com/en-us/legal/terms-of-use) generally
+restrict copying and do not establish permission to retain this transcript or
+submit it to an external model. Two more search-result leads (Meta and JPM)
+point to Q4 CDN-hosted PDFs, but their issuer relationship, completeness, and
+rights have not been verified. This is not a completed 10–20-call coverage
+audit: no rights-cleared transcript has been collected and no provider access
+has been established. The two requested 3–5-hour work sessions have not been
+completed or represented as complete.
 
 [Quartr's free mobile app](https://quartr.com/products/mobile-app) advertises
 access to transcripts and an in-app AI chat. Its published
@@ -72,7 +84,8 @@ training data. The language model must not receive post-call returns or
 subsequent information. The 10–20-call audit is only a feasibility check, not
 enough on its own to support a predictive model comparison. Quartr's consumer
 terms have now been reviewed; they do not establish retention or external-model
-use rights.
+use rights. The Microsoft terms have also been reviewed and do not establish
+those rights.
 
 ## Existing implementation
 
@@ -97,8 +110,10 @@ included.
 2. Populate `inputs/q2_2026_events_template.csv` from verified fiscal-quarter
    period-end, EPS, and timestamp sources. Do not treat Yahoo's report date as
    a verified fiscal-quarter end.
-3. Use the metadata-only template to screen 10–20 calls only after confirming
-   that the access route permits that check. Treat it as an access/coverage
+3. Ask the course lead/library for written guidance on Microsoft transcript
+   retention/model-input rights, and verify any institutional license. Continue
+   the 10–20-call audit only through a permitted access route; distinguish
+   candidate listings from verified usable coverage. Treat the audit as a
    feasibility check, not a sufficient prediction sample. If broader coverage
    and text-use rights are authorized, pass the same transcript-covered events
    and language-score columns to `compare_chronological_predictions`;

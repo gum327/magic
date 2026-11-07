@@ -59,7 +59,7 @@ sample, and must not be used to claim evidence for either hypothesis.
 | Earnings release/call timestamp | Align the information event to trading sessions | Verify with a second source where possible |
 | Adjusted daily prices | Stock and ETF returns | The current pilot uses Yahoo Finance; validate before scale-up |
 | SPY, BIL, IWM, IWD, IWF adjusted prices | Provisional daily factor proxies | ETF proxies, not official Kenneth French factors |
-| Earnings-call transcript | Construct text measures | Not acquired; access and reuse rights must be confirmed |
+| Earnings-call transcript | Construct text measures | No rights-cleared transcript acquired; one Microsoft IR page was viewed, but retention/model-use rights remain unresolved |
 | Model version and rubric | Reproduce transcript measures | Proposed pinned checkpoint `gpt-5.2-2025-12-11`; verify transcript/API terms |
 
 Store source name, retrieval time, source URL or identifier, definitions,
@@ -80,6 +80,19 @@ calls for coverage, event alignment, and usable content. This audit is a
 feasibility check only, not a sufficient predictive-analysis sample. If
 rights or broader cohort coverage fail, complete the quantitative baseline
 and defer AI sentiment.
+
+A November 7, 2026 metadata screen identified 15 candidate listing leads in
+`inputs/transcript_candidate_screen_q2_2026.csv`; these do not constitute 15
+verified transcripts. The Microsoft Investor Relations page for
+[FY26 Q4](https://www.microsoft.com/en-us/Investor/events/FY-2026/earnings-fy-2026-q4)
+confirms the July 29, 2026 call and displays transcript text. Only an initial
+preview was viewed; no transcript text was retained or analyzed. Microsoft's
+[website terms](https://www.microsoft.com/en-us/legal/terms-of-use) generally
+restrict copying and do not establish permission for study retention or
+external-model input. Meta and JPM Q4 CDN PDF search leads have not been
+verified for issuer relationship, completeness, or rights. No rights-cleared
+transcript has been collected; the 10–20-call coverage audit remains
+incomplete.
 
 Quartr's free mobile app advertises transcripts and in-app AI chat; its
 transcript API and MCP offerings require paid access, and the MCP docs state
