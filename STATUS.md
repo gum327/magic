@@ -45,18 +45,28 @@ from a transcript provider.
 
 A focused metadata screen on November 7, 2026 identified 15 S&P-roster
 candidate listings in `inputs/transcript_candidate_screen_q2_2026.csv`.
-These are search-result leads, not 15 verified or rights-cleared transcripts.
+These are not 15 verified or rights-cleared transcripts. Two first-party
+transcript PDFs have been verified: JPMorganChase's 2Q26 PDF and Meta's Q4CDN
+PDF linked/indexed with Meta IR materials. Both PDFs were opened in a browser,
+but their transcript text was not reviewed or retained; retention and
+external-model rights are unknown. Amazon's official event page confirms its
+July 30 call but lists a webcast, release, and slides—not a transcript. Its
+third-party transcript listings remain leads only.
 The Microsoft Investor Relations page for [FY26 Q4](https://www.microsoft.com/en-us/Investor/events/FY-2026/earnings-fy-2026-q4)
 confirms a July 29, 2026 call and displays transcript text; only the initial
 preview was viewed, and no transcript text was saved or analyzed. Microsoft's
 [website terms](https://www.microsoft.com/en-us/legal/terms-of-use) generally
 restrict copying and do not establish permission to retain this transcript or
-submit it to an external model. Two more search-result leads (Meta and JPM)
-point to Q4 CDN-hosted PDFs, but their issuer relationship, completeness, and
-rights have not been verified. This is not a completed 10–20-call coverage
-audit: no rights-cleared transcript has been collected and no provider access
-has been established. The two requested 3–5-hour work sessions have not been
-completed or represented as complete.
+submit it to an external model. Intel search results identify a Seeking Alpha
+transcript listing, but no transcript source page was opened and no text was
+retained. The attached
+[Quartr B2C terms PDF](https://a.storyblok.com/f/182663/x/49876bbd8f/terms-of-service-quartr-b2c-version-2025-11-27.pdf)
+is the November 27, 2025 version; as already noted, its terms do not establish
+permission to retain transcripts for this study or send them to an external
+model. This is not a completed 10–20-call coverage audit: no rights-cleared
+transcript has been collected and no provider license has been established.
+The two requested 3–5-hour work sessions have not been completed or
+represented as complete.
 
 [Quartr's free mobile app](https://quartr.com/products/mobile-app) advertises
 access to transcripts and an in-app AI chat. Its published

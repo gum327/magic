@@ -45,7 +45,10 @@ The Seeking Alpha transcript index is publicly viewable, but its current
 terms limit content to personal, non-commercial use and prohibit automated
 retrieval, scraping, and data mining. Do not scrape it. A November 7, 2026
 metadata screen found 15 candidate listing leads; these are not verified
-transcripts or cleared coverage. One Microsoft Investor Relations page
+transcripts or cleared coverage. A first-party JPMorganChase 2Q26 earnings
+transcript PDFs for JPMorganChase Q2 2026 and Meta Q2 2026 are verified at
+their issuer/IR CDN URLs. Both were opened in a browser, but transcript text
+was not reviewed or retained and rights remain unknown. One Microsoft Investor Relations page
 confirms its July 29, 2026 call and displays transcript text; only an initial
 preview was viewed, and no text was saved or analyzed. Microsoft's website
 terms generally restrict copying and do not establish research-retention or
@@ -61,7 +64,8 @@ not establish access to transcripts, coverage, or AI-use rights. The
 course lead/library must verify those entitlements; no rights-cleared
 transcripts have been collected and the 10–20-call audit is incomplete.
 
-Quartr's published consumer terms prohibit data-mining tools and limit its
+Quartr's [B2C terms PDF dated November 27, 2025](https://a.storyblok.com/f/182663/x/49876bbd8f/terms-of-service-quartr-b2c-version-2025-11-27.pdf)
+prohibits data-mining tools and limits its
 service content to internal use; third-party furnishing requires written
 approval or another permission provided under the terms. Permission to retain
 transcript text for this project or submit it to an external model is not
