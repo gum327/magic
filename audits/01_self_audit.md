@@ -44,10 +44,11 @@ on the pilot, but not yet run on the target S&P 500 cohort. The proxies
 The Seeking Alpha transcript index is publicly viewable, but its current
 terms limit content to personal, non-commercial use and prohibit automated
 retrieval, scraping, and data mining. Do not scrape it. A November 7, 2026
-metadata screen found 16 candidate-company rows; these are not verified
-transcripts or cleared coverage. First-party transcript PDFs have been
-located for Alphabet, Bank of America, Coca-Cola, JPMorganChase, Meta, and
-Netflix through IR/Q4CDN pages or indexed first-party links. They were opened
+metadata screen found 18 candidate-company rows; these are not verified
+transcripts or cleared coverage. Ten potential first-party transcript PDF
+links have been located for Alphabet, AT&T, Bank of America, Citigroup,
+Coca-Cola, HPE, JPMorganChase, Meta, Netflix, and Visa through issuer
+IR/Q4CDN pages or indexed first-party links. They were opened
 or their direct URLs verified, but their
 text was not reviewed or retained and rights remain unknown. A Microsoft
 Investor Relations page confirms its July 29, 2026 call and displays transcript
@@ -64,8 +65,9 @@ show third-party transcript leads, but its issuer transcript page was not
 verified. Microsoft's website terms generally restrict copying and do not
 establish research-retention or external-model rights. See
 `inputs/transcript_candidate_screen_q2_2026.csv` and
-`inputs/transcript_access_audit_template.csv`. The metadata audit has 16
-company rows; AAPL and Intel remain unverified at the issuer/source level,
+`inputs/transcript_access_audit_template.csv`. The metadata audit has 18
+company rows and 11 potential first-party source links (ten PDF links plus
+Microsoft's transcript page); AAPL and Intel remain unverified at the issuer/source level,
 and third-party transcript leads for GS, MS, and IBM remain unverified. It
 does not establish 10–20-call transcript coverage.
 Public visibility is not evidence of reuse rights; obtain written permission

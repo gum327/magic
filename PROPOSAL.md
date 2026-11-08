@@ -81,8 +81,8 @@ feasibility check only, not a sufficient predictive-analysis sample. If
 rights or broader cohort coverage fail, complete the quantitative baseline
 and defer AI sentiment.
 
-A November 7, 2026 metadata screen identified 16 candidate-company rows in
-`inputs/transcript_candidate_screen_q2_2026.csv`; these do not constitute 16
+A November 7, 2026 metadata screen identified 18 candidate-company rows in
+`inputs/transcript_candidate_screen_q2_2026.csv`; these do not constitute 18
 verified transcripts. The Microsoft Investor Relations page for
 [FY26 Q4](https://www.microsoft.com/en-us/Investor/events/FY-2026/earnings-fy-2026-q4)
 confirms the July 29, 2026 call and displays transcript text. Only an initial
@@ -107,7 +107,10 @@ third-party leads; its issuer transcript page was not verified. No
 rights-cleared transcript has been collected. AAPL and Intel remain
 unverified at the issuer/source level, and the third-party transcript leads
 for GS, MS, and IBM remain unverified. This is not a completed 10–20-call
-transcript-coverage audit.
+transcript-coverage audit. The tracker now includes 18 candidate companies
+and 11 potential first-party source links (ten PDF links plus Microsoft's
+transcript page); AT&T and HPE fiscal-period alignment is unverified. No full
+transcript or reuse permission has been verified, and the pilot remains empty.
 
 Quartr's free mobile app advertises transcripts and in-app AI chat; its
 transcript API and MCP offerings require paid access, and the MCP docs state
