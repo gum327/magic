@@ -45,9 +45,10 @@ from a transcript provider.
 
 A focused metadata screen on November 7, 2026 identified 18 S&P-roster
 candidate listings in `inputs/transcript_candidate_screen_q2_2026.csv`.
-These are not 18 verified or rights-cleared transcripts. Ten potential first-party
-transcript PDFs have been located through issuer IR/Q4CDN pages or indexed
-first-party links: Alphabet, Bank of America, Coca-Cola, JPMorganChase, Meta,
+These are not 18 verified or rights-cleared transcripts. Ten potential
+first-party transcript PDF links have been identified through issuer IR/Q4CDN
+pages or indexed first-party links: Alphabet, Bank of America, Coca-Cola,
+JPMorganChase, Meta,
 Netflix, Visa, Citigroup, AT&T, and HPE. [Citi's official quarterly earnings page](https://www.citigroup.com/global/investors/quarterly-earnings)
 links its [July 14 Q2 transcript PDF](https://www.citigroup.com/rcs/citigpa/storage/public/2026psqtr2-transcript.pdf);
 only the PDF metadata was inspected, with no
