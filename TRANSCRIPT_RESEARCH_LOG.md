@@ -2,12 +2,13 @@
 
 ## Scope and reporting rule
 
-This log records the current, short research work blocks separately. The
-professor's requested two 3–5-hour sessions have **not** been completed. The
-durations below are the observed elapsed time for these work blocks, not an
-estimate of prior unscheduled research. Earlier screening facts are carried
-forward from the existing dated project trackers; their time spent was not
-recorded and is not included in the durations below.
+This log records two specifically timed work blocks from the latest
+source-verification pass. Their durations are **not** the total time spent on
+the transcript investigation. Earlier source screening, browser searches,
+issuer-link review, and project-file work took place across prior work periods,
+but their durations were not recorded. Therefore this log cannot provide a
+reliable aggregate or determine how many 3–5-hour sessions those combined
+efforts represent. Do not interpret the timed blocks below as the full effort.
 
 No transcript was transcribed, decoded, summarized, or added to the repository.
 No provider credentials were available. A public link or successful HTTP
@@ -65,15 +66,18 @@ header check is not treated as license or permission.
   for retention and external AI input remain unestablished. The pilot dataset
   therefore contains zero eligible transcript records.
 
-## Earlier documented work carried forward
+## Earlier documented work carried forward (duration not recorded)
 
-The existing November 7 tracker recorded metadata-only screens for the 16
-initial companies, including official event pages with no transcript link for
-Amazon, Mastercard, Goldman Sachs, Morgan Stanley, and IBM; unresolved leads
-for Apple and Intel; and unknown text-use rights for the located issuer
-materials. The prior tracker states Microsoft transcript text was not saved
-and only an initial preview was viewed. These statements are carried forward
-as project-file evidence; the time for that earlier work was not captured.
+The prior investigation reviewed the project plan/status/proposal and notebook,
+screened 16 initial companies, searched issuer and third-party transcript
+leads, and recorded event pages that listed only webcasts or releases as well
+as unresolved leads for Apple and Intel. It also checked transcript-page
+availability and source terms, including Seeking Alpha restrictions and
+possible FactSet/Quartr access routes. The existing trackers report that
+Microsoft transcript text was not saved and only an initial preview was
+viewed. This earlier work is carried forward as project-file evidence, but
+its elapsed time was not captured. The current pass expanded the candidate
+screen to 18 companies and 11 potential first-party links.
 
 ## Current result
 
@@ -84,7 +88,8 @@ as project-file evidence; the time for that earlier work was not captured.
 - Transcripts with explicit permission for study retention: **0**.
 - Transcripts with explicit permission for external AI input: **0**.
 - Authorized pilot records: **0**.
-- Professor-requested 3–5-hour sessions completed: **0 of 2**.
+- Aggregate time across earlier research and the two timed blocks: **not
+  recorded**; session-duration compliance cannot be determined from this log.
 
 Supporting details are in [TRANSCRIPT_SOURCE_AUDIT.csv](./TRANSCRIPT_SOURCE_AUDIT.csv)
 and [TRANSCRIPT_PILOT.csv](./TRANSCRIPT_PILOT.csv).
