@@ -43,43 +43,34 @@ that our course has access to transcripts or permission for AI use. Ask the
 course lead/library to verify that entitlement or request a written license
 from a transcript provider.
 
-A focused metadata screen on November 7, 2026 identified 18 S&P-roster
-candidate listings in `inputs/transcript_candidate_screen_q2_2026.csv`.
-These are not 18 verified or rights-cleared transcripts. Ten potential
-first-party transcript PDF links have been identified through issuer IR/Q4CDN
-pages or indexed first-party links: Alphabet, Bank of America, Coca-Cola,
-JPMorganChase, Meta,
-Netflix, Visa, Citigroup, AT&T, and HPE. [Citi's official quarterly earnings page](https://www.citigroup.com/global/investors/quarterly-earnings)
-links its [July 14 Q2 transcript PDF](https://www.citigroup.com/rcs/citigpa/storage/public/2026psqtr2-transcript.pdf);
-only the PDF metadata was inspected, with no
-transcript text extracted, reviewed, or retained. The Visa IR event page links
-its July 28 Q3 PDF directly. AT&T and HPE issuer-hosted PDF endpoints also
-responded to header-only checks; their fiscal-period/event alignment remains
-unverified. Transcript text from the other PDFs was not
-reviewed or retained; retention and external-model rights remain unknown.
-Microsoft IR displays its Q4 call transcript; only the initial preview was
-viewed and no text saved. Thus 11 potential first-party source links are
-identified (ten PDF links and Microsoft's transcript page), but zero are cleared for
-retention/model input. Amazon's and
-Mastercard's official event pages confirm their Q2 calls but list no
-transcript; third-party listings remain leads only. Official Goldman Sachs,
-Morgan Stanley, and IBM event pages confirm Q2 calls but list no transcript.
-The metadata audit now has one row for each of the 18 screened companies.
-AAPL and Intel remain unverified at the issuer/source level. Third-party
-transcript leads for GS, MS, and IBM are also unverified, although their
-issuer call pages were checked. A targeted GS search returned a Yahoo
-Finance/Quartr result snippet, but not a verified transcript destination; a
-separate Goldman Sachs BDC result was excluded as a different issuer. No full
-transcript has been inspected for completeness; the pilot remains empty.
-The Microsoft Investor Relations page for [FY26 Q4](https://www.microsoft.com/en-us/Investor/events/FY-2026/earnings-fy-2026-q4)
-confirms a July 29, 2026 call and displays transcript text; only the initial
-preview was viewed, and no transcript text was saved or analyzed. Microsoft's
-[website terms](https://www.microsoft.com/en-us/legal/terms-of-use) generally
-restrict copying and do not establish permission to retain this transcript or
-submit it to an external model. Intel search results identify a Seeking Alpha
-transcript listing, but no transcript source page was opened and no text was
-retained. Candidate listings and first-party materials are itemized in the
-screen and metadata audit files. The attached
+The metadata screen began on November 7 and was updated November 10, 2026.
+It now has 19 company candidates in
+`inputs/transcript_candidate_screen_q2_2026.csv`, including Wells Fargo,
+which was added as a lead. Ten potential first-party transcript locations
+are event-aligned to the calendar-Q2 cohort: nine PDF links (Alphabet,
+AT&T, Bank of America, Citigroup, Coca-Cola, JPMorganChase, Meta, Netflix,
+and Visa) plus Microsoft's transcript page. HPE has a located issuer PDF,
+but its fiscal Q2 ended April 30, so it is outside the cohort. Apple and
+Intel fiscal quarters ended June 27 and their calls were July 30 and July 23,
+respectively; official result materials do not provide a verified full
+transcript. AT&T's fiscal period alignment is confirmed at June 30.
+
+The Citi PDF returned 403 to a metadata-only request; it was not retried or
+bypassed. Transcript text was not retained. The nine PDF contents were not
+reviewed for completeness, and no transcript source has confirmed permission
+for project retention or external AI input. Microsoft's
+[FY26 Q4 page](https://www.microsoft.com/en-us/Investor/events/FY-2026/earnings-fy-2026-q4)
+displays transcript text, but only the initial preview was viewed and no text
+was saved or analyzed; its [website terms](https://www.microsoft.com/en-us/legal/terms-of-use)
+do not establish project-retention or external-model permission. Official
+event pages for Amazon, Mastercard, Goldman Sachs, Morgan Stanley, and IBM
+list no transcript. Wells Fargo's official quarterly page lists earnings
+materials, while its transcript result is only a GuruFocus search lead whose
+destination and rights are unverified. Third-party leads for GS, MS, IBM,
+Apple, and Intel also remain unverified. No full transcript has been checked
+for completeness; the pilot remains empty.
+
+The attached
 [Quartr B2C terms PDF](https://a.storyblok.com/f/182663/x/49876bbd8f/terms-of-service-quartr-b2c-version-2025-11-27.pdf)
 is the November 27, 2025 version; as already noted, its terms do not establish
 permission to retain transcripts for this study or send them to an external

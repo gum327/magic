@@ -81,36 +81,36 @@ feasibility check only, not a sufficient predictive-analysis sample. If
 rights or broader cohort coverage fail, complete the quantitative baseline
 and defer AI sentiment.
 
-A November 7, 2026 metadata screen identified 18 candidate-company rows in
-`inputs/transcript_candidate_screen_q2_2026.csv`; these do not constitute 18
-verified transcripts. The Microsoft Investor Relations page for
+A metadata screen started November 7 and was updated November 10, 2026. It
+now has 19 company candidates in
+`inputs/transcript_candidate_screen_q2_2026.csv`, including Wells Fargo as a
+third-party lead. Ten potential first-party transcript locations are aligned
+to the calendar-Q2 cohort: nine PDF links (Alphabet, AT&T, Bank of America,
+Citigroup, Coca-Cola, JPMorganChase, Meta, Netflix, and Visa) and Microsoft's
+transcript page. HPE has a located issuer PDF, but its fiscal Q2 ended April
+30, outside the cohort. Apple and Intel fiscal quarters ended June 27, with
+calls on July 30 and July 23; their official results materials do not provide
+a verified full transcript. AT&T's fiscal period alignment is confirmed at
+June 30.
+
+The Microsoft Investor Relations page for
 [FY26 Q4](https://www.microsoft.com/en-us/Investor/events/FY-2026/earnings-fy-2026-q4)
-confirms the July 29, 2026 call and displays transcript text. Only an initial
-preview was viewed; no transcript text was retained or analyzed. Microsoft's
-[website terms](https://www.microsoft.com/en-us/legal/terms-of-use) generally
-restrict copying and do not establish permission for study retention or
-external-model input. First-party transcript PDFs have been located for Alphabet, Bank of America,
-Coca-Cola, JPMorganChase, Meta, and Netflix through IR/Q4CDN pages or indexed
-first-party links. The PDFs were opened or their direct URLs verified, but
-transcript text was not reviewed or retained, and reuse rights remain
-unresolved. Microsoft IR displays its Q4 FY2026 transcript; only an initial
-preview was viewed and no text saved. Visa's IR event page links its July 28
-Q3 2026 transcript PDF directly; the PDF was not opened and reuse rights
-remain unknown. Citigroup's [official quarterly earnings page](https://www.citigroup.com/global/investors/quarterly-earnings)
+displays transcript text, but only the initial preview was viewed and no
+transcript text was retained or analyzed. Microsoft's
+[website terms](https://www.microsoft.com/en-us/legal/terms-of-use) do not
+establish permission for study retention or external-model input. Citi's
+[official quarterly earnings page](https://www.citigroup.com/global/investors/quarterly-earnings)
 links its [July 14 Q2 transcript PDF](https://www.citigroup.com/rcs/citigpa/storage/public/2026psqtr2-transcript.pdf);
-only the PDF metadata was inspected, no transcript text was extracted or
-retained, and rights remain unresolved. Amazon's and
-Mastercard's official Q2 event pages list no
-transcript. Goldman Sachs, Morgan Stanley, and IBM Q2 call pages were also
-checked and list no transcript. Intel search results show unverified
-third-party leads; its issuer transcript page was not verified. No
-rights-cleared transcript has been collected. AAPL and Intel remain
-unverified at the issuer/source level, and the third-party transcript leads
-for GS, MS, and IBM remain unverified. This is not a completed 10–20-call
-transcript-coverage audit. The tracker now includes 18 candidate companies
-and 11 potential first-party source links (ten PDF links plus Microsoft's
-transcript page); AT&T and HPE fiscal-period alignment is unverified. No full
-transcript or reuse permission has been verified, and the pilot remains empty.
+only PDF metadata was inspected. No transcript text was retained. The other
+PDF contents were not reviewed for completeness, and reuse rights remain
+unresolved. Amazon, Mastercard, Goldman Sachs, Morgan Stanley, and IBM
+official event pages list no transcript. Wells Fargo's official quarterly
+page lists earnings materials, while its transcript result is an unverified
+GuruFocus lead. Third-party leads for Apple, Intel, GS, MS, and IBM are also
+unverified. The Citi file returned 403 to a metadata-only request and was not
+retried or bypassed. No source has confirmed permission for project
+retention or external AI input; no full transcript has been checked for
+completeness, and the pilot remains empty.
 
 Quartr's free mobile app advertises transcripts and in-app AI chat; its
 transcript API and MCP offerings require paid access, and the MCP docs state

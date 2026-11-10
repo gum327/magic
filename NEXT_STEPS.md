@@ -15,8 +15,10 @@
    records; do not put transcript text or credentials in Git.
 3. **Prioritize issuer links already located.** Begin with the issuer-hosted
    sources in `TRANSCRIPT_SOURCE_AUDIT.csv`, while remembering that public
-   visibility is not permission. Resolve the fiscal period-end/date gaps for
-   Apple, Intel, AT&T, and HPE. Citi's official page lists a PDF, but its
+   visibility is not permission. Apple, Intel, and AT&T event alignment is
+   now confirmed; HPE's fiscal Q2 ended April 30 and is outside the cohort.
+   Verify any new leads, including the unconfirmed Wells Fargo third-party
+   result, at their destination. Citi's official page lists a PDF, but its
    direct link returned 403 to a metadata-only request; use only the ordinary
    issuer page/browser route if authorized, and do not bypass the response.
 4. **If issuer or library permissions are insufficient, request a provider
@@ -52,7 +54,7 @@
    fewer than 10 are eligible, report the shortfall and why; do not fill gaps
    with summaries or unauthorized content.
 10. **Audit selection bias and analysis feasibility.** Compare included and
-    excluded names against all 18+ candidates and the full dated roster;
+    excluded names against all 19 tracked candidates and the full dated roster;
     report missing transcript rates by source/sector/size where data permit.
     A 10–20 call feasibility pilot is not enough on its own for a stable
     predictive comparison or a 60/40 holdout.

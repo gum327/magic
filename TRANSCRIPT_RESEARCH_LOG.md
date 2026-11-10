@@ -77,18 +77,40 @@ possible FactSet/Quartr access routes. The existing trackers report that
 Microsoft transcript text was not saved and only an initial preview was
 viewed. This earlier work is carried forward as project-file evidence, but
 its elapsed time was not captured. The current pass expanded the candidate
-screen to 18 companies and 11 potential first-party links.
+screen to 18 companies and 11 potential first-party links as of November 7.
+
+## Session 3 — event alignment and lead verification
+
+- **Date:** November 10, 2026. **Elapsed time:** not recorded.
+- **Work:** Rechecked unresolved cohort dates and source leads using issuer
+  pages and search-result excerpts. Apple's issuer release confirms fiscal Q3
+  ended June 27 and its call was July 30; Intel's official results listing
+  confirms Q2 ended June 27 and its call was July 23. The official result
+  materials surfaced for both did not provide a verified full transcript.
+  AT&T's quarterly index confirms a Q2 transcript with Q&A and prepared
+  remarks for its June 30 period end. HPE's issuer listing confirms its fiscal
+  Q2 ended April 30, so its PDF is outside the calendar-Q2 cohort. Wells
+  Fargo's IR quarterly page and a targeted official-domain search did not
+  verify the GuruFocus transcript lead.
+- **Retrieval boundary:** No transcript text was retrieved, reviewed, or
+  retained during this follow-up. No access-control bypass was attempted.
+- **Outcome:** The candidate tracker now has 19 company rows. Ten potential
+  first-party transcript locations align to the cohort (nine issuer PDF links
+  and Microsoft's IR page); HPE's link is recorded but excluded. Wells Fargo
+  remains an unverified third-party lead.
 
 ## Current result
 
-- Candidate companies recorded: **18**.
-- Potential first-party transcript links located: **11**.
+- Candidate companies recorded: **19**.
+- Potential first-party transcript locations aligned to the cohort: **10**
+  (nine PDFs and Microsoft's transcript page); HPE's PDF is outside the
+  cohort.
 - Transcript content verified complete by inspecting the full transcript:
   **0**.
 - Transcripts with explicit permission for study retention: **0**.
 - Transcripts with explicit permission for external AI input: **0**.
 - Authorized pilot records: **0**.
-- Aggregate time across earlier research and the two timed blocks: **not
+- Aggregate time across earlier research and the November 10 follow-up: **not
   recorded**; session-duration compliance cannot be determined from this log.
 
 Supporting details are in [TRANSCRIPT_SOURCE_AUDIT.csv](./TRANSCRIPT_SOURCE_AUDIT.csv)

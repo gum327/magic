@@ -43,33 +43,33 @@ on the pilot, but not yet run on the target S&P 500 cohort. The proxies
 
 The Seeking Alpha transcript index is publicly viewable, but its current
 terms limit content to personal, non-commercial use and prohibit automated
-retrieval, scraping, and data mining. Do not scrape it. A November 7, 2026
-metadata screen found 18 candidate-company rows; these are not verified
-transcripts or cleared coverage. Ten potential first-party transcript PDF
-links have been located for Alphabet, AT&T, Bank of America, Citigroup,
-Coca-Cola, HPE, JPMorganChase, Meta, Netflix, and Visa through issuer
-IR/Q4CDN pages or indexed first-party links. They were opened
-or their direct URLs verified, but their
-text was not reviewed or retained and rights remain unknown. A Microsoft
-Investor Relations page confirms its July 29, 2026 call and displays transcript
-text; only an initial preview was viewed, and no text was saved or analyzed.
-Visa IR lists a transcript link for its July 28 Q3 2026 event, but its direct
-PDF is now verified on the issuer event page; the PDF was not opened and
-reuse terms remain unknown. Citigroup's [official quarterly earnings page](https://www.citigroup.com/global/investors/quarterly-earnings)
+retrieval, scraping, and data mining. Do not scrape it. A metadata screen
+started November 7 and was updated November 10, 2026; it now has 19
+candidate-company rows, not verified transcripts or cleared coverage. Ten
+potential first-party transcript locations align to the cohort: nine PDF
+links for Alphabet, AT&T, Bank of America, Citigroup, Coca-Cola,
+JPMorganChase, Meta, Netflix, and Visa, plus Microsoft's transcript page.
+HPE's issuer PDF is excluded because its fiscal Q2 ended April 30, outside
+the cohort. Apple and Intel fiscal quarters ended June 27 and their calls
+were July 30 and July 23; official result materials do not provide a
+verified full transcript. AT&T's period end is confirmed as June 30.
+
+The source links were checked, but transcript text was not retained and
+reuse/model rights remain unknown. Microsoft's Investor Relations page
+displays transcript text; only an initial preview was viewed and no text was
+saved or analyzed. Its website terms do not establish research-retention or
+external-model rights. Citi's [official quarterly earnings page](https://www.citigroup.com/global/investors/quarterly-earnings)
 links its [July 14 Q2 transcript PDF](https://www.citigroup.com/rcs/citigpa/storage/public/2026psqtr2-transcript.pdf);
-only the PDF metadata was inspected, with no transcript text extracted or
-retained and rights unresolved. Official
-Goldman Sachs, Morgan Stanley, and IBM
-Q2 call pages confirm events but list no transcript. Intel search results
-show third-party transcript leads, but its issuer transcript page was not
-verified. Microsoft's website terms generally restrict copying and do not
-establish research-retention or external-model rights. See
+only PDF metadata was inspected, and the direct file returned 403 to a
+metadata-only request. It was not retried or bypassed. Official event pages
+for Amazon, Mastercard, Goldman Sachs, Morgan Stanley, and IBM list no
+transcript. Wells Fargo's official quarterly page lists earnings materials,
+while its GuruFocus transcript result remains an unverified lead. Third-party
+leads for Apple, Intel, GS, MS, IBM, and Wells Fargo remain unverified. See
 `inputs/transcript_candidate_screen_q2_2026.csv` and
-`inputs/transcript_access_audit_template.csv`. The metadata audit has 18
-company rows and 11 potential first-party source links (ten PDF links plus
-Microsoft's transcript page); AAPL and Intel remain unverified at the issuer/source level,
-and third-party transcript leads for GS, MS, and IBM remain unverified. It
-does not establish 10–20-call transcript coverage.
+`inputs/transcript_access_audit_template.csv`. No full transcript has been
+checked for completeness, no source has confirmed retention or external-AI
+permission, and the audit does not establish 10–20-call coverage.
 Public visibility is not evidence of reuse rights; obtain written permission
 or a suitable institutional/explicitly permitted source before collecting or
 scoring text.
