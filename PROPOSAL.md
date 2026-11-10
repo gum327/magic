@@ -82,12 +82,14 @@ rights or broader cohort coverage fail, complete the quantitative baseline
 and defer AI sentiment.
 
 A metadata screen started November 7 and was updated November 10, 2026. It
-now has 19 company candidates in
+now has 21 company candidates in
 `inputs/transcript_candidate_screen_q2_2026.csv`, including Wells Fargo as a
-third-party lead. Ten potential first-party transcript locations are aligned
-to the calendar-Q2 cohort: nine PDF links (Alphabet, AT&T, Bank of America,
-Citigroup, Coca-Cola, JPMorganChase, Meta, Netflix, and Visa) and Microsoft's
-transcript page. HPE has a located issuer PDF, but its fiscal Q2 ended April
+third-party lead. Twelve potential first-party transcript locations are aligned
+to the calendar-Q2 cohort: 11 PDF links (Alphabet, AT&T, Bank of America,
+Citigroup, Coca-Cola, Expedia, Hilton, JPMorganChase, Meta, Netflix, and Visa)
+and Microsoft's transcript page. Hilton's and Expedia's June 30 quarter ends
+are confirmed by SEC 10-Q headers; both transcripts are posted, not verified
+complete or rights-cleared. HPE has a located issuer PDF, but its fiscal Q2 ended April
 30, outside the cohort. Apple and Intel fiscal quarters ended June 27, with
 calls on July 30 and July 23; their official results materials do not provide
 a verified full transcript. AT&T's fiscal period alignment is confirmed at

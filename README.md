@@ -96,13 +96,14 @@ that a reporting date automatically corresponds to a calendar Q2 fiscal end.
 Seeking Alpha's transcript index is publicly viewable, but its current terms
 limit use to personal, non-commercial purposes and prohibit automated
 retrieval, scraping, and data mining. Do not scrape it. A metadata screen
-started November 7 and updated November 10, 2026 found 19 candidate-company
+started November 7 and updated November 10, 2026 found 21 candidate-company
 rows; see
-`inputs/transcript_candidate_screen_q2_2026.csv`. These are not 19 verified or
-rights-cleared transcripts. Ten potential first-party transcript locations
+`inputs/transcript_candidate_screen_q2_2026.csv`. These are not 21 verified or
+rights-cleared transcripts. Twelve potential first-party transcript locations
 have been identified within the calendar-Q2 cohort: PDF links for Alphabet,
-AT&T, Bank of America, Citigroup, Coca-Cola, JPMorganChase, Meta, Netflix,
-and Visa, plus Microsoft's transcript page. HPE's issuer PDF is outside the
+AT&T, Bank of America, Citigroup, Coca-Cola, Expedia, Hilton, JPMorganChase,
+Meta, Netflix, and Visa, plus Microsoft's transcript page. Hilton and Expedia
+fiscal quarters ended June 30, 2026, confirmed by their SEC 10-Q headers. HPE's issuer PDF is outside the
 cohort because fiscal Q2 ended April 30, 2026. Transcript text was not
 reviewed or retained and reuse/model rights remain unverified. Apple and
 Intel are event-aligned, with fiscal quarters ended June 27, but their
@@ -132,14 +133,14 @@ FactSet provides an
 [Academic ID request page](https://support.factset.com/academic/), but actual
 institutional transcript access and reuse terms are unknown. Get written
 authorization or verify an institutional license before obtaining, retaining,
-or submitting transcript text to any model. Ten potential first-party
-transcript locations remain in the cohort (nine PDF links and Microsoft's
+or submitting transcript text to any model. Twelve potential first-party
+transcript locations remain in the cohort (11 PDF links and Microsoft's
 transcript page); HPE's located PDF is excluded because its quarter ended
 April 30. AT&T's fiscal period alignment is confirmed. Apple and Intel are
 calendar-Q2 aligned but their official materials do not provide a verified
 full transcript. Wells Fargo is a newly recorded third-party lead only; its
 transcript destination is not verified. No source is cleared for this study's
-retention or model use. The metadata audit has 19 company rows, but it does
+retention or model use. The metadata audit has 21 company candidates, but it does
 not establish usable 10–20-call coverage; leads for GS, MS, IBM, and WFC
 remain unverified.
 Track coverage and rights checks in

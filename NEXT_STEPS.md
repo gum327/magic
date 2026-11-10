@@ -5,6 +5,8 @@
 1. **Ask the course lead/library to check institutional access.** Specifically
    ask whether the school has FactSet, LSEG/Refinitiv, Bloomberg, Capital IQ,
    or another service with full historical Q2 2026 earnings-call transcripts.
+   Lehigh's Financial Services Lab already lists Bloomberg and Thomson One;
+   ask first whether either licenses transcripts for this course project.
    Ask for the applicable license terms, not just confirmation that a webpage
    opens.
 2. **Get written permission for the intended actions.** Confirm whether the
@@ -17,6 +19,12 @@
    sources in `TRANSCRIPT_SOURCE_AUDIT.csv`, while remembering that public
    visibility is not permission. Apple, Intel, and AT&T event alignment is
    now confirmed; HPE's fiscal Q2 ended April 30 and is outside the cohort.
+   Hilton and Expedia now have issuer-posted Q2 transcript PDFs, and SEC
+   10-Q headers confirm both quarters ended June 30, 2026. They still need a
+   completeness check and written reuse/model permission. A search excerpt
+   describes Hilton's file as S&P Global-formatted, and Expedia's filename
+   follows a vendor naming pattern. Both are unverified, but a transcript
+   vendor's copyright may also need clearing.
    Verify any new leads, including the unconfirmed Wells Fargo third-party
    result, at their destination. Citi's official page lists a PDF, but its
    direct link returned 403 to a metadata-only request; use only the ordinary
@@ -54,7 +62,7 @@
    fewer than 10 are eligible, report the shortfall and why; do not fill gaps
    with summaries or unauthorized content.
 10. **Audit selection bias and analysis feasibility.** Compare included and
-    excluded names against all 19 tracked candidates and the full dated roster;
+    excluded names against all 21 tracked candidates and the full dated roster;
     report missing transcript rates by source/sector/size where data permit.
     A 10–20 call feasibility pilot is not enough on its own for a stable
     predictive comparison or a 60/40 holdout.

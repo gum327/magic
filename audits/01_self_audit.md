@@ -44,11 +44,12 @@ on the pilot, but not yet run on the target S&P 500 cohort. The proxies
 The Seeking Alpha transcript index is publicly viewable, but its current
 terms limit content to personal, non-commercial use and prohibit automated
 retrieval, scraping, and data mining. Do not scrape it. A metadata screen
-started November 7 and was updated November 10, 2026; it now has 19
-candidate-company rows, not verified transcripts or cleared coverage. Ten
-potential first-party transcript locations align to the cohort: nine PDF
-links for Alphabet, AT&T, Bank of America, Citigroup, Coca-Cola,
-JPMorganChase, Meta, Netflix, and Visa, plus Microsoft's transcript page.
+started November 7 and was updated November 10, 2026; it now has 21
+candidate-company rows, not verified transcripts or cleared coverage. Twelve
+potential first-party transcript locations align to the cohort: 11 PDF
+links for Alphabet, AT&T, Bank of America, Citigroup, Coca-Cola, Expedia,
+Hilton, JPMorganChase, Meta, Netflix, and Visa, plus Microsoft's transcript
+page. Hilton and Expedia June 30 period ends are confirmed by SEC 10-Q headers.
 HPE's issuer PDF is excluded because its fiscal Q2 ended April 30, outside
 the cohort. Apple and Intel fiscal quarters ended June 27 and their calls
 were July 30 and July 23; official result materials do not provide a

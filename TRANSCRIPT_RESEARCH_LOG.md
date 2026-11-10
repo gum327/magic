@@ -99,19 +99,61 @@ screen to 18 companies and 11 potential first-party links as of November 7.
   and Microsoft's IR page); HPE's link is recorded but excluded. Wells Fargo
   remains an unverified third-party lead.
 
+## Session 4 — Hilton and Expedia reconciliation, institutional route
+
+- **Date/time:** November 10, 2026, 11:47:33 EST to about 11:55 EST
+  (assisted pass; start and intermediate timestamps from the shell clock).
+- **Elapsed time:** about 8 minutes. This is not a 3–5-hour session, and it
+  does not complete either requested session.
+- **Hilton (HLT):** The roster row is present. Hilton's official
+  quarterly-results page lists a Q2 2026 Earnings Call Transcript (PDF). That
+  listed URL returned `200 application/pdf` to a HEAD request. An older
+  `~/media` URL from search results returned 404 and was not retried. The SEC
+  10-Q header (accession 0001585689-26-000043) gives a conformed period of
+  2026-06-30 and a fiscal year end of 12/31. The issuer release covers the
+  three months ended June 30, 2026 and sets the call for July 28, 2026 at
+  9:00 a.m. ET. Cohort-aligned.
+- **Expedia (EXPE):** The roster row is present. Expedia's official Q2 2026
+  earnings-call event page links a transcript PDF on its IR CDN, which
+  returned `200 application/pdf` to HEAD. The fiscal quarter end was verified
+  from authoritative sources. The SEC 10-Q header (accession
+  0001324424-26-000053, filed 2026-08-06) gives a conformed period of
+  2026-06-30 and a fiscal year end of 12/31. The 8-K earnings-release exhibit
+  states that the second quarter ended June 30, 2026 and sets the call for
+  August 5, 2026 at 1:30 p.m. PT. Cohort-aligned.
+- **Terms:** Hilton's IR disclaimer has only an all-rights-reserved notice.
+  The hilton.com Site Usage Agreement (October 2025) prohibits copying or
+  reproducing site material, and it does not explicitly name ir.hilton.com.
+  Expedia Group's website terms (last modified July 22, 2026) limit use to
+  personal or internal business use and bar copying. They do not mention AI
+  and do not explicitly name ir.expediagroup.com. Neither set of terms grants
+  study retention or external-model input.
+- **Institutional route:** Lehigh library guides list Bloomberg, Thomson One,
+  and WRDS through the Financial Services Lab. None is described there as
+  carrying transcripts. Capital IQ, FactSet, and LSEG were not found on the
+  checked pages. No database was accessed.
+- **Retrieval boundary:** Transcript PDF bodies were not opened. One WebFetch
+  of Expedia's earnings-release PDF (not a transcript) cached the binary
+  release file in the local tool-results folder outside the repository. Its
+  text was not readable, and nothing was added to the repository.
+- **Tracker hygiene:** Marked the stale 2026-11-07 Intel row in
+  `TRANSCRIPT_SOURCE_AUDIT.csv` as superseded so Intel is counted once.
+
 ## Current result
 
-- Candidate companies recorded: **19**.
-- Potential first-party transcript locations aligned to the cohort: **10**
-  (nine PDFs and Microsoft's transcript page); HPE's PDF is outside the
-  cohort.
+- Candidate companies recorded: **21**.
+- Potential first-party transcript locations aligned to the cohort: **12**
+  (11 PDFs, including Hilton and Expedia, and Microsoft's transcript page);
+  HPE's PDF is outside the cohort. These are posted transcripts, not verified
+  complete ones.
 - Transcript content verified complete by inspecting the full transcript:
   **0**.
 - Transcripts with explicit permission for study retention: **0**.
 - Transcripts with explicit permission for external AI input: **0**.
 - Authorized pilot records: **0**.
-- Aggregate time across earlier research and the November 10 follow-up: **not
-  recorded**; session-duration compliance cannot be determined from this log.
+- Aggregate time across earlier research and the first November 10 follow-up:
+  **not recorded**. Timed blocks total about 13 minutes (Sessions 1, 2, and 4).
+  Neither requested 3–5-hour session is documented as completed.
 
 Supporting details are in [TRANSCRIPT_SOURCE_AUDIT.csv](./TRANSCRIPT_SOURCE_AUDIT.csv)
 and [TRANSCRIPT_PILOT.csv](./TRANSCRIPT_PILOT.csv).

@@ -44,19 +44,25 @@ course lead/library to verify that entitlement or request a written license
 from a transcript provider.
 
 The metadata screen began on November 7 and was updated November 10, 2026.
-It now has 19 company candidates in
+It now has 21 company candidates in
 `inputs/transcript_candidate_screen_q2_2026.csv`, including Wells Fargo,
-which was added as a lead. Ten potential first-party transcript locations
-are event-aligned to the calendar-Q2 cohort: nine PDF links (Alphabet,
-AT&T, Bank of America, Citigroup, Coca-Cola, JPMorganChase, Meta, Netflix,
-and Visa) plus Microsoft's transcript page. HPE has a located issuer PDF,
+which was added as a lead. Twelve potential first-party transcript locations
+are event-aligned to the calendar-Q2 cohort: 11 PDF links (Alphabet,
+AT&T, Bank of America, Citigroup, Coca-Cola, Expedia, Hilton, JPMorganChase,
+Meta, Netflix, and Visa) plus Microsoft's transcript page. Hilton's
+quarterly-results page and Expedia's Q2 event page each list a transcript
+PDF; SEC 10-Q headers confirm both quarters ended June 30, 2026 (calls July
+28 and August 5). Both are posted transcripts, not verified complete ones:
+their contents were not opened, and Hilton's site-usage agreement and
+Expedia's website terms restrict copying and do not grant study-retention or
+external-model rights. HPE has a located issuer PDF,
 but its fiscal Q2 ended April 30, so it is outside the cohort. Apple and
 Intel fiscal quarters ended June 27 and their calls were July 30 and July 23,
 respectively; official result materials do not provide a verified full
 transcript. AT&T's fiscal period alignment is confirmed at June 30.
 
 The Citi PDF returned 403 to a metadata-only request; it was not retried or
-bypassed. Transcript text was not retained. The nine PDF contents were not
+bypassed. Transcript text was not retained. The 11 PDF contents were not
 reviewed for completeness, and no transcript source has confirmed permission
 for project retention or external AI input. Microsoft's
 [FY26 Q4 page](https://www.microsoft.com/en-us/Investor/events/FY-2026/earnings-fy-2026-q4)
