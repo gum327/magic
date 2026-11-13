@@ -1,0 +1,5 @@
+# Dashboard theme. Blue accent so selections don't read as errors (red is
+# reserved for "Missing" and synthetic-data warnings). Light/dark follows the
+# viewer's system setting.
+[theme]
+primaryColor = "#2a78d6"
