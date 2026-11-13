@@ -98,10 +98,11 @@ post-call information out of the scoring process.
 
 ## Remaining threats and checks
 
-- The Homework 8 dashboard includes a separate, reproducible 20-row synthetic
-  fixture with conspicuous fictional identifiers. It exists only to check
-  display and missing-data behavior; its generated EPS, firm characteristics,
-  sentiment, and return values are not real data or model results. The
+- The Homework 8 dashboard includes three reproducible 20-row synthetic
+  component fixtures and their event-ID outer merge. They exist only to check
+  handoff, display, and missing-data behavior; generated EPS, firm
+  characteristics, transcript features, and CAR values are not real data or
+  model results, and the Event Study Package has not been run on them. The
   four-company Yahoo pilot remains a separate convenience sample.
 - Verify point-in-time S&P 500 membership and retain post-roster removals.
 - Independently verify event timestamps and EPS actual/consensus definitions.

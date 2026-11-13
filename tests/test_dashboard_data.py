@@ -93,6 +93,11 @@ class DashboardDatasetTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Conflicting ticker"):
             merge_event_datasets(financial, conflict, transcript)
 
+        mismatched_id = event_study.copy()
+        mismatched_id.loc[0, "event_id"] = "DIFFERENT-ID"
+        with self.assertRaisesRegex(ValueError, "multiple event IDs"):
+            merge_event_datasets(financial, mismatched_id, transcript)
+
     def test_fixture_generator_is_reproducible(self):
         first = build_datasets()
         second = build_datasets()

@@ -143,24 +143,30 @@ predictive accuracy. See
 
 ## Homework 8 dashboard checkpoint
 
-The dashboard now defaults to a reproducible 20-row synthetic fixture with
-fictional `SYN` identifiers and can switch to the existing four-row Yahoo
-pilot. It displays the selected sample size, EPS and transcript-feature
-coverage, event-level results, outcome choices, missingness, duplicate/key
-checks, EPS-surprise consistency, score-range checks, and limitations. The
-synthetic factor returns, EPS values, firm characteristics, and transcript
-scores are generated placeholders only; they are not real prices, verified
-Yahoo Finance data, estimated CARs, or Claude outputs. Some missing values
-are intentional examples and remain null.
+The dashboard defaults to a 20-row, three-source synthetic checkpoint and
+can switch to the existing four-row Yahoo pilot. The synthetic handoffs are
+`synthetic_yahoo_finance_variables.csv`,
+`synthetic_event_study_results.csv`, and
+`synthetic_transcript_features.csv`; they outer-merge on `event_id`, verify
+`ticker` and `fiscal_period_end`, and preserve component presence flags. The
+dashboard shows `CAR[0,1]` and secondary synthetic CAR windows, alongside the
+pilot's separately named ETF-proxy/SPY outcomes.
 
-The shared key and baseline feature/outcome names follow `PROPOSAL.md` and
-`code/pead_pipeline.py`. `language_outlook_tone` and
-`language_guidance_specificity` match the existing transcript checkpoint.
-`language_sentiment_score` is only a synthetic dashboard field; its rubric
-and use in the final model remain undefined. Confirm additional firm
-controls and language variables with Kami before treating this schema as
-final. No 500-company sample or real transcript-feature merge has been built.
-Regenerate the UI fixture with `python code/build_synthetic_checkpoint.py`.
+All fixture values are generated placeholders, not actual Yahoo Finance data,
+Event Study Package results, text-derived sentiment, or Claude outputs.
+Source fields say synthetic and retrieval fields are blank. Some missing
+values are deliberate examples and stay null. The dashboard displays
+overview, coverage, quality checks, and limitations; it does not estimate
+returns or fit models.
+
+The suggested checkpoint comparison is Yahoo-only, then Yahoo plus classic
+sentiment, then additional transcript/AI features. The exact Yahoo fields
+should be checked against Gus's myGPT list; Kami should confirm model inputs
+and whether the project uses regression, predictive ML, or both. Do not use
+a return overlapping `CAR[0,1]` as a predictor. The standardized checkpoint
+schema does not replace the longer-horizon final design in `PROPOSAL.md`.
+Regenerate all fixtures with `python code/build_synthetic_checkpoint.py`.
+No 500-company sample or real transcript-feature merge has been built.
 
 ## Existing implementation
 

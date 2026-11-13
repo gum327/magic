@@ -23,6 +23,7 @@ COVERAGE_GROUPS = {
         "eps_actual",
         "eps_estimate",
         "eps_surprise_pct",
+        "eps_source",
         "eps_beat",
         "eps_source",
         "market_cap_usd",
@@ -34,6 +35,7 @@ COVERAGE_GROUPS = {
         "car_0_1_pct",
         "car_0_5_pct",
         "car_0_20_pct",
+        "event_study_status",
         "event_study_method",
         "announcement_abnormal_return_pct",
         "abnormal_5d_return_pct",
@@ -50,16 +52,16 @@ COVERAGE_GROUPS = {
         "analyst_question_sentiment",
         "congratulations_mentioned",
         "language_outlook_tone",
-        "language_sentiment_score",
         "language_guidance_specificity",
         "transcript_score_status",
     ),
     "Provenance": (
-        "earnings_source",
+        "eps_source",
+        "financial_data_source",
         "event_timestamp_source",
         "prices_source",
-        "financial_data_source",
         "event_study_source",
+        "event_study_method",
         "transcript_sentiment_method",
         "transcript_source",
         "financial_retrieved_at_utc",
@@ -80,6 +82,8 @@ def validate_required_columns(data):
     missing = sorted(set(REQUIRED_COLUMNS).difference(data.columns))
     if missing:
         raise ValueError("Dataset is missing required columns: {}".format(", ".join(missing)))
+
+
 def coverage_table(data):
     rows = []
     for group, columns in COVERAGE_GROUPS.items():
@@ -135,9 +139,19 @@ def quality_summary(data):
             data["language_guidance_specificity"], errors="coerce"
         ).dropna()
         invalid_language += int((~values.between(0, 2) | values.mod(1).ne(0)).sum())
-    if "language_sentiment_score" in data:
-        values = pd.to_numeric(data["language_sentiment_score"], errors="coerce").dropna()
-        invalid_language += int((~values.between(-1, 1)).sum())
+    for column in (
+        "transcript_sentiment",
+        "management_sentiment",
+        "analyst_question_sentiment",
+    ):
+        if column in data:
+            values = pd.to_numeric(data[column], errors="coerce").dropna()
+            invalid_language += int((~values.between(-1, 1)).sum())
+    if "congratulations_mentioned" in data:
+        values = pd.to_numeric(
+            data["congratulations_mentioned"], errors="coerce"
+        ).dropna()
+        invalid_language += int((~values.isin([0, 1])).sum())
     if "transcript_score_status" in data:
         tone_values = pd.to_numeric(
             data.get("language_outlook_tone", pd.Series(index=data.index, dtype=float)),

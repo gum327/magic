@@ -157,39 +157,53 @@ research use is confirmed by the published terms.
 
 ## Homework 8 dashboard fixture and shared row contract
 
-The dashboard offers a 20-row synthetic checkpoint fixture and the existing
-four-row Yahoo Finance pilot. The synthetic rows use `SYN001`–`SYN020`, are
-generated locally by `code/build_synthetic_checkpoint.py`, and are not issuer,
-price, transcript, or model observations. Missing values are deliberate
-examples for testing coverage display. The factor-proxy outcomes are
-placeholders, not estimated returns; no transcript text is stored and the
-language scores are generated placeholders, not LLM outputs.
+For the checkpoint, the dashboard merges three separate 20-row handoff
+fixtures. They use fictional `SYN` identifiers and are generated locally by
+`code/build_synthetic_checkpoint.py`; none contains issuer, Yahoo, event-study
+package, transcript, or LLM observations. Numeric values are placeholders.
+Some blanks deliberately test coverage display. No transcript text is stored.
 
-The proposed event key is (`ticker`, `fiscal_period_end`), with
-`earnings_timestamp` preserving the timezone-aware public event time. The
-dashboard and later merge expect:
+The normalized merge key is `event_id`, with `ticker` and `fiscal_period_end`
+checked across all sources. Each source is one row per company-quarter event;
+the outer merge keeps events absent from a component and adds a
+`*_record_present` flag. For real data, agree on the event ID across team
+handoffs before merging. Dashboard fields:
 
 | Group | Shared columns and meaning |
 |---|---|
-| Event | `ticker`, `fiscal_period_end`, `earnings_timestamp`; one company-quarter event per row |
-| Financial X | `eps_actual`, `eps_estimate`, `eps_surprise_pct` using `(actual - estimate) / abs(estimate) * 100`; `market_cap_usd` and `sector` are firm descriptors |
-| Event reaction / Y | `factor_proxy_announcement_abnormal_return_pct`; ETF-proxy CARs for 5/20/60 sessions; separate SPY buy-and-hold abnormal returns for 5/20/60 sessions |
-| Transcript X | `language_outlook_tone` (-2 to +2) and `language_guidance_specificity` (0 to 2) follow the synthetic checkpoint rubric; `transcript_score_status` preserves insufficient, incomplete, and unavailable cases |
-| Provenance | Per-domain source fields for earnings, timestamps, prices, financial characteristics, and transcript features; `retrieved_at_utc` is blank for the synthetic fixture because nothing was retrieved |
+| Event | `event_id`, `ticker`, `fiscal_period_end`, timezone-aware `earnings_timestamp`; one call per row |
+| Yahoo-finance X | `eps_actual`, `eps_estimate`, `eps_surprise_pct` = `(actual - estimate) / abs(estimate) * 100`, `eps_beat`, `market_cap_usd`, `sector`, and pre-call return/volatility fields |
+| Event-study Y | Normalized checkpoint fields `car_0_1_pct`, `car_0_5_pct`, `car_0_20_pct`; Gus should map the package output and confirm its event-day convention |
+| Transcript X | Classic placeholders `transcript_sentiment`, `management_sentiment`, `analyst_question_sentiment`, `congratulations_mentioned`; AI-checkpoint fields `language_outlook_tone`, `language_guidance_specificity`, and `transcript_score_status` |
+| Provenance | Per-source source/retrieval fields; the synthetic fixture marks each source as synthetic and leaves retrieval dates blank |
 
-`language_sentiment_score` is a synthetic-only placeholder on a -1 to +1
-scale; its research rubric and inclusion in the final model are not defined.
-The existing transcript checkpoint implements only outlook tone and guidance
-specificity. The research plan specifies the baseline (EPS surprise and
-announcement reaction) and the 20-session ETF-proxy outcome; Kami should
-confirm additional controls and final language features before real-data
-integration. Join pipeline and transcript feature outputs on the event key,
-retain source/retrieval metadata, and keep missing values missing.
+`transcript_sentiment`, manager/analyst sentiment, and the congratulations
+flag are synthetic UI values, not scores derived from text. The existing
+transcript checkpoint rubric covers outlook tone and guidance specificity
+only; the fixture's values for those fields are also generated, not Claude
+outputs. The exact Yahoo fields should be reconciled with Gus's myGPT list,
+and Kami should approve the explanatory/predictive variables and whether to
+use regression, predictive ML, or both. The dashboard does not fit models.
 
-Regenerate the fixture with `python code/build_synthetic_checkpoint.py`.
-Choose the synthetic checkpoint in the dashboard's Dataset menu to inspect
-overview, coverage, quality checks, and limitations; the Yahoo pilot remains
-available in the same menu.
+For the checkpoint, the comparison can be staged as (1) Yahoo variables only,
+(2) Yahoo plus classic transcript sentiment, and (3) those variables plus
+additional transcript/AI features. Because `CAR[0,1]` includes the event day
+and following day, do not use a same-window announcement return as a
+predictor. This checkpoint fixture does not change the final study design in
+`PROPOSAL.md`, which has a separate ETF-proxy outcome plan.
+
+The generated files are:
+
+- `outputs/synthetic_yahoo_finance_variables.csv`
+- `outputs/synthetic_event_study_results.csv`
+- `outputs/synthetic_transcript_features.csv`
+- `outputs/synthetic_checkpoint_dataset.csv` — outer-merged dashboard input
+
+Regenerate all four with `python code/build_synthetic_checkpoint.py`. For
+other compatible handoffs, the shared merger is
+`code/merge_event_datasets.py`. Choose the synthetic checkpoint in the
+dashboard's Dataset menu to inspect overview, coverage, quality checks, and
+limitations; the existing Yahoo pilot remains available in that menu.
 
 ## Repository guide
 
@@ -198,9 +212,14 @@ available in the same menu.
 - `STATUS.md` — decisions, completed work, and open dependencies.
 - `code/pead_pipeline.py` — current small Yahoo Finance pilot pipeline.
 - `code/build_synthetic_checkpoint.py` — deterministic synthetic-only
-  dashboard fixture generator.
+-  three-source dashboard fixture generator.
+- `code/merge_event_datasets.py` — validated outer merge on shared event IDs.
+- `outputs/synthetic_yahoo_finance_variables.csv`,
+  `outputs/synthetic_event_study_results.csv`, and
+  `outputs/synthetic_transcript_features.csv` — separate 20-row synthetic
+  team handoff fixtures.
 - `outputs/synthetic_checkpoint_dataset.csv` — 20-row synthetic dashboard
-  fixture; no real issuers, returns, transcript text, or LLM scores.
+  merge; no real issuers, returns, transcript text, or LLM scores.
 - `outputs/pead_sample.csv` — four-firm pilot output; not the final sample.
 - `inputs/q2_2026_events_template.csv` — required verified event-manifest
   columns; currently unpopulated.
@@ -236,6 +255,11 @@ Run commands from the repository root:
 pip install -r requirements.txt
 python code/pead_pipeline.py --as-of 2026-11-06
 python code/build_synthetic_checkpoint.py
+python code/merge_event_datasets.py \
+  --financial outputs/synthetic_yahoo_finance_variables.csv \
+  --event-study outputs/synthetic_event_study_results.csv \
+  --transcript outputs/synthetic_transcript_features.csv \
+  --output outputs/synthetic_checkpoint_dataset.csv
 python -m unittest discover -s tests
 streamlit run dashboard/pead_app.py
 ```

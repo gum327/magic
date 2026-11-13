@@ -95,6 +95,11 @@ def build_datasets():
             "car_0_1_pct": car_0_1,
             "car_0_5_pct": car_0_5,
             "car_0_20_pct": car_0_20,
+            "event_study_status": np.where(
+                np.isfinite(car_0_1),
+                "synthetic_placeholder",
+                "synthetic_missingness_example",
+            ),
             "event_study_method": (
                 "Synthetic placeholder; event-study package not run"
             ),

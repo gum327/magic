@@ -83,6 +83,10 @@ def merge_event_datasets(financial, event_study, transcript):
     for name in COMPONENTS:
         presence_column = "{}_record_present".format(name)
         merged[presence_column] = merged[presence_column].fillna(False).astype(bool)
+    if merged.duplicated(list(IDENTITY_COLUMNS)).any():
+        raise ValueError(
+            "Components assign multiple event IDs to the same ticker/period."
+        )
     return merged.sort_values(EVENT_ID).reset_index(drop=True)
 
 
