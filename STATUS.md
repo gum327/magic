@@ -114,6 +114,14 @@ terms have now been reviewed; they do not establish retention or external-model
 use rights. The Microsoft terms have also been reviewed and do not establish
 those rights.
 
+For the November 13 checkpoint, Professor Bowen said a synthetic exercise or
+up to 20 real calls from the licensed dataset may be tested with non-Enterprise
+Claude if queries are not used for training; do not use Expected Parrot. The
+synthetic-first prompt and two-feature scoring rubric are in
+`TRANSCRIPT_CHECKPOINT.md`. No real transcript text has been processed here,
+and this checkpoint does not replace the proposed final model or support
+predictive claims.
+
 ## Existing implementation
 
 The four-firm AAPL/MSFT/TSLA/NVDA Yahoo Finance pilot, CSV, dashboard, audit,
