@@ -155,12 +155,52 @@ permission to retain transcript text or send it to a separate model. This is a
 possible source to ask about, but neither a systematic coverage audit nor
 research use is confirmed by the published terms.
 
+## Homework 8 dashboard fixture and shared row contract
+
+The dashboard offers a 20-row synthetic checkpoint fixture and the existing
+four-row Yahoo Finance pilot. The synthetic rows use `SYN001`–`SYN020`, are
+generated locally by `code/build_synthetic_checkpoint.py`, and are not issuer,
+price, transcript, or model observations. Missing values are deliberate
+examples for testing coverage display. The factor-proxy outcomes are
+placeholders, not estimated returns; no transcript text is stored and the
+language scores are generated placeholders, not LLM outputs.
+
+The proposed event key is (`ticker`, `fiscal_period_end`), with
+`earnings_timestamp` preserving the timezone-aware public event time. The
+dashboard and later merge expect:
+
+| Group | Shared columns and meaning |
+|---|---|
+| Event | `ticker`, `fiscal_period_end`, `earnings_timestamp`; one company-quarter event per row |
+| Financial X | `eps_actual`, `eps_estimate`, `eps_surprise_pct` using `(actual - estimate) / abs(estimate) * 100`; `market_cap_usd` and `sector` are firm descriptors |
+| Event reaction / Y | `factor_proxy_announcement_abnormal_return_pct`; ETF-proxy CARs for 5/20/60 sessions; separate SPY buy-and-hold abnormal returns for 5/20/60 sessions |
+| Transcript X | `language_outlook_tone` (-2 to +2) and `language_guidance_specificity` (0 to 2) follow the synthetic checkpoint rubric; `transcript_score_status` preserves insufficient, incomplete, and unavailable cases |
+| Provenance | Per-domain source fields for earnings, timestamps, prices, financial characteristics, and transcript features; `retrieved_at_utc` is blank for the synthetic fixture because nothing was retrieved |
+
+`language_sentiment_score` is a synthetic-only placeholder on a -1 to +1
+scale; its research rubric and inclusion in the final model are not defined.
+The existing transcript checkpoint implements only outlook tone and guidance
+specificity. The research plan specifies the baseline (EPS surprise and
+announcement reaction) and the 20-session ETF-proxy outcome; Kami should
+confirm additional controls and final language features before real-data
+integration. Join pipeline and transcript feature outputs on the event key,
+retain source/retrieval metadata, and keep missing values missing.
+
+Regenerate the fixture with `python code/build_synthetic_checkpoint.py`.
+Choose the synthetic checkpoint in the dashboard's Dataset menu to inspect
+overview, coverage, quality checks, and limitations; the Yahoo pilot remains
+available in the same menu.
+
 ## Repository guide
 
 - `Magic_TeamProposal.ipynb` — project proposal and revised research design.
 - `PROPOSAL.md` — detailed sample, methods, and validation plan.
 - `STATUS.md` — decisions, completed work, and open dependencies.
 - `code/pead_pipeline.py` — current small Yahoo Finance pilot pipeline.
+- `code/build_synthetic_checkpoint.py` — deterministic synthetic-only
+  dashboard fixture generator.
+- `outputs/synthetic_checkpoint_dataset.csv` — 20-row synthetic dashboard
+  fixture; no real issuers, returns, transcript text, or LLM scores.
 - `outputs/pead_sample.csv` — four-firm pilot output; not the final sample.
 - `inputs/q2_2026_events_template.csv` — required verified event-manifest
   columns; currently unpopulated.
@@ -176,7 +216,15 @@ research use is confirmed by the published terms.
   those invented excerpts; do not send this file to a model.
 - `inputs/synthetic_transcript_checkpoint_claude_scores.csv` — Claude scores
   for the synthetic checkpoint run; not study data.
-- `dashboard/pead_app.py` — pilot Streamlit dashboard.
+- `inputs/synthetic_transcript_validation.jsonl` — separate 10-call synthetic
+  validation set; do not treat as real event data.
+- `inputs/synthetic_transcript_validation_expected.csv` — blinded reference
+  scores; do not send this file to a model.
+- `inputs/synthetic_transcript_validation_claude_scores.csv` — Claude scores
+  from the frozen-prompt validation run; not study data.
+- `dashboard/pead_app.py` — pilot and synthetic checkpoint dashboard.
+- `dashboard/data_contract.py` — shared event schema, coverage summary, and
+  dashboard quality checks.
 - `audits/01_self_audit.md` — current pilot limitations and validation needs.
 - `tests/test_pead_pipeline.py` — pipeline unit tests.
 
@@ -187,6 +235,7 @@ Run commands from the repository root:
 ```bash
 pip install -r requirements.txt
 python code/pead_pipeline.py --as-of 2026-11-06
+python code/build_synthetic_checkpoint.py
 python -m unittest discover -s tests
 streamlit run dashboard/pead_app.py
 ```

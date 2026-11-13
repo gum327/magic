@@ -134,6 +134,34 @@ estimate. The mock calls test scoring and output format, not real-call token
 cost. See
 `inputs/synthetic_transcript_checkpoint_claude_scores.csv`.
 
+A separate 10-call synthetic validation set was scored once with the prompt
+frozen at version 1.2. Its reference labels were not sent to Claude and were
+not changed after scoring; all 10 model outputs matched. This is a synthetic
+consistency check only, not validation on real transcripts or evidence of
+predictive accuracy. See
+`inputs/synthetic_transcript_validation_claude_scores.csv`.
+
+## Homework 8 dashboard checkpoint
+
+The dashboard now defaults to a reproducible 20-row synthetic fixture with
+fictional `SYN` identifiers and can switch to the existing four-row Yahoo
+pilot. It displays the selected sample size, EPS and transcript-feature
+coverage, event-level results, outcome choices, missingness, duplicate/key
+checks, EPS-surprise consistency, score-range checks, and limitations. The
+synthetic factor returns, EPS values, firm characteristics, and transcript
+scores are generated placeholders only; they are not real prices, verified
+Yahoo Finance data, estimated CARs, or Claude outputs. Some missing values
+are intentional examples and remain null.
+
+The shared key and baseline feature/outcome names follow `PROPOSAL.md` and
+`code/pead_pipeline.py`. `language_outlook_tone` and
+`language_guidance_specificity` match the existing transcript checkpoint.
+`language_sentiment_score` is only a synthetic dashboard field; its rubric
+and use in the final model remain undefined. Confirm additional firm
+controls and language variables with Kami before treating this schema as
+final. No 500-company sample or real transcript-feature merge has been built.
+Regenerate the UI fixture with `python code/build_synthetic_checkpoint.py`.
+
 ## Existing implementation
 
 The four-firm AAPL/MSFT/TSLA/NVDA Yahoo Finance pilot, CSV, dashboard, audit,

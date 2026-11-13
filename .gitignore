@@ -1,6 +1,7 @@
 # secrets
 .env
 .streamlit/secrets.toml
+/restricted_data/
 
 # Python and notebooks
 __pycache__/

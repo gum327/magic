@@ -161,6 +161,21 @@ again; this 20/20 agreement is a prompt-debugging result, not an independent
 accuracy estimate. The web interface did not expose a maximum-output-token
 setting.
 
+## Blind synthetic validation
+
+The separate 10-call validation set is in
+`inputs/synthetic_transcript_validation.jsonl`. Its reference labels are in
+`inputs/synthetic_transcript_validation_expected.csv`; keep that file out of
+the model prompt. Those labels were set before the validation run. Prompt
+version 1.2 was frozen before scoring, and neither the prompt nor the labels
+were changed afterward.
+
+Claude Haiku 5.5 at Low effort returned 10 rows, all matching the reference
+labels. The results are in
+`inputs/synthetic_transcript_validation_claude_scores.csv`. This checks
+consistency on invented examples only; it is not evidence that the scores are
+accurate for real calls or useful for return prediction.
+
 ## Minimal run log
 
 Keep the run log separate from transcript text. Record the event identifier,
