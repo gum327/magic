@@ -61,9 +61,11 @@ class DashboardDatasetTests(unittest.TestCase):
         data = self.synthetic.copy()
         data.loc[0, "language_outlook_tone"] = 3
         data.loc[1, "event_id"] = data.loc[0, "event_id"]
+        data.loc[2, "eps_beat"] = 1 - data.loc[2, "eps_beat"]
         quality = quality_summary(data)
         self.assertEqual(quality["invalid_language_scores"], 1)
         self.assertEqual(quality["duplicate_event_rows"], 2)
+        self.assertEqual(quality["eps_beat_mismatches"], 1)
 
     def test_pilot_without_language_columns_reports_zero_language_coverage(self):
         validate_required_columns(self.pilot)

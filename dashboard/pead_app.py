@@ -141,14 +141,15 @@ if (~coverage["field_present"]).any():
     )
 
 st.subheader("Data quality")
-q1, q2, q3, q4 = st.columns(4)
+q1, q2, q3, q4, q5 = st.columns(5)
 q1.metric("Duplicate event rows", quality["duplicate_event_rows"])
 q2.metric("Rows with missing event keys", quality["missing_event_keys"])
 q3.metric("EPS surprise mismatches", quality["eps_surprise_mismatches"])
-q4.metric("Out-of-range transcript scores", quality["invalid_language_scores"])
-q5, q6 = st.columns(2)
-q5.metric("Baseline-ready rows", quality["baseline_complete_rows"])
-q6.metric("Outlook-feature-complete rows", quality["outlook_feature_complete_rows"])
+q4.metric("EPS beat/miss mismatches", quality["eps_beat_mismatches"])
+q5.metric("Invalid transcript values", quality["invalid_language_scores"])
+q6, q7 = st.columns(2)
+q6.metric("EPS + primary outcome rows", quality["primary_data_complete_rows"])
+q7.metric("Outlook-feature-complete rows", quality["outlook_feature_complete_rows"])
 
 st.subheader("Event-level results")
 display_columns = [
@@ -176,7 +177,6 @@ display_columns = [
         "factor_proxy_abnormal_60d_return_pct",
         "abnormal_20d_return_pct",
         "language_outlook_tone",
-        "language_sentiment_score",
         "language_guidance_specificity",
         "transcript_sentiment",
         "management_sentiment",
@@ -197,13 +197,9 @@ st.markdown(
 - `car_0_1_pct` is the proposed checkpoint-normalized CAR[0,1] field for the
   event day and following day; the course event-study package has not been run
   on this synthetic fixture. Confirm its date convention with Gus.
-- SPY buy-and-hold abnormal return is the firm's adjusted buy-and-hold return
-  minus SPY's return over the same sessions.
-- ETF-proxy abnormal returns use market excess (SPY-BIL), size (IWM-SPY), and
-  value (IWD-IWF) daily returns. The announcement reaction is reported
-- separately in the existing Yahoo pilot; these values are not in the
-  Event Study Package fixture. ETF proxies are not official Kenneth French
-  factors.
+- The existing Yahoo pilot separately reports SPY buy-and-hold abnormal
+  returns and ETF-proxy returns. ETF proxies (SPY-BIL, IWM-SPY, IWD-IWF) are
+  not official Kenneth French factors and are not Event Study Package outputs.
 - Synthetic EPS, firm characteristics, textual features, and all return
   values are fabricated placeholders; no model or event study was estimated.
 - `transcript_sentiment`, `management_sentiment`,

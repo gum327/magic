@@ -23,9 +23,7 @@ COVERAGE_GROUPS = {
         "eps_actual",
         "eps_estimate",
         "eps_surprise_pct",
-        "eps_source",
         "eps_beat",
-        "eps_source",
         "market_cap_usd",
         "sector",
         "prior_20d_return_pct",
@@ -36,7 +34,6 @@ COVERAGE_GROUPS = {
         "car_0_5_pct",
         "car_0_20_pct",
         "event_study_status",
-        "event_study_method",
         "announcement_abnormal_return_pct",
         "abnormal_5d_return_pct",
         "abnormal_20d_return_pct",
@@ -124,11 +121,15 @@ def quality_summary(data):
     actual = numeric_column("eps_actual")
     estimate = numeric_column("eps_estimate")
     surprise = numeric_column("eps_surprise_pct")
+    beat = numeric_column("eps_beat")
     valid_eps = actual.notna() & estimate.notna() & estimate.ne(0) & surprise.notna()
     expected_surprise = (actual[valid_eps] - estimate[valid_eps]) / estimate[valid_eps].abs() * 100
     mismatch = int(
         (~np.isclose(surprise[valid_eps], expected_surprise, rtol=1e-5, atol=1e-5)).sum()
     )
+    valid_beat = actual.notna() & estimate.notna() & beat.notna()
+    expected_beat = (actual[valid_beat] > estimate[valid_beat]).astype(float)
+    beat_mismatch = int((~np.isclose(beat[valid_beat], expected_beat)).sum())
 
     invalid_language = 0
     if "language_outlook_tone" in data:
@@ -200,6 +201,7 @@ def quality_summary(data):
         "missing_event_keys": missing_keys,
         "duplicate_event_rows": duplicate_keys,
         "eps_surprise_mismatches": mismatch,
+        "eps_beat_mismatches": beat_mismatch,
         "invalid_language_scores": invalid_language,
         "primary_data_complete_rows": int(
             data.reindex(columns=complete_columns).notna().all(axis=1).sum()
