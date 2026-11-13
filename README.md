@@ -168,6 +168,8 @@ research use is confirmed by the published terms.
   coverage and rights log; do not store transcript text here.
 - `inputs/transcript_candidate_screen_q2_2026.csv` — preliminary, metadata-only
   screen of transcript listing leads; not verified coverage or permission.
+- `TRANSCRIPT_CHECKPOINT.md` — synthetic-first prompt and scoring rubric for
+  the transcript-feature checkpoint; not the final study protocol.
 - `dashboard/pead_app.py` — pilot Streamlit dashboard.
 - `audits/01_self_audit.md` — current pilot limitations and validation needs.
 - `tests/test_pead_pipeline.py` — pipeline unit tests.
