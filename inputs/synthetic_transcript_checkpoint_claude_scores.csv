@@ -1,0 +1,21 @@
+id,outlook_tone,guidance_specificity,status,model,effort,prompt_version,fixture_version,run_date
+SYN-001,2,2,scored,Claude Haiku 5.5,Low,1.2,expanded-mock-calls-v2,2026-11-13
+SYN-002,1,1,scored,Claude Haiku 5.5,Low,1.2,expanded-mock-calls-v2,2026-11-13
+SYN-003,0,2,scored,Claude Haiku 5.5,Low,1.2,expanded-mock-calls-v2,2026-11-13
+SYN-004,-2,2,scored,Claude Haiku 5.5,Low,1.2,expanded-mock-calls-v2,2026-11-13
+SYN-005,-1,1,scored,Claude Haiku 5.5,Low,1.2,expanded-mock-calls-v2,2026-11-13
+SYN-006,0,2,scored,Claude Haiku 5.5,Low,1.2,expanded-mock-calls-v2,2026-11-13
+SYN-007,null,0,insufficient_outlook,Claude Haiku 5.5,Low,1.2,expanded-mock-calls-v2,2026-11-13
+SYN-008,null,null,incomplete_transcript,Claude Haiku 5.5,Low,1.2,expanded-mock-calls-v2,2026-11-13
+SYN-009,0,1,scored,Claude Haiku 5.5,Low,1.2,expanded-mock-calls-v2,2026-11-13
+SYN-010,1,1,scored,Claude Haiku 5.5,Low,1.2,expanded-mock-calls-v2,2026-11-13
+SYN-011,-1,1,scored,Claude Haiku 5.5,Low,1.2,expanded-mock-calls-v2,2026-11-13
+SYN-012,0,2,scored,Claude Haiku 5.5,Low,1.2,expanded-mock-calls-v2,2026-11-13
+SYN-013,0,2,scored,Claude Haiku 5.5,Low,1.2,expanded-mock-calls-v2,2026-11-13
+SYN-014,null,0,insufficient_outlook,Claude Haiku 5.5,Low,1.2,expanded-mock-calls-v2,2026-11-13
+SYN-015,1,1,scored,Claude Haiku 5.5,Low,1.2,expanded-mock-calls-v2,2026-11-13
+SYN-016,-2,2,scored,Claude Haiku 5.5,Low,1.2,expanded-mock-calls-v2,2026-11-13
+SYN-017,0,1,scored,Claude Haiku 5.5,Low,1.2,expanded-mock-calls-v2,2026-11-13
+SYN-018,null,0,insufficient_outlook,Claude Haiku 5.5,Low,1.2,expanded-mock-calls-v2,2026-11-13
+SYN-019,null,null,incomplete_transcript,Claude Haiku 5.5,Low,1.2,expanded-mock-calls-v2,2026-11-13
+SYN-020,2,2,scored,Claude Haiku 5.5,Low,1.2,expanded-mock-calls-v2,2026-11-13

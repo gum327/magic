@@ -120,7 +120,19 @@ Claude if queries are not used for training; do not use Expected Parrot. The
 synthetic-first prompt and two-feature scoring rubric are in
 `TRANSCRIPT_CHECKPOINT.md`. No real transcript text has been processed here,
 and this checkpoint does not replace the proposed final model or support
-predictive claims.
+predictive claims. The synthetic example was run twice with Claude Haiku 5.5
+at Low effort and returned the expected scores. The web interface did not
+expose a maximum-token setting, and strict JSON parseability remains
+unverified for the single-transcript JSON prompt; verify copied output before
+using that format for real transcripts.
+
+Twenty expanded synthetic mini-calls were batch-scored with Claude Haiku 5.5
+at Low effort, using prompt version 1.2. All 20 matched the reference labels
+after the rubric was clarified and two labels were corrected; because the same
+examples were used for prompt tuning, this is not an independent accuracy
+estimate. The mock calls test scoring and output format, not real-call token
+cost. See
+`inputs/synthetic_transcript_checkpoint_claude_scores.csv`.
 
 ## Existing implementation
 

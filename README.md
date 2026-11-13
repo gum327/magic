@@ -170,6 +170,12 @@ research use is confirmed by the published terms.
   screen of transcript listing leads; not verified coverage or permission.
 - `TRANSCRIPT_CHECKPOINT.md` — synthetic-first prompt and scoring rubric for
   the transcript-feature checkpoint; not the final study protocol.
+- `inputs/synthetic_transcript_checkpoint.jsonl` — 20 invented mini-call
+  transcripts for prompt testing; not company or market data.
+- `inputs/synthetic_transcript_expected_scores.csv` — reference scores for
+  those invented excerpts; do not send this file to a model.
+- `inputs/synthetic_transcript_checkpoint_claude_scores.csv` — Claude scores
+  for the synthetic checkpoint run; not study data.
 - `dashboard/pead_app.py` — pilot Streamlit dashboard.
 - `audits/01_self_audit.md` — current pilot limitations and validation needs.
 - `tests/test_pead_pipeline.py` — pipeline unit tests.
