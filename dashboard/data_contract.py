@@ -65,7 +65,12 @@ COVERAGE_GROUPS = {
         "event_study_retrieved_at_utc",
         "transcript_retrieved_at_utc",
         "language_model",
+        "language_effort",
         "language_prompt_version",
+        "language_score_run_date",
+        "language_fixture_version",
+        "language_score_source",
+        "transcript_input_type",
     ),
     "Component records": (
         "financial_record_present",

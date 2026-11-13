@@ -46,8 +46,9 @@ if is_synthetic:
         "fixtures are merged by event_id."
     )
     st.warning(
-        "Every row is generated for dashboard testing. Synthetic values are not "
-        "observations, model results, or evidence about the S&P 500 cohort."
+        "Financial and return values are fabricated. Any Claude scores are from "
+        "fictional calls only; none are real-company observations or evidence "
+        "about the S&P 500 cohort."
     )
 else:
     st.caption("Four-company Yahoo Finance pilot; not the S&P 500 Q2 2026 study")
@@ -183,6 +184,13 @@ display_columns = [
         "analyst_question_sentiment",
         "congratulations_mentioned",
         "transcript_score_status",
+        "transcript_input_type",
+        "language_model",
+        "language_effort",
+        "language_prompt_version",
+        "language_score_run_date",
+        "language_fixture_version",
+        "language_score_source",
         "record_type",
     )
     if column in data.columns
@@ -204,9 +212,12 @@ st.markdown(
   values are fabricated placeholders; no model or event study was estimated.
 - `transcript_sentiment`, `management_sentiment`,
   `analyst_question_sentiment`, and `congratulations_mentioned` are also
-  synthetic UI fields. Their extraction methods require team agreement.
+  synthetic UI values, not calculated from transcript text. Their extraction
+  methods require team agreement.
 - `language_outlook_tone` and `language_guidance_specificity` use the
-  synthetic transcript checkpoint rubric; no Claude outputs are included.
+  synthetic transcript checkpoint rubric. These are Claude Haiku 5.5 Low
+  outputs on the fictional development calls (prompt 1.2), not real-call
+  results; the same set was used for prompt tuning.
 - Missing values remain missing. Coverage percentages describe only the
   currently selected dataset, not the 500-company target cohort.
 - The proposed sequence is Yahoo-only variables, then classic transcript

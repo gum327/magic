@@ -101,9 +101,12 @@ post-call information out of the scoring process.
 - The Homework 8 dashboard includes three reproducible 20-row synthetic
   component fixtures and their event-ID outer merge. They exist only to check
   handoff, display, and missing-data behavior; generated EPS, firm
-  characteristics, transcript features, and CAR values are not real data or
-  model results, and the Event Study Package has not been run on them. The
-  four-company Yahoo pilot remains a separate convenience sample.
+  characteristics, classic sentiment, and CAR values are not real data or
+  Event Study Package results. Its outlook-tone and guidance-specificity
+  fields reuse Claude Haiku 5.5 outputs on fictional development mini-calls;
+  they do not represent real-call performance, and the prompt was tuned on
+  that same development set. No transcript text is included in the dashboard
+  data. The four-company Yahoo pilot remains a separate convenience sample.
 - Verify point-in-time S&P 500 membership and retain post-roster removals.
 - Independently verify event timestamps and EPS actual/consensus definitions.
 - Account for announcement timing, confounding same-day news, overlapping

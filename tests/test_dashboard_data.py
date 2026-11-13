@@ -48,6 +48,43 @@ class DashboardDatasetTests(unittest.TestCase):
         )
         np.testing.assert_allclose(valid["eps_surprise_pct"], expected)
 
+    def test_transcript_handoff_uses_existing_claude_scores_without_text(self):
+        transcript = pd.read_csv(
+            ROOT / "outputs" / "synthetic_transcript_features.csv"
+        )
+        scores = pd.read_csv(
+            ROOT / "inputs" / "synthetic_transcript_checkpoint_claude_scores.csv"
+        )
+        merged = transcript.merge(
+            scores,
+            left_on="event_id",
+            right_on="id",
+            validate="one_to_one",
+        )
+        np.testing.assert_allclose(
+            merged["language_outlook_tone"],
+            merged["outlook_tone"],
+            equal_nan=True,
+        )
+        np.testing.assert_allclose(
+            merged["language_guidance_specificity"],
+            merged["guidance_specificity"],
+            equal_nan=True,
+        )
+        self.assertTrue(merged["transcript_score_status"].equals(merged["status"]))
+        self.assertEqual(set(transcript["language_model"]), {"Claude Haiku 5.5"})
+        self.assertEqual(set(transcript["language_effort"]), {"Low"})
+        self.assertEqual(set(transcript["language_prompt_version"]), {1.2})
+        self.assertEqual(set(transcript["transcript_input_type"]), {"synthetic"})
+        self.assertTrue(transcript["language_score_run_date"].notna().all())
+        self.assertTrue(transcript["language_fixture_version"].notna().all())
+        self.assertTrue(
+            transcript["language_score_source"].eq(
+                "synthetic_transcript_checkpoint_claude_scores.csv"
+            ).all()
+        )
+        self.assertFalse(any("text" in column.lower() for column in transcript.columns))
+
     def test_missing_values_are_preserved_and_counted(self):
         coverage = coverage_table(self.synthetic).set_index("field")
         self.assertEqual(coverage.loc["eps_surprise_pct", "observed"], 19)

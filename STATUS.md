@@ -152,12 +152,17 @@ can switch to the existing four-row Yahoo pilot. The synthetic handoffs are
 dashboard shows `CAR[0,1]` and secondary synthetic CAR windows, alongside the
 pilot's separately named ETF-proxy/SPY outcomes.
 
-All fixture values are generated placeholders, not actual Yahoo Finance data,
-Event Study Package results, text-derived sentiment, or Claude outputs.
-Source fields say synthetic and retrieval fields are blank. Some missing
-values are deliberate examples and stay null. The dashboard displays
-overview, coverage, quality checks, and limitations; it does not estimate
-returns or fit models.
+Financial values, CARs, and classic sentiment fields are generated
+placeholders, not actual Yahoo Finance data, Event Study Package results, or
+scores calculated from text. The two rubric features in the transcript
+handoff reuse Claude Haiku 5.5 Low outputs on the 20 fictional development
+calls (prompt 1.2); metadata is recorded and no transcript text is included.
+Those same calls were used for prompt tuning, so 20/20 label agreement is not
+an independent accuracy estimate. A separate 10-call synthetic validation
+set matched 10/10 references once. Source fields identify synthetic inputs,
+retrieval fields remain blank, and deliberate missing values stay null. The
+dashboard displays overview, coverage, quality checks, and limitations; it
+does not estimate returns or fit models.
 
 The suggested checkpoint comparison is Yahoo-only, then Yahoo plus classic
 sentiment, then additional transcript/AI features. The exact Yahoo fields

@@ -9,6 +9,65 @@ from merge_event_datasets import merge_event_datasets
 
 OUTPUT_DIR = Path(__file__).resolve().parents[1] / "outputs"
 FIXTURE_DATE = "2026-11-13"
+TRANSCRIPT_SCORE_PATH = (
+    Path(__file__).resolve().parents[1]
+    / "inputs"
+    / "synthetic_transcript_checkpoint_claude_scores.csv"
+)
+
+
+def _load_transcript_scores(event_ids):
+    scores = pd.read_csv(TRANSCRIPT_SCORE_PATH)
+    required = {
+        "id",
+        "outlook_tone",
+        "guidance_specificity",
+        "status",
+        "model",
+        "effort",
+        "prompt_version",
+        "fixture_version",
+        "run_date",
+    }
+    missing = required.difference(scores.columns)
+    if missing:
+        raise ValueError(
+            "Transcript score log is missing columns: {}".format(
+                ", ".join(sorted(missing))
+            )
+        )
+    if scores["id"].duplicated().any() or set(scores["id"]) != set(event_ids):
+        raise ValueError("Transcript score IDs must match the synthetic event IDs exactly.")
+
+    scores = scores.set_index("id").loc[event_ids].reset_index()
+    scores["outlook_tone"] = pd.to_numeric(scores["outlook_tone"], errors="coerce")
+    scores["guidance_specificity"] = pd.to_numeric(
+        scores["guidance_specificity"], errors="coerce"
+    )
+    allowed_statuses = {"scored", "insufficient_outlook", "incomplete_transcript"}
+    if not set(scores["status"]).issubset(allowed_statuses):
+        raise ValueError("Transcript score log contains an unknown status.")
+    scored = scores["status"].eq("scored")
+    insufficient = scores["status"].eq("insufficient_outlook")
+    incomplete = scores["status"].eq("incomplete_transcript")
+    if (
+        scores.loc[scored, ["outlook_tone", "guidance_specificity"]].isna().any().any()
+        or not scores.loc[scored, "outlook_tone"].between(-2, 2).all()
+        or not scores.loc[scored, "outlook_tone"].mod(1).eq(0).all()
+        or not scores.loc[scored, "guidance_specificity"].between(0, 2).all()
+        or not scores.loc[scored, "guidance_specificity"].mod(1).eq(0).all()
+    ):
+        raise ValueError("Scored transcript rows contain invalid feature values.")
+    if (
+        scores.loc[insufficient, "outlook_tone"].notna().any()
+        or not scores.loc[insufficient, "guidance_specificity"].eq(0).all()
+        or scores.loc[incomplete, ["outlook_tone", "guidance_specificity"]]
+        .notna()
+        .any()
+        .any()
+    ):
+        raise ValueError("Transcript scores violate the checkpoint status rules.")
+    return scores
 
 
 def build_datasets():
@@ -108,41 +167,15 @@ def build_datasets():
         }
     )
 
-    tone = np.array(
-        [2, 1, 0, -2, -1, 0, 1, -1, 2, 0, 1, -2, np.nan, 1, np.nan, np.nan, np.nan, -1, np.nan, 2]
-    )
-    specificity = np.array(
-        [2, 1, 2, 2, 1, 2, 0, 1, 2, 1, 1, 2, 0, 1, 0, np.nan, np.nan, 1, np.nan, 2]
-    )
-    outlook_status = [
-        "scored",
-        "scored",
-        "scored",
-        "scored",
-        "scored",
-        "scored",
-        "scored",
-        "scored",
-        "scored",
-        "scored",
-        "scored",
-        "scored",
-        "insufficient_outlook",
-        "scored",
-        "insufficient_outlook",
-        "incomplete_transcript",
-        "not_available",
-        "scored",
-        "incomplete_transcript",
-        "scored",
-    ]
+    scores = _load_transcript_scores(event_ids)
     classic_sentiment = np.round(rng.uniform(-1, 1, size), 2)
     management_sentiment = np.round(rng.uniform(-1, 1, size), 2)
     analyst_sentiment = np.round(rng.uniform(-1, 1, size), 2)
+    incomplete_rows = scores["status"].eq("incomplete_transcript").to_numpy()
     for values in (classic_sentiment, management_sentiment, analyst_sentiment):
-        values[[15, 16, 18]] = np.nan
+        values[incomplete_rows] = np.nan
     congratulations = rng.integers(0, 2, size).astype(float)
-    congratulations[[15, 16, 18]] = np.nan
+    congratulations[incomplete_rows] = np.nan
     transcript = pd.DataFrame(
         {
             **identity,
@@ -150,15 +183,24 @@ def build_datasets():
             "management_sentiment": management_sentiment,
             "analyst_question_sentiment": analyst_sentiment,
             "congratulations_mentioned": congratulations,
-            "language_outlook_tone": tone,
-            "language_guidance_specificity": specificity,
-            "transcript_score_status": outlook_status,
+            "language_outlook_tone": scores["outlook_tone"].to_numpy(),
+            "language_guidance_specificity": scores[
+                "guidance_specificity"
+            ].to_numpy(),
+            "transcript_score_status": scores["status"].to_numpy(),
             "transcript_sentiment_method": (
                 "Synthetic placeholder; not calculated from transcript text"
             ),
-            "language_model": "Synthetic placeholder; not LLM-generated",
-            "language_prompt_version": "not_applicable",
-            "transcript_source": "Synthetic fixture; no transcript text retained",
+            "language_model": scores["model"].to_numpy(),
+            "language_effort": scores["effort"].to_numpy(),
+            "language_prompt_version": scores["prompt_version"].to_numpy(),
+            "language_score_run_date": scores["run_date"].to_numpy(),
+            "language_fixture_version": scores["fixture_version"].to_numpy(),
+            "language_score_source": TRANSCRIPT_SCORE_PATH.name,
+            "transcript_input_type": "synthetic",
+            "transcript_source": (
+                "Synthetic mock calls; raw text excluded from dashboard data"
+            ),
             "transcript_retrieved_at_utc": "",
         }
     )

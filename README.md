@@ -159,9 +159,12 @@ research use is confirmed by the published terms.
 
 For the checkpoint, the dashboard merges three separate 20-row handoff
 fixtures. They use fictional `SYN` identifiers and are generated locally by
-`code/build_synthetic_checkpoint.py`; none contains issuer, Yahoo, event-study
-package, transcript, or LLM observations. Numeric values are placeholders.
-Some blanks deliberately test coverage display. No transcript text is stored.
+`code/build_synthetic_checkpoint.py`; none contains real issuer, Yahoo, or
+event-study package observations. The transcript handoff uses the existing
+Claude scores on fictional mini-calls only. Classic sentiment values and
+congratulations flags are placeholders, not computed from text. Some blanks
+deliberately test coverage display. No transcript text is stored in the merged
+dashboard data.
 
 The normalized merge key is `event_id`, with `ticker` and `fiscal_period_end`
 checked across all sources. Each source is one row per company-quarter event;
@@ -174,16 +177,20 @@ handoffs before merging. Dashboard fields:
 | Event | `event_id`, `ticker`, `fiscal_period_end`, timezone-aware `earnings_timestamp`; one call per row |
 | Yahoo-finance X | `eps_actual`, `eps_estimate`, `eps_surprise_pct` = `(actual - estimate) / abs(estimate) * 100`, `eps_beat`, `market_cap_usd`, `sector`, and pre-call return/volatility fields |
 | Event-study Y | Normalized checkpoint fields `car_0_1_pct`, `car_0_5_pct`, `car_0_20_pct`; Gus should map the package output and confirm its event-day convention |
-| Transcript X | Classic placeholders `transcript_sentiment`, `management_sentiment`, `analyst_question_sentiment`, `congratulations_mentioned`; AI-checkpoint fields `language_outlook_tone`, `language_guidance_specificity`, and `transcript_score_status` |
-| Provenance | Per-source source/retrieval fields; the synthetic fixture marks each source as synthetic and leaves retrieval dates blank |
+| Transcript X | Placeholder classic fields `transcript_sentiment`, `management_sentiment`, `analyst_question_sentiment`, `congratulations_mentioned`; Claude-scored synthetic-call fields `language_outlook_tone`, `language_guidance_specificity`, and `transcript_score_status` |
+| Provenance | Per-source source/retrieval fields; synthetic input is labeled, retrieval dates are blank, and Claude model, effort, prompt, and run date are recorded |
 
 `transcript_sentiment`, manager/analyst sentiment, and the congratulations
 flag are synthetic UI values, not scores derived from text. The existing
 transcript checkpoint rubric covers outlook tone and guidance specificity
-only; the fixture's values for those fields are also generated, not Claude
-outputs. The exact Yahoo fields should be reconciled with Gus's myGPT list,
-and Kami should approve the explanatory/predictive variables and whether to
-use regression, predictive ML, or both. The dashboard does not fit models.
+only. Those fields in the fixture are the Claude Haiku 5.5 Low outputs from
+the 20 fictional development calls under prompt version 1.2; the same set was
+used for prompt tuning, so its 20/20 reference agreement is not an independent
+accuracy estimate. The separate 10-call synthetic validation is documented in
+`TRANSCRIPT_CHECKPOINT.md`. The exact Yahoo fields should be reconciled with
+Gus's myGPT list, and Kami should approve the explanatory/predictive variables
+and whether to use regression, predictive ML, or both. The dashboard does not
+fit models.
 
 For the checkpoint, the comparison can be staged as (1) Yahoo variables only,
 (2) Yahoo plus classic transcript sentiment, and (3) those variables plus
@@ -219,7 +226,8 @@ limitations; the existing Yahoo pilot remains available in that menu.
   `outputs/synthetic_transcript_features.csv` — separate 20-row synthetic
   team handoff fixtures.
 - `outputs/synthetic_checkpoint_dataset.csv` — 20-row synthetic dashboard
-  merge; no real issuers, returns, transcript text, or LLM scores.
+  merge; no real issuers, returns, or transcript text; AI scores use fictional
+  calls only.
 - `outputs/pead_sample.csv` — four-firm pilot output; not the final sample.
 - `inputs/q2_2026_events_template.csv` — required verified event-manifest
   columns; currently unpopulated.
