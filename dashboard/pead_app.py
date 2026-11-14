@@ -72,8 +72,8 @@ def status_chip(status: str) -> str:
 
 def synthetic_banner(what: str = "This section"):
     st.error(
-        "**SYNTHETIC TEST DATA: NOT RESEARCH RESULTS.** {} uses random numbers "
-        "generated to test the layout. Tickers SYN01–SYN40 are fake. Real "
+        "**SYNTHETIC TEST DATA: NOT RESEARCH RESULTS.** {} uses synthetic inputs "
+        "generated to test the layout. Tickers starting with SYN are fake. Real "
         "outputs will replace them automatically when delivered.".format(what),
         icon="🧪",
     )

@@ -330,9 +330,12 @@ class AppSmokeTests(unittest.TestCase):
         self.assertFalse(app.exception, [e.value for e in app.exception])
         return app
 
-    def test_app_runs_without_fixtures_and_shows_no_synthetic_banner(self):
+    def test_app_runs_without_fixtures_and_labels_synthetic_outputs(self):
+        # outputs/transcript_features.csv is Abby's synthetic handoff, so the
+        # banner must appear even with fixtures off.
         app = self._run(False)
-        self.assertFalse(any("SYNTHETIC TEST DATA" in e.value for e in app.error))
+        self.assertTrue(any("SYNTHETIC TEST DATA" in e.value for e in app.error))
+        self.assertTrue(any("synthetic inputs" in e.value for e in app.error))
         self.assertTrue(any("PILOT DATA" in w.value for w in app.warning))
 
     def test_app_runs_with_fixtures_and_labels_them(self):
