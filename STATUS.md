@@ -164,6 +164,16 @@ retrieval fields remain blank, and deliberate missing values stay null. The
 dashboard displays overview, coverage, quality checks, and limitations; it
 does not estimate returns or fit models.
 
+A separate local-only transcript feature extractor now scores the 20
+fictional speaker-labeled mini-call excerpts with the Loughran–McDonald
+1993–2025 Master Dictionary. It outputs one event-keyed row per manifest
+record, including sentiment, word counts/proportions, management/analyst
+sections, and explicit completeness flags. Its two incomplete synthetic
+inputs remain unscored. The dictionary file is not committed; the extractor
+records its version, source, retrieval date, and checksum. This output is not
+yet merged into the dashboard handoff, and it is not evidence about real
+transcripts or return prediction.
+
 The suggested checkpoint comparison is Yahoo-only, then Yahoo plus classic
 sentiment, then additional transcript/AI features. The exact Yahoo fields
 should be checked against Gus's myGPT list; Kami should confirm model inputs

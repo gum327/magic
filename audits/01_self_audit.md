@@ -107,6 +107,12 @@ post-call information out of the scoring process.
   they do not represent real-call performance, and the prompt was tuned on
   that same development set. No transcript text is included in the dashboard
   data. The four-company Yahoo pilot remains a separate convenience sample.
+- The separate local transcript-feature pipeline scores only the 20
+  fictional, speaker-labeled mini-call excerpts with the Loughran–McDonald
+  1993–2025 dictionary. It preserves two incomplete rows as unscored and
+  writes no source text to its output. The examples validate code paths and
+  event-ID alignment, not real-call sentiment accuracy; no real transcript
+  rights or source-specific parser has been validated.
 - Verify point-in-time S&P 500 membership and retain post-roster removals.
 - Independently verify event timestamps and EPS actual/consensus definitions.
 - Account for announcement timing, confounding same-day news, overlapping

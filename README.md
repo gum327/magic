@@ -172,6 +172,16 @@ the outer merge keeps events absent from a component and adds a
 `*_record_present` flag. For real data, agree on the event ID across team
 handoffs before merging. Dashboard fields:
 
+The separate local text-feature pipeline is documented in
+[`docs/transcript_features/README.md`](docs/transcript_features/README.md).
+It calculates Loughran–McDonald dictionary features on the 20 fictional
+speaker-labeled excerpts and writes
+`outputs/synthetic_transcript_text_features.csv`, keyed by the same `event_id`.
+This output is separate from the dashboard fixture: the latter's classic
+sentiment columns remain synthetic placeholders until the team agrees to
+replace them with extracted features. The local pipeline makes no external
+AI/API calls.
+
 | Group | Shared columns and meaning |
 |---|---|
 | Event | `event_id`, `ticker`, `fiscal_period_end`, timezone-aware `earnings_timestamp`; one call per row |
@@ -219,7 +229,15 @@ limitations; the existing Yahoo pilot remains available in that menu.
 - `STATUS.md` — decisions, completed work, and open dependencies.
 - `code/pead_pipeline.py` — current small Yahoo Finance pilot pipeline.
 - `code/build_synthetic_checkpoint.py` — deterministic synthetic-only
--  three-source dashboard fixture generator.
+  three-source dashboard fixture generator.
+- `code/extract_transcript_features.py` — local, dictionary-based transcript
+  feature extractor; no external model calls.
+- `docs/transcript_features/README.md` and
+  `docs/transcript_features/data_dictionary.md` — run instructions, feature
+  definitions, and provenance.
+- `inputs/synthetic_transcript_manifest.csv` and
+  `outputs/synthetic_transcript_text_features.csv` — synthetic event metadata
+  and local dictionary scores; no transcript text in the output.
 - `code/merge_event_datasets.py` — validated outer merge on shared event IDs.
 - `outputs/synthetic_yahoo_finance_variables.csv`,
   `outputs/synthetic_event_study_results.csv`, and
@@ -263,6 +281,12 @@ Run commands from the repository root:
 pip install -r requirements.txt
 python code/pead_pipeline.py --as-of 2026-11-06
 python code/build_synthetic_checkpoint.py
+python code/extract_transcript_features.py \
+  --input-jsonl inputs/synthetic_transcript_checkpoint.jsonl \
+  --manifest-csv inputs/synthetic_transcript_manifest.csv \
+  --dictionary-csv /path/to/Loughran-McDonald_MasterDictionary_1993-2025.csv \
+  --dictionary-retrieved-date 2026-11-13 \
+  --output outputs/synthetic_transcript_text_features.csv
 python code/merge_event_datasets.py \
   --financial outputs/synthetic_yahoo_finance_variables.csv \
   --event-study outputs/synthetic_event_study_results.csv \

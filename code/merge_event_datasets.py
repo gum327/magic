@@ -7,6 +7,7 @@ import pandas as pd
 
 EVENT_ID = "event_id"
 IDENTITY_COLUMNS = ("ticker", "fiscal_period_end")
+OPTIONAL_SHARED_COLUMNS = ("company_name",)
 COMPONENTS = ("financial", "event_study", "transcript")
 
 
@@ -32,13 +33,18 @@ def merge_event_datasets(financial, event_study, transcript):
         "event_study": event_study.copy(),
         "transcript": transcript.copy(),
     }
+    shared_columns = IDENTITY_COLUMNS + tuple(
+        column
+        for column in OPTIONAL_SHARED_COLUMNS
+        if any(column in frame.columns for frame in data.values())
+    )
     used_columns = set()
     prepared = []
     for name in COMPONENTS:
         frame = data[name]
         _validate_component(frame, name)
         non_identity = set(frame.columns).difference(
-            {EVENT_ID, *IDENTITY_COLUMNS}
+            {EVENT_ID, *shared_columns}
         )
         overlaps = used_columns.intersection(non_identity)
         if overlaps:
@@ -49,7 +55,8 @@ def merge_event_datasets(financial, event_study, transcript):
         frame = frame.rename(
             columns={
                 column: "{}__{}".format(column, name)
-                for column in IDENTITY_COLUMNS
+                for column in shared_columns
+                if column in frame.columns
             }
         )
         frame["{}_record_present".format(name)] = True
@@ -64,9 +71,11 @@ def merge_event_datasets(financial, event_study, transcript):
             validate="one_to_one",
         )
 
-    for column in IDENTITY_COLUMNS:
+    for column in shared_columns:
         source_columns = [
-            "{}__{}".format(column, name) for name in COMPONENTS
+            "{}__{}".format(column, name)
+            for name in COMPONENTS
+            if column in data[name].columns
         ]
         values = merged[source_columns]
         mismatches = values.nunique(axis=1, dropna=True).gt(1)
