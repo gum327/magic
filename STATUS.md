@@ -114,17 +114,17 @@ terms have now been reviewed; they do not establish retention or external-model
 use rights. The Microsoft terms have also been reviewed and do not establish
 those rights.
 
-For the November 13 checkpoint, Professor Bowen said a synthetic exercise or
-up to 20 real calls from the licensed dataset may be tested with non-Enterprise
-Claude if queries are not used for training; do not use Expected Parrot. The
-synthetic-first prompt and two-feature scoring rubric are in
+For the November 13 checkpoint, use synthetic transcripts only with external
+AI. Professor Bowen's current instruction prohibits uploading licensed
+transcript text to GitHub or sending it to external AI services; do not use
+Claude, Expected Parrot, or another external service with real transcript
+text. The synthetic-only prompt and two-feature scoring rubric are in
 `TRANSCRIPT_CHECKPOINT.md`. No real transcript text has been processed here,
 and this checkpoint does not replace the proposed final model or support
 predictive claims. The synthetic example was run twice with Claude Haiku 5.5
 at Low effort and returned the expected scores. The web interface did not
 expose a maximum-token setting, and strict JSON parseability remains
-unverified for the single-transcript JSON prompt; verify copied output before
-using that format for real transcripts.
+unverified for the single-transcript JSON prompt.
 
 Twenty expanded synthetic mini-calls were batch-scored with Claude Haiku 5.5
 at Low effort, using prompt version 1.2. All 20 matched the reference labels
@@ -168,8 +168,9 @@ A separate local-only transcript feature extractor now scores the 20
 fictional speaker-labeled mini-call excerpts with the Loughran–McDonald
 1993–2025 Master Dictionary. It outputs one event-keyed row per manifest
 record, including sentiment, word counts/proportions, management/analyst
-sections, and explicit completeness flags. Its two incomplete synthetic
-inputs remain unscored. The dictionary file is not committed; the extractor
+sections, and explicit completeness flags. All 20 synthetic fixture excerpts
+are scored; separate tests cover incomplete and missing inputs. The
+dictionary file is not committed; the extractor
 records its version, source, retrieval date, and checksum. This output is not
 yet merged into the dashboard handoff, and it is not evidence about real
 transcripts or return prediction.

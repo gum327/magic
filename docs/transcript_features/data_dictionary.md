@@ -17,11 +17,11 @@ fictional mini-call excerpts, not real companies or complete calls.
 | `call_date` | ISO date | Synthetic call date from the existing checkpoint fixture. |
 | `fiscal_quarter` | string | Synthetic fiscal-quarter label (`2026Q2`). |
 | `fiscal_period_end` | ISO date | Synthetic quarter-end date; not a verified company fiscal period. |
-| `transcript_status` | category | `complete`, `incomplete_transcript`, or `missing_transcript`. Non-complete rows have null feature values. |
+| `transcript_status` | category | `complete`, `incomplete_transcript`, or `missing_transcript`. `complete` means the supplied input is complete for its stated scope; in this fixture it means a complete mini-call excerpt with the required speaker sections, not a full issuer transcript. Non-complete rows have null feature values. |
 | `transcript_input_type` | category | `synthetic` for all rows in this checkpoint. |
 | `transcript_source` | string | Synthetic input description; future data should record its authorized source. |
 | `transcript_retrieved_at_utc` | string | `not_applicable_synthetic` in the fixture; future data should record the source retrieval timestamp in UTC. |
-| `section_status` | category | `complete` or semicolon-separated parser flags such as missing sections, unlabeled prefix, or missing speaker labels. A flagged section's score is null. |
+| `section_status` | category | `complete` or semicolon-separated parser flags such as missing sections, unlabeled prefix, or unrecognized speaker labels. Missing sections and any unrecognized speaker identity keep speaker-specific features null. |
 
 ## Numeric features
 
@@ -53,13 +53,16 @@ zero and negative-year removal markers do not count as membership.
 | `management_sentiment` | float | Net financial sentiment across management turns. |
 | `analyst_question_word_count` | integer | Tokens in turns labeled `Analyst`. |
 | `analyst_question_sentiment` | float | Net financial sentiment in analyst turns. |
+| `analyst_question_count` | nullable integer | Punctuation-based question-count proxy: number of question-mark characters (`?`) in analyst-labeled turns, not semantic question segmentation; null if the analyst section is missing or any speaker label is unrecognized. |
 | `congratulations_mentioned` | nullable integer | 1 if the exact word “congratulations” appears, otherwise 0; null for incomplete/missing transcripts. |
 
 A score is null for an empty or unavailable section, not zero. A zero score
 for a nonempty section means positive and negative dictionary counts balance;
 it does not imply that the language is truly neutral. No stemming, negation,
 sarcasm, phrase-level context, or speaker-level attribution beyond the
-normalized labels is modeled.
+normalized labels is modeled. Unknown speaker names are not guessed to be
+management or analysts: overall text sentiment can still be calculated, but
+speaker-specific features are null and `section_status` records the issue.
 
 ## Provenance fields
 

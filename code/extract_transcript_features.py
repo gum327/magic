@@ -42,11 +42,13 @@ FEATURE_COLUMNS = (
     "management_sentiment",
     "analyst_question_word_count",
     "analyst_question_sentiment",
+    "analyst_question_count",
     "congratulations_mentioned",
 )
 TOKEN_PATTERN = re.compile(r"[A-Za-z]+")
 SPEAKER_PATTERN = re.compile(
-    r"\b(?P<speaker>Operator|CEO|CFO|Analyst):\s*", re.IGNORECASE
+    r"(?<!\w)(?P<speaker>[A-Z][A-Za-z0-9.'-]*"
+    r"(?:\s+(?:[A-Z][A-Za-z0-9.'-]*|\d+)){0,3}):\s*"
 )
 INCOMPLETE_MARKER = re.compile(
     r"^\[SYNTHETIC TRANSCRIPT IS INCOMPLETE:[^\]]+\]\s*", re.IGNORECASE
@@ -98,14 +100,14 @@ def _text_metrics(text, dictionary):
     uncertainty = sum(word in dictionary["uncertainty"] for word in words)
     if word_count == 0:
         return {
-            "word_count": 0,
-            "positive_word_count": 0,
+            "word_count": None,
+            "positive_word_count": None,
             "positive_word_proportion": None,
-            "negative_word_count": 0,
+            "negative_word_count": None,
             "negative_word_proportion": None,
-            "uncertainty_word_count": 0,
+            "uncertainty_word_count": None,
             "uncertainty_word_proportion": None,
-            "sentiment_word_count": 0,
+            "sentiment_word_count": None,
             "sentiment": None,
         }
     return {
@@ -121,8 +123,26 @@ def _text_metrics(text, dictionary):
     }
 
 
+def _speaker_role(label):
+    normalized = " ".join(label.lower().split())
+    if normalized in {"operator", "host", "moderator"}:
+        return "operator"
+    if re.fullmatch(r"analyst(?:\s+\d+)?", normalized):
+        return "analyst"
+    if normalized in {
+        "ceo",
+        "cfo",
+        "management",
+        "executive",
+        "chief executive officer",
+        "chief financial officer",
+    }:
+        return "management"
+    return "unknown"
+
+
 def _parse_transcript(text):
-    """Split the checkpoint's canonical speaker labels into call sections."""
+    """Split labeled turns; unknown speaker identities are never inferred."""
     clean_text = INCOMPLETE_MARKER.sub("", text.strip())
     matches = list(SPEAKER_PATTERN.finditer(clean_text))
     prefix = clean_text[: matches[0].start()].strip() if matches else clean_text
@@ -130,7 +150,8 @@ def _parse_transcript(text):
     for index, match in enumerate(matches):
         start = match.end()
         end = matches[index + 1].start() if index + 1 < len(matches) else len(clean_text)
-        role = match.group("speaker").lower()
+        label = match.group("speaker")
+        role = _speaker_role(label)
         turns.append((role, clean_text[start:end].strip()))
 
     first_analyst = next(
@@ -140,27 +161,32 @@ def _parse_transcript(text):
     prepared = []
     management_qa = []
     analysts = []
+    unknown_speakers = False
     all_text = [prefix] if prefix else []
     for index, (role, turn_text) in enumerate(turns):
         if turn_text:
             all_text.append(turn_text)
-        if role in {"ceo", "cfo"}:
+        if role == "management":
             if first_analyst is None or index < first_analyst:
                 prepared.append(turn_text)
             else:
                 management_qa.append(turn_text)
         elif role == "analyst":
             analysts.append(turn_text)
+        elif role == "unknown":
+            unknown_speakers = True
 
     missing_sections = []
     if not any(text for text in prepared):
         missing_sections.append("missing_management_prepared_remarks")
-    if not analysts:
+    if not any(analysts):
         missing_sections.append("missing_analyst_questions")
     if not any(text for text in management_qa):
         missing_sections.append("missing_management_qa")
     if prefix:
         missing_sections.append("unlabeled_prefix")
+    if unknown_speakers:
+        missing_sections.append("unrecognized_speaker_labels")
     if not turns:
         missing_sections.append("no_speaker_labels")
 
@@ -170,10 +196,16 @@ def _parse_transcript(text):
         "management_qa_text": " ".join(management_qa),
         "management_text": " ".join(prepared + management_qa),
         "analyst_text": " ".join(analysts),
+        "analyst_question_count": (
+            sum(turn.count("?") for turn in analysts if turn)
+            if any(analysts)
+            else None
+        ),
         "section_status": (
             "complete" if not missing_sections else ";".join(missing_sections)
         ),
         "congratulations_text": clean_text,
+        "unrecognized_speaker_labels": unknown_speakers,
     }
 
 
@@ -197,8 +229,10 @@ def extract_transcript_features(record, metadata, dictionary, dictionary_metadat
             "management_qa_text": "",
             "management_text": "",
             "analyst_text": "",
+            "analyst_question_count": None,
             "section_status": "missing_transcript",
             "congratulations_text": "",
+            "unrecognized_speaker_labels": False,
         }
     else:
         parsed = _parse_transcript(text)
@@ -237,12 +271,27 @@ def extract_transcript_features(record, metadata, dictionary, dictionary_metadat
             "management_sentiment": management["sentiment"],
             "analyst_question_word_count": analysts["word_count"],
             "analyst_question_sentiment": analysts["sentiment"],
+            "analyst_question_count": parsed["analyst_question_count"],
             "congratulations_mentioned": int(
                 re.search(r"\bcongratulations\b", parsed["congratulations_text"], re.I)
                 is not None
             ),
         }
     )
+    if parsed["unrecognized_speaker_labels"]:
+        speaker_feature_columns = (
+            "management_prepared_word_count",
+            "management_prepared_sentiment",
+            "management_qa_word_count",
+            "management_qa_sentiment",
+            "management_word_count",
+            "management_sentiment",
+            "analyst_question_word_count",
+            "analyst_question_sentiment",
+            "analyst_question_count",
+        )
+        for column in speaker_feature_columns:
+            row[column] = None
     return row
 
 

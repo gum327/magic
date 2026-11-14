@@ -3,9 +3,11 @@
 - **Works:** Local Python extraction with the Loughran–McDonald financial
   dictionary; overall, management, management-prepared, management-Q&A, and
   analyst sentiment; positive/negative/uncertainty counts and proportions;
-  congratulations flag; and word counts.
-- **Test data:** 20 fictional mini-call excerpts matched to 20 synthetic
-  event IDs. Two inputs are explicitly incomplete and retain null feature
+  congratulations flag; analyst question-mark count; and word counts.
+- **Test data:** 20 fictional mini-call excerpts, complete for the measured
+  speaker sections, matched to 20 synthetic event IDs. All 20 produce overall
+  sentiment and analyst question counts.
+  Separate tests verify incomplete and missing inputs retain null feature
   values. No real transcript text was accessed or processed.
 - **Privacy and licensing:** The extractor makes no external AI/API calls.
   The dictionary is used locally under the authors' academic-research

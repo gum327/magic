@@ -88,6 +88,7 @@ class TranscriptFeatureTests(unittest.TestCase):
         self.assertAlmostEqual(row["management_sentiment"], 2 / 9)
         self.assertEqual(row["analyst_question_word_count"], 3)
         self.assertEqual(row["analyst_question_sentiment"], 0)
+        self.assertEqual(row["analyst_question_count"], 1)
         self.assertEqual(row["congratulations_mentioned"], 1)
         self.assertFalse(
             any("transcript" in key.lower() and "text" in key.lower() for key in row)
@@ -103,13 +104,43 @@ class TranscriptFeatureTests(unittest.TestCase):
             "missing_analyst_questions;missing_management_qa",
         )
         self.assertIsNone(row["analyst_question_sentiment"])
+        self.assertIsNone(row["analyst_question_count"])
         self.assertIsNone(row["management_qa_sentiment"])
+        self.assertIsNone(row["analyst_question_word_count"])
 
         incomplete_metadata = dict(self.metadata, transcript_status="incomplete_transcript")
         incomplete = extract_transcript_features(
             record, incomplete_metadata, self.dictionary, self.provenance
         )
         self.assertTrue(all(incomplete[column] is None for column in FEATURE_COLUMNS))
+
+    def test_unknown_speaker_names_are_not_assigned_to_management_or_analysts(self):
+        record = {
+            "transcript": (
+                "CEO: Profit improved. Analyst: Risk may increase? "
+                "CFO: Losses declined. John Doe: An unclassified statement."
+            )
+        }
+        row = extract_transcript_features(
+            record, self.metadata, self.dictionary, self.provenance
+        )
+        self.assertIn("unrecognized_speaker_labels", row["section_status"])
+        self.assertIsNotNone(row["transcript_sentiment"])
+        self.assertIsNone(row["management_sentiment"])
+        self.assertIsNone(row["analyst_question_sentiment"])
+        self.assertIsNone(row["analyst_question_count"])
+
+    def test_analyst_question_count_counts_question_marks_not_speaker_turns(self):
+        record = {
+            "transcript": (
+                "CEO: Results were stable. Analyst: What changed? Why now? "
+                "CFO: We will provide more detail."
+            )
+        }
+        row = extract_transcript_features(
+            record, self.metadata, self.dictionary, self.provenance
+        )
+        self.assertEqual(row["analyst_question_count"], 2)
 
     def test_synthetic_corpus_produces_one_event_keyed_row_per_manifest_record(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -123,18 +154,20 @@ class TranscriptFeatureTests(unittest.TestCase):
                 }
             ).to_csv(dictionary_path, index=False)
             features = build_feature_dataset(
-                ROOT / "inputs" / "synthetic_transcript_checkpoint.jsonl",
-                ROOT / "inputs" / "synthetic_transcript_manifest.csv",
+                ROOT / "inputs" / "synthetic_transcript_text_feature_checkpoint.jsonl",
+                ROOT / "inputs" / "synthetic_transcript_text_feature_manifest.csv",
                 dictionary_path,
             )
 
-        manifest = pd.read_csv(ROOT / "inputs" / "synthetic_transcript_manifest.csv")
+        manifest = pd.read_csv(
+            ROOT / "inputs" / "synthetic_transcript_text_feature_manifest.csv"
+        )
         self.assertEqual(len(features), 20)
         self.assertEqual(features["event_id"].tolist(), manifest["event_id"].tolist())
         self.assertEqual(features["transcript_id"].nunique(), 20)
         self.assertEqual(
             features["transcript_status"].value_counts().to_dict(),
-            {"complete": 18, "incomplete_transcript": 2},
+            {"complete": 20},
         )
         financial = pd.read_csv(ROOT / "outputs" / "synthetic_yahoo_finance_variables.csv")
         aligned = features.merge(
@@ -162,13 +195,9 @@ class TranscriptFeatureTests(unittest.TestCase):
         conflicting_names.loc[0, "company_name"] = "Wrong Synthetic Name"
         with self.assertRaisesRegex(ValueError, "Conflicting company_name"):
             merge_event_datasets(financial, event_study, conflicting_names)
-        complete = features["transcript_status"].eq("complete")
-        incomplete = features["transcript_status"].eq("incomplete_transcript")
-        self.assertTrue(features.loc[complete, "transcript_sentiment"].notna().all())
-        self.assertTrue(features.loc[complete, "section_status"].eq("complete").all())
-        self.assertTrue(
-            features.loc[incomplete, list(FEATURE_COLUMNS)].isna().all().all()
-        )
+        self.assertTrue(features["transcript_sentiment"].notna().all())
+        self.assertTrue(features["analyst_question_count"].notna().all())
+        self.assertTrue(features["section_status"].eq("complete").all())
         self.assertFalse(
             any(
                 "transcript" in column.lower() and "text" in column.lower()
@@ -201,10 +230,10 @@ class TranscriptFeatureTests(unittest.TestCase):
 
     def test_batch_processes_500_records_without_manual_steps(self):
         source_records = read_transcript_jsonl(
-            ROOT / "inputs" / "synthetic_transcript_checkpoint.jsonl"
+            ROOT / "inputs" / "synthetic_transcript_text_feature_checkpoint.jsonl"
         )
         source_manifest = pd.read_csv(
-            ROOT / "inputs" / "synthetic_transcript_manifest.csv"
+            ROOT / "inputs" / "synthetic_transcript_text_feature_manifest.csv"
         ).set_index("transcript_id")
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -248,6 +277,8 @@ class TranscriptFeatureTests(unittest.TestCase):
             )
         self.assertEqual(len(features), 500)
         self.assertEqual(features["event_id"].nunique(), 500)
+        self.assertTrue(features["transcript_sentiment"].notna().all())
+        self.assertTrue(features["analyst_question_count"].notna().all())
 
 
 if __name__ == "__main__":

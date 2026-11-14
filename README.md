@@ -235,9 +235,11 @@ limitations; the existing Yahoo pilot remains available in that menu.
 - `docs/transcript_features/README.md` and
   `docs/transcript_features/data_dictionary.md` — run instructions, feature
   definitions, and provenance.
-- `inputs/synthetic_transcript_manifest.csv` and
-  `outputs/synthetic_transcript_text_features.csv` — synthetic event metadata
-  and local dictionary scores; no transcript text in the output.
+- `inputs/synthetic_transcript_text_feature_checkpoint.jsonl`,
+  `inputs/synthetic_transcript_text_feature_manifest.csv`, and
+  `outputs/synthetic_transcript_text_features.csv` — synthetic feature-input
+  excerpts and metadata plus local dictionary scores; the output has no
+  transcript text.
 - `code/merge_event_datasets.py` — validated outer merge on shared event IDs.
 - `outputs/synthetic_yahoo_finance_variables.csv`,
   `outputs/synthetic_event_study_results.csv`, and
@@ -282,8 +284,8 @@ pip install -r requirements.txt
 python code/pead_pipeline.py --as-of 2026-11-06
 python code/build_synthetic_checkpoint.py
 python code/extract_transcript_features.py \
-  --input-jsonl inputs/synthetic_transcript_checkpoint.jsonl \
-  --manifest-csv inputs/synthetic_transcript_manifest.csv \
+  --input-jsonl inputs/synthetic_transcript_text_feature_checkpoint.jsonl \
+  --manifest-csv inputs/synthetic_transcript_text_feature_manifest.csv \
   --dictionary-csv /path/to/Loughran-McDonald_MasterDictionary_1993-2025.csv \
   --dictionary-retrieved-date 2026-11-13 \
   --output outputs/synthetic_transcript_text_features.csv

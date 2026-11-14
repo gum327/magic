@@ -3,17 +3,16 @@
 ## Scope and safeguards
 
 This is a low-cost workflow check, not the final research scoring protocol or
-evidence about the S&P 500 cohort. Use synthetic transcripts or, subject to
-the safeguard below, up to 20 real transcripts from the professor-provided
-licensed dataset.
+evidence about the S&P 500 cohort. Use synthetic transcripts only with
+external AI.
 
-Professor Bowen's November 13 email permits a checkpoint using fake transcripts
-or up to 20 real transcripts from the licensed dataset, with non-Enterprise
-Claude, provided queries are not used for training. If using real transcripts,
-use only that professor-provided subset, confirm the account's no-training
-setting, and send text directly to Claude. Do not use Expected Parrot. Keep raw
-files in the authorized location and out of GitHub. If the account setting
-cannot be confirmed, continue with synthetic text only.
+Professor Bowen's current instruction prohibits uploading licensed transcript
+text to GitHub or sending it to external AI services. Do not send real
+transcripts to Claude, Expected Parrot, or any other external service. Keep
+any authorized real files in approved local storage and use local processing
+only when the provider terms and project instructions allow it. A future
+change to this rule requires explicit written authorization and a fresh terms
+review.
 
 The final study's proposed model remains the pinned checkpoint documented in
 `PROPOSAL.md`; this exploratory Claude checkpoint does not replace it.
@@ -75,7 +74,7 @@ Use standard ASCII double quotes, not typographic quotes, so the response is
 valid JSON. Do not wrap it in a Markdown code fence.
 
 Transcript:
-<PASTE ONE SYNTHETIC OR AUTHORIZED TRANSCRIPT HERE>
+<PASTE ONE SYNTHETIC TRANSCRIPT HERE>
 ```
 
 ## Single-excerpt dry run
@@ -119,9 +118,10 @@ JSON parseability remains unverified.
 The JSONL file contains 20 fictional mini-calls, including improving, stable,
 worsening, no-outlook, and explicitly incomplete cases. They can be scored
 together in one request as a low-cost format experiment. This batch approach
-applies only to these synthetic mini-calls; use one transcript per request for
-real transcripts. The mock calls are much shorter than real full-length calls,
-so this tests scoring and output format but not real-call token cost.
+applies only to these synthetic mini-calls. No real transcript text is
+authorized for external model requests. The mock calls are much shorter than
+real full-length calls, so this tests scoring and output format but not
+real-call token cost.
 
 The first batch exposed ambiguity between qualitative outlooks that name a
 future period and numerical guidance. Prompt version 1.2 clarifies that a
@@ -178,12 +178,12 @@ accurate for real calls or useful for return prediction.
 
 ## Minimal run log
 
-Keep the run log separate from transcript text. Record the event identifier,
-whether the transcript was synthetic or authorized, model/version shown by the
-client (and exact API model identifier if available), prompt version, run date,
-no-training confirmation for real inputs, status, scores, and any error. Do
-not save transcript text, quotations, or model explanations in the log.
-Preserve incomplete and failed records as such.
+Keep the run log separate from transcript text. For synthetic runs, record the
+event identifier, model/version shown by the client (and exact API model
+identifier if available), prompt version, run date, status, scores, and any
+error. Do not save transcript text, quotations, or model explanations in the
+log. Preserve incomplete and failed records as such. Under the current
+instruction, do not send real transcript text to an external model.
 
 Do not interpret this checkpoint as a predictive test. A 20-call exercise is
 only a workflow and coverage feasibility check; the final study requires

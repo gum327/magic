@@ -2,10 +2,14 @@
 
 This pipeline computes dictionary-based transcript variables locally. It
 makes no Claude, OpenAI, Expected Parrot, or other external AI/API calls.
-The checkpoint inputs are the 20 fictional mini-call excerpts in
-`inputs/synthetic_transcript_checkpoint.jsonl`; they are not real earnings
-calls or full-length transcripts. Two are explicitly incomplete and remain
-unscored.
+The inputs are the 20 fictional mini-call excerpts in
+`inputs/synthetic_transcript_text_feature_checkpoint.jsonl`; their metadata
+is in `inputs/synthetic_transcript_text_feature_manifest.csv`. They are not
+real earnings calls or full-length transcripts. All 20 fixture excerpts are
+complete for the speaker sections this pipeline measures. Unit tests
+separately verify that incomplete and missing inputs keep feature values
+null. This local-scoring fixture is separate from the synthetic Claude-prompt
+fixture used in `TRANSCRIPT_CHECKPOINT.md`.
 
 ## Run
 
@@ -18,8 +22,8 @@ From the repository root:
 
 ```bash
 python code/extract_transcript_features.py \
-  --input-jsonl inputs/synthetic_transcript_checkpoint.jsonl \
-  --manifest-csv inputs/synthetic_transcript_manifest.csv \
+  --input-jsonl inputs/synthetic_transcript_text_feature_checkpoint.jsonl \
+  --manifest-csv inputs/synthetic_transcript_text_feature_manifest.csv \
   --dictionary-csv /path/to/Loughran-McDonald_MasterDictionary_1993-2025.csv \
   --dictionary-retrieved-date 2026-11-13 \
   --output outputs/synthetic_transcript_text_features.csv
@@ -32,6 +36,9 @@ transcripts, keep the text in the authorized local location, create a
 metadata-only manifest, and normalize each call to the speaker labels
 `Operator`, `CEO`, `CFO`, and `Analyst` before running the extractor. Source-
 specific transcript parsing and permission checks are not implemented here.
+Unrecognized speaker labels are recorded as a section issue and are never
+guessed to be management or analysts; overall sentiment remains available
+while speaker-specific scores and analyst-question counts are null.
 The manifest records the transcript source and UTC retrieval timestamp; the
 dictionary retrieval date is required by the command.
 
@@ -44,6 +51,9 @@ unmanifested IDs fail explicitly.
 The shared event merger also coalesces `company_name` when more than one
 component supplies it and rejects conflicts; the event keys remain
 `event_id`, `ticker`, and `fiscal_period_end`.
+`analyst_question_count` counts literal question marks in analyst-labeled
+turns, not the number of analyst speaker turns. It is a reproducible
+punctuation-based proxy, not semantic question segmentation.
 
 ## Reproducibility
 
@@ -60,8 +70,7 @@ python -m unittest discover -s tests -p test_transcript_features.py
 ## Checkpoint scope
 
 This validates a local feature-extraction workflow on 20 invented excerpts,
-not accuracy on actual calls and not prediction of returns. For any real
-transcript, verify the provider's retention and research-use terms first.
-No real transcript may be sent to an external model without explicit
-permission and the required account protections. AI scoring remains a
-separate optional workflow and is disabled in this pipeline.
+not accuracy on actual calls and not prediction of returns. For any real transcript, verify the provider's retention and research-use
+terms before local processing. Under current project instructions, do not send
+real transcript text to any external model. AI scoring remains a separate
+optional workflow and is disabled in this pipeline.
