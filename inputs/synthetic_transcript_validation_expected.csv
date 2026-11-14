@@ -1,0 +1,11 @@
+id,outlook_tone,guidance_specificity,status
+VAL-001,2,2,scored
+VAL-002,1,1,scored
+VAL-003,0,2,scored
+VAL-004,-2,2,scored
+VAL-005,-1,1,scored
+VAL-006,null,0,insufficient_outlook
+VAL-007,null,null,incomplete_transcript
+VAL-008,0,2,scored
+VAL-009,0,1,scored
+VAL-010,-1,1,scored

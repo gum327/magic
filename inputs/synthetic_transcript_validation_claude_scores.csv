@@ -1,0 +1,11 @@
+id,outlook_tone,guidance_specificity,status,model,effort,prompt_version,run_date
+VAL-001,2,2,scored,Claude Haiku 5.5,Low,1.2,2026-11-13
+VAL-002,1,1,scored,Claude Haiku 5.5,Low,1.2,2026-11-13
+VAL-003,0,2,scored,Claude Haiku 5.5,Low,1.2,2026-11-13
+VAL-004,-2,2,scored,Claude Haiku 5.5,Low,1.2,2026-11-13
+VAL-005,-1,1,scored,Claude Haiku 5.5,Low,1.2,2026-11-13
+VAL-006,null,0,insufficient_outlook,Claude Haiku 5.5,Low,1.2,2026-11-13
+VAL-007,null,null,incomplete_transcript,Claude Haiku 5.5,Low,1.2,2026-11-13
+VAL-008,0,2,scored,Claude Haiku 5.5,Low,1.2,2026-11-13
+VAL-009,0,1,scored,Claude Haiku 5.5,Low,1.2,2026-11-13
+VAL-010,-1,1,scored,Claude Haiku 5.5,Low,1.2,2026-11-13

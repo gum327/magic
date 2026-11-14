@@ -81,23 +81,38 @@ feasibility check only, not a sufficient predictive-analysis sample. If
 rights or broader cohort coverage fail, complete the quantitative baseline
 and defer AI sentiment.
 
-A November 7, 2026 metadata screen identified 15 candidate listing leads in
-`inputs/transcript_candidate_screen_q2_2026.csv`; these do not constitute 15
-verified transcripts. The Microsoft Investor Relations page for
+A metadata screen started November 7 and was updated November 10, 2026. It
+now has 21 company candidates in
+`inputs/transcript_candidate_screen_q2_2026.csv`, including Wells Fargo as a
+third-party lead. Twelve potential first-party transcript locations are aligned
+to the calendar-Q2 cohort: 11 PDF links (Alphabet, AT&T, Bank of America,
+Citigroup, Coca-Cola, Expedia, Hilton, JPMorganChase, Meta, Netflix, and Visa)
+and Microsoft's transcript page. Hilton's and Expedia's June 30 quarter ends
+are confirmed by SEC 10-Q headers; both transcripts are posted, not verified
+complete or rights-cleared. HPE has a located issuer PDF, but its fiscal Q2 ended April
+30, outside the cohort. Apple and Intel fiscal quarters ended June 27, with
+calls on July 30 and July 23; their official results materials do not provide
+a verified full transcript. AT&T's fiscal period alignment is confirmed at
+June 30.
+
+The Microsoft Investor Relations page for
 [FY26 Q4](https://www.microsoft.com/en-us/Investor/events/FY-2026/earnings-fy-2026-q4)
-confirms the July 29, 2026 call and displays transcript text. Only an initial
-preview was viewed; no transcript text was retained or analyzed. Microsoft's
-[website terms](https://www.microsoft.com/en-us/legal/terms-of-use) generally
-restrict copying and do not establish permission for study retention or
-external-model input. First-party transcript PDFs for JPMorganChase Q2 2026
-and Meta Q2 2026 have been verified at their
-[JPMorganChase](https://www.jpmorganchase.com/content/dam/jpmc/jpmorgan-chase-and-co/investor-relations/documents/quarterly-earnings/2026/2nd-quarter/2Q26-earnings-transcript.pdf)
-and
-[Meta/Q4CDN](https://s21.q4cdn.com/399680738/files/doc_financials/2026/q2/META-Q2-2026-Earnings-Call-Transcript.pdf)
-URLs. Both PDFs were opened in a browser, but no transcript text was reviewed
-or retained, and reuse rights remain unresolved. Amazon's official event page
-lists no transcript. No rights-cleared transcript has been collected; the
-10–20-call coverage audit remains incomplete.
+displays transcript text, but only the initial preview was viewed and no
+transcript text was retained or analyzed. Microsoft's
+[website terms](https://www.microsoft.com/en-us/legal/terms-of-use) do not
+establish permission for study retention or external-model input. Citi's
+[official quarterly earnings page](https://www.citigroup.com/global/investors/quarterly-earnings)
+links its [July 14 Q2 transcript PDF](https://www.citigroup.com/rcs/citigpa/storage/public/2026psqtr2-transcript.pdf);
+only PDF metadata was inspected. No transcript text was retained. The other
+PDF contents were not reviewed for completeness, and reuse rights remain
+unresolved. Amazon, Mastercard, Goldman Sachs, Morgan Stanley, and IBM
+official event pages list no transcript. Wells Fargo's official quarterly
+page lists earnings materials, while its transcript result is an unverified
+GuruFocus lead. Third-party leads for Apple, Intel, GS, MS, and IBM are also
+unverified. The Citi file returned 403 to a metadata-only request and was not
+retried or bypassed. No source has confirmed permission for project
+retention or external AI input; no full transcript has been checked for
+completeness, and the pilot remains empty.
 
 Quartr's free mobile app advertises transcripts and in-app AI chat; its
 transcript API and MCP offerings require paid access, and the MCP docs state

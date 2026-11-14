@@ -43,20 +43,37 @@ on the pilot, but not yet run on the target S&P 500 cohort. The proxies
 
 The Seeking Alpha transcript index is publicly viewable, but its current
 terms limit content to personal, non-commercial use and prohibit automated
-retrieval, scraping, and data mining. Do not scrape it. A November 7, 2026
-metadata screen found 15 candidate listing leads; these are not verified
-transcripts or cleared coverage. A first-party JPMorganChase 2Q26 earnings
-transcript PDFs for JPMorganChase Q2 2026 and Meta Q2 2026 are verified at
-their issuer/IR CDN URLs. Both were opened in a browser, but transcript text
-was not reviewed or retained and rights remain unknown. One Microsoft Investor Relations page
-confirms its July 29, 2026 call and displays transcript text; only an initial
-preview was viewed, and no text was saved or analyzed. Microsoft's website
-terms generally restrict copying and do not establish research-retention or
-external-model rights. See
+retrieval, scraping, and data mining. Do not scrape it. A metadata screen
+started November 7 and was updated November 10, 2026; it now has 21
+candidate-company rows, not verified transcripts or cleared coverage. Twelve
+potential first-party transcript locations align to the cohort: 11 PDF
+links for Alphabet, AT&T, Bank of America, Citigroup, Coca-Cola, Expedia,
+Hilton, JPMorganChase, Meta, Netflix, and Visa, plus Microsoft's transcript
+page. Hilton and Expedia June 30 period ends are confirmed by SEC 10-Q headers.
+HPE's issuer PDF is excluded because its fiscal Q2 ended April 30, outside
+the cohort. Apple and Intel fiscal quarters ended June 27 and their calls
+were July 30 and July 23; official result materials do not provide a
+verified full transcript. AT&T's period end is confirmed as June 30.
+
+The source links were checked, but transcript text was not retained and
+reuse/model rights remain unknown. Microsoft's Investor Relations page
+displays transcript text; only an initial preview was viewed and no text was
+saved or analyzed. Its website terms do not establish research-retention or
+external-model rights. Citi's [official quarterly earnings page](https://www.citigroup.com/global/investors/quarterly-earnings)
+links its [July 14 Q2 transcript PDF](https://www.citigroup.com/rcs/citigpa/storage/public/2026psqtr2-transcript.pdf);
+only PDF metadata was inspected, and the direct file returned 403 to a
+metadata-only request. It was not retried or bypassed. Official event pages
+for Amazon, Mastercard, Goldman Sachs, Morgan Stanley, and IBM list no
+transcript. Wells Fargo's official quarterly page lists earnings materials,
+while its GuruFocus transcript result remains an unverified lead. Third-party
+leads for Apple, Intel, GS, MS, IBM, and Wells Fargo remain unverified. See
 `inputs/transcript_candidate_screen_q2_2026.csv` and
-`inputs/transcript_access_audit_template.csv`. Public visibility is not
-evidence of reuse rights; obtain written permission or a suitable
-institutional/explicitly permitted source before collecting or scoring text.
+`inputs/transcript_access_audit_template.csv`. No full transcript has been
+checked for completeness, no source has confirmed retention or external-AI
+permission, and the audit does not establish 10–20-call coverage.
+Public visibility is not evidence of reuse rights; obtain written permission
+or a suitable institutional/explicitly permitted source before collecting or
+scoring text.
 
 FactSet has an [Academic ID request page](https://support.factset.com/academic/),
 which is a plausible institution-mediated access route. The page itself does
@@ -81,6 +98,22 @@ post-call information out of the scoring process.
 
 ## Remaining threats and checks
 
+- The Homework 8 dashboard includes three reproducible 20-row synthetic
+  component fixtures and their event-ID outer merge. They exist only to check
+  handoff, display, and missing-data behavior; generated EPS, firm
+  characteristics, classic sentiment, and CAR values are not real data or
+  Event Study Package results. Its outlook-tone and guidance-specificity
+  fields reuse Claude Haiku 5.5 outputs on fictional development mini-calls;
+  they do not represent real-call performance, and the prompt was tuned on
+  that same development set. No transcript text is included in the dashboard
+  data. The four-company Yahoo pilot remains a separate convenience sample.
+- The separate local transcript-feature pipeline scores only the 20
+  fictional, speaker-labeled mini-call excerpts with the Loughran–McDonald
+  1993–2025 dictionary. All 20 synthetic fixture excerpts are scored;
+  separate tests verify incomplete and missing rows remain unscored. The
+  pipeline writes no source text to its output. The examples validate code paths and
+  event-ID alignment, not real-call sentiment accuracy; no real transcript
+  rights or source-specific parser has been validated.
 - Verify point-in-time S&P 500 membership and retain post-roster removals.
 - Independently verify event timestamps and EPS actual/consensus definitions.
 - Account for announcement timing, confounding same-day news, overlapping
