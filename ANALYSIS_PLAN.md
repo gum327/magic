@@ -6,14 +6,16 @@ This plan sets out how we will test whether earnings-call language helps explain
 
 ## Outcome
 
-The outcome (Y) is **CAR[0,1]**: the cumulative abnormal return over the earnings call day and the following day, relative to what a factor model predicts. It is produced by the event study package from the list of tickers and call dates.
+For this checkpoint, the outcome (Y) is **CAR[0,1]**: the cumulative abnormal return over the earnings call day and the following day, relative to what a factor model predicts. It is produced by the event study package from the list of tickers and call dates.
+
+This is distinct from the project's final outcome, the cumulative abnormal return over the 20 trading sessions after the announcement-reaction session, which the full analysis will use. At this checkpoint, CAR[0,1] captures the immediate reaction around the call.
 
 ## Sample and data
 
 - **Observation:** one company-quarter earnings call.
 - **Universe:** S&P 500 constituents as of June 30, 2026, from a dated roster file saved in the repo.
 - **Period:** companies with fiscal quarters ending April 1 through June 30, 2026.
-- **Same sample in every run:** all three runs use exactly the same events. Events missing any variable are dropped, and we report how many.
+- **Same sample in every run:** all three runs use exactly the same events. Events missing any variable are dropped, and we report how many. A missing score is recorded as null, not zero, because zero would be read as a neutral score.
 - **Inputs:** (1) the event study dataset, built from tickers and call dates, which supplies CAR[0,1]; (2) Yahoo Finance variables measured as of the call date; (3) a transcript dataset with one row per call. The three are merged on a shared event ID (event ID, ticker, and fiscal period end).
 
 ## Approach: three runs, each adding information
