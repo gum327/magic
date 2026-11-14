@@ -184,6 +184,21 @@ schema does not replace the longer-horizon final design in `PROPOSAL.md`.
 Regenerate all fixtures with `python code/build_synthetic_checkpoint.py`.
 No 500-company sample or real transcript-feature merge has been built.
 
+### Synthetic final-shape dataset and Results tab (Nov 14, 2026)
+
+`code/build_synthetic_final_dataset.py` generates 500 invented calls
+(`SYN001`-`SYN500`) with every variable in `ANALYSIS_PLAN.md`, writes the
+variable dictionary, and runs the plan's three nested OLS models on
+`CAR[0,1]` (same complete-case sample, chronological ~60/40 split on a date
+boundary). The dashboard's **Results (checkpoint)** tab displays those outputs
+under a synthetic banner. Relationships are planted by the generator, so the
+results show the analysis layout only. `car_final_20s_pct` (the final-study
+outcome) is in the file but not used by the checkpoint models.
+`sentiment_gap` stays in the dataset but is excluded from the regressions,
+because it equals management minus analyst sentiment exactly (perfect
+collinearity). The real merged file should replace
+`outputs/synthetic_final_dataset.csv` with the same columns.
+
 ## Existing implementation
 
 The four-firm AAPL/MSFT/TSLA/NVDA Yahoo Finance pilot, CSV, dashboard, audit,

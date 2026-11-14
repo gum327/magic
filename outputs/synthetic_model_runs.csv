@@ -1,0 +1,4 @@
+run,label,n_features,train_n,test_n,excluded_n,train_cutoff,test_start,out_of_sample_r2,mae,rmse,data_status
+1,Run 1: Yahoo Finance only,14,208,148,144,2026-08-03,2026-08-04,-0.0171,3.7226,5.0885,synthetic
+2,Run 2: + dictionary text,18,208,148,144,2026-08-03,2026-08-04,0.0527,3.6229,4.9109,synthetic
+3,Run 3: + AI-scored text,20,208,148,144,2026-08-03,2026-08-04,0.0704,3.5988,4.8648,synthetic

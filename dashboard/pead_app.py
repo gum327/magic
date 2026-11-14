@@ -174,8 +174,11 @@ if use_fixtures:
     )
 
 tabs = st.tabs(
-    ["Overview", "Data coverage", "Data quality & gaps", "Event explorer", "Findings", "Methods & limitations"]
+    ["Overview", "Results (checkpoint)", "Data coverage", "Data quality & gaps", "Event explorer",
+     "Language findings", "Methods & limitations"]
 )
+results_tab = tabs[1]
+tabs = [tabs[0]] + list(tabs[2:])  # the original sections keep their indices below
 
 # --------------------------------------------------------------------------
 # 1. Overview
@@ -262,6 +265,112 @@ with tabs[0]:
 - **Out-of-sample R²:** improvement over simply predicting the training-set average. Below 0 means worse than that average.
 """
         )
+
+# --------------------------------------------------------------------------
+# 1b. Results (checkpoint): three nested runs on CAR[0,1]
+# --------------------------------------------------------------------------
+with results_tab:
+    final_ds, runs_ds = data["final_dataset"], data["model_runs"]
+    coefs_ds, preds_ds, vars_ds = data["model_coefficients"], data["run_predictions"], data["variables"]
+    st.subheader("Does earnings-call language explain the stock's reaction?")
+    st.markdown(
+        "**Checkpoint outcome: CAR[0,1]**, the cumulative abnormal return on the call day and the next "
+        "trading day. This is distinct from the project's **final outcome**, the abnormal return over the 20 "
+        "trading sessions after the reaction session, which the full study will use."
+    )
+    if not (final_ds.available and runs_ds.available):
+        awaiting("the merged final dataset", "The final-shape dataset and model runs are not available.",
+                 ["Run 1 to 3 holdout R², MAE and RMSE", "Which variables move CAR[0,1]",
+                  "Predicted vs. actual reactions"],
+                 [DATASETS["final_dataset"].path, DATASETS["model_runs"].path])
+    else:
+        fd, runs = final_ds.frame, runs_ds.frame.sort_values("run")
+        if final_ds.status == SYNTHETIC or runs_ds.status == SYNTHETIC:
+            st.error(
+                "**SYNTHETIC DATA: NOT RESEARCH RESULTS.** Every number on this tab comes from 500 invented "
+                "earnings calls (tickers SYN001–SYN500) whose relationships were **planted** by "
+                "`code/build_synthetic_final_dataset.py`. The tab shows what the analysis will look like; the "
+                "real merged dataset will replace it with the same columns.",
+                icon="🧪",
+            )
+        names = {}
+        if vars_ds.available:
+            names = dict(zip(vars_ds.frame["variable"], vars_ds.frame["variable"].str.replace("_", " ")))
+        first, last = runs.iloc[0], runs.iloc[-1]
+
+        k = st.columns(4)
+        k[0].metric("Earnings calls", "{:,}".format(len(fd)), border=True)
+        k[1].metric("Used in models", "{:,}".format(int(first["train_n"] + first["test_n"])), border=True,
+                    delta="{:,} excluded (missing)".format(int(first["excluded_n"])),
+                    delta_color="off", delta_arrow="off",
+                    help="Same events in every run. Events missing any variable are dropped, never zero-filled.")
+        k[2].metric("Holdout events", "{:,}".format(int(first["test_n"])), border=True,
+                    delta="{:,} training events".format(int(first["train_n"])), delta_color="off", delta_arrow="off",
+                    help="Sorted by call date: fit on the earliest 60%, tested once on the latest 40%.")
+        k[3].metric("Holdout R², Run 3", "{:.3f}".format(last["out_of_sample_r2"]), border=True,
+                    delta="{:+.3f} vs. Run 1".format(last["out_of_sample_r2"] - first["out_of_sample_r2"]))
+
+        st.markdown("#### Does each layer of information improve prediction?")
+        st.caption("Each run adds variables to the previous one, on the same events. Higher R² and lower error "
+                   "mean better holdout predictions. Below 0 R² would mean worse than guessing the average.")
+        st.altair_chart(charts.run_metrics_chart(runs))
+        st.caption("Runs: **1** Yahoo Finance variables (EPS surprise, size, valuation, quality, leverage, risk, "
+                   "momentum, attention) · **2** + dictionary sentiment and 'congratulations' · **3** + AI-scored "
+                   "outlook tone and guidance specificity. Training: calls through {}. Holdout: calls from {}.".format(
+                       first["train_cutoff"], first["test_start"]))
+
+        a, b = st.columns([3, 2], gap="large")
+        with a:
+            st.markdown("#### Which variables matter?")
+            if coefs_ds.available:
+                run_id = st.segmented_control("Model", list(runs["run"]), default=int(last["run"]),
+                                              format_func=lambda r: "Run {}".format(r), required=True,
+                                              key="coef_run")
+                st.altair_chart(charts.coefficient_chart(
+                    coefs_ds.frame[coefs_ds.frame["run"] == run_id], names), width="stretch")
+                st.caption("Dot = estimated change in CAR[0,1] (percentage points) when the variable rises by "
+                           "one standard deviation, holding the others fixed. Line = 95% interval.")
+        with b:
+            st.markdown("#### Predicted vs. actual (holdout)")
+            if preds_ds.available:
+                pick = st.selectbox("Model", list(runs["label"]), index=len(runs) - 1, key="pred_run")
+                run_id = int(runs.loc[runs["label"] == pick, "run"].iloc[0])
+                st.altair_chart(charts.run_predictions_chart(preds_ds.frame, "pred_run{}".format(run_id), pick),
+                                width="stretch")
+                st.caption("Points on the dashed line are perfect predictions.")
+
+        st.markdown("#### Explore one variable against the reaction")
+        numeric = [v for v in (vars_ds.frame["variable"] if vars_ds.available else fd.columns)
+                   if v in fd.columns and v not in ("car_0_1_pct", "car_final_20s_pct")
+                   and pd.api.types.is_numeric_dtype(fd[v])]
+        e1, e2 = st.columns([3, 2], gap="large")
+        with e1:
+            default = numeric.index("eps_surprise_pct") if "eps_surprise_pct" in numeric else 0
+            xvar = st.selectbox("Variable", numeric, index=default, format_func=lambda v: names.get(v, v))
+            st.altair_chart(charts.binned_relationship_chart(fd, xvar, names.get(xvar, xvar), "car_0_1_pct",
+                                                             "CAR[0,1] (%)"), width="stretch")
+            n_blank = int(fd[xvar].isna().sum())
+            if n_blank:
+                st.caption("{} calls have no value for this variable and are left out (not set to zero).".format(
+                    n_blank))
+        with e2:
+            st.markdown("**Average reaction: beat vs. miss**")
+            grp = fd.assign(result=fd["eps_beat"].map({1: "Beat consensus", 0: "Missed / met"}))
+            st.altair_chart(charts.group_mean_chart(grp, "result", "car_0_1_pct", "CAR[0,1] (%)"), width="stretch")
+            if "congratulations_mentioned" in fd.columns:
+                st.markdown("**Average reaction: analyst said 'congratulations'?**")
+                grp = fd.assign(congrats=fd["congratulations_mentioned"].map({1: "Yes", 0: "No"}))
+                st.altair_chart(charts.group_mean_chart(grp, "congrats", "car_0_1_pct", "CAR[0,1] (%)"),
+                                width="stretch")
+
+        with st.expander("Variable dictionary (names, definitions, sources)"):
+            if vars_ds.available:
+                st.dataframe(vars_ds.frame, hide_index=True, column_config={
+                    "definition": st.column_config.TextColumn(width="large")})
+        with st.expander("Full dataset ({:,} rows)".format(len(fd))):
+            st.dataframe(fd, hide_index=True)
+            st.download_button("Download dataset (CSV)", fd.to_csv(index=False).encode(),
+                               Path(str(final_ds.path)).name, mime="text/csv")
 
 # --------------------------------------------------------------------------
 # 2. Data coverage

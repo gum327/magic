@@ -282,3 +282,96 @@ def feature_scatter(df: pd.DataFrame, feature: str, outcome: str, outcome_title:
         ],
     )
     return (_zero_rule("y") + dots).properties(height=340)
+
+
+# --------------------------------------------------------------------------
+# Checkpoint results (three nested runs on CAR[0,1])
+# --------------------------------------------------------------------------
+RUN_COLORS = [MUTED, BLUE, ORANGE]
+
+
+def run_metrics_chart(runs: pd.DataFrame) -> alt.Chart:
+    labels = list(runs.sort_values("run")["label"])
+    titles = {"out_of_sample_r2": "Holdout R² (higher = better)", "mae": "MAE, pp (lower = better)",
+              "rmse": "RMSE, pp (lower = better)"}
+    long = runs.melt(id_vars=["run", "label"], value_vars=list(titles), var_name="metric", value_name="value")
+    long["metric"] = long["metric"].map(titles)
+    long["shown"] = long.apply(lambda r: ("{:.3f}" if "R²" in r["metric"] else "{:.2f}").format(r["value"]), axis=1)
+    base = alt.Chart(long).encode(
+        y=alt.Y("label:N", sort=labels, title=None, axis=alt.Axis(labelLimit=220)),
+        x=alt.X("value:Q", title=None, axis=alt.Axis(tickCount=4)),
+        tooltip=[alt.Tooltip("label:N", title="Run"), alt.Tooltip("metric:N", title="Metric"),
+                 alt.Tooltip("shown:N", title="Value")],
+    )
+    bars = base.mark_bar(cornerRadiusEnd=4, height=22).encode(
+        color=alt.Color("label:N", scale=alt.Scale(domain=labels, range=RUN_COLORS), legend=None))
+    text = base.mark_text(align="left", dx=6, fontWeight="bold", color=LABEL).encode(text="shown:N")
+    return (
+        alt.layer(bars, text, data=long)
+        .properties(width=150, height=alt.Step(34))
+        .facet(column=alt.Column("metric:N", sort=list(titles.values()), title=None,
+                                 header=alt.Header(labelFontWeight="bold", labelFontSize=13)))
+        .resolve_scale(x="independent")
+    )
+
+
+def coefficient_chart(coefs: pd.DataFrame, names: dict) -> alt.Chart:
+    df = coefs.copy()
+    df["name"] = df["variable"].map(names).fillna(df["variable"])
+    df["side"] = df.apply(lambda r: "Clearly above 0" if r["ci_low"] > 0 else
+                          ("Clearly below 0" if r["ci_high"] < 0 else "Interval includes 0"), axis=1)
+    order = list(df.sort_values("coef_per_sd")["name"])
+    domain = ["Clearly above 0", "Interval includes 0", "Clearly below 0"]
+    base = alt.Chart(df).encode(
+        y=alt.Y("name:N", sort=order, title=None, axis=alt.Axis(labelLimit=260)),
+        tooltip=[alt.Tooltip("name:N", title="Variable"),
+                 alt.Tooltip("coef_per_sd:Q", title="Effect of +1 SD (pp)", format=".2f"),
+                 alt.Tooltip("ci_low:Q", title="95% low", format=".2f"),
+                 alt.Tooltip("ci_high:Q", title="95% high", format=".2f")],
+    )
+    color = alt.Color("side:N", scale=alt.Scale(domain=domain, range=[BLUE, BASELINE, ORANGE]),
+                      legend=alt.Legend(title=None, orient="bottom", labelLimit=200))
+    bars = base.mark_rule(strokeWidth=3).encode(x=alt.X("ci_low:Q", title="Change in CAR[0,1] per +1 SD (pp)"),
+                                                x2="ci_high:Q", color=color)
+    dots = base.mark_circle(size=90, opacity=1).encode(x="coef_per_sd:Q", color=color)
+    return (_zero_rule("x") + bars + dots).properties(height=alt.Step(22))
+
+
+def binned_relationship_chart(df: pd.DataFrame, x: str, x_title: str, y: str, y_title: str) -> alt.Chart:
+    data = df.dropna(subset=[x, y])
+    dots = alt.Chart(data).mark_circle(size=40, color=BLUE, opacity=0.35).encode(
+        x=alt.X("{}:Q".format(x), title=x_title),
+        y=alt.Y("{}:Q".format(y), title=y_title),
+        tooltip=[alt.Tooltip("ticker:N", title="Event"), alt.Tooltip("{}:Q".format(x), title=x_title, format=".2f"),
+                 alt.Tooltip("{}:Q".format(y), title=y_title, format=".2f")],
+    )
+    fit = alt.Chart(data).transform_regression(x, y).mark_line(color=ORANGE, strokeWidth=3).encode(
+        x="{}:Q".format(x), y="{}:Q".format(y))
+    return (_zero_rule("y") + dots + fit).properties(height=360)
+
+
+def group_mean_chart(df: pd.DataFrame, group: str, y: str, y_title: str) -> alt.Chart:
+    data = df.dropna(subset=[group, y])
+    base = alt.Chart(data).encode(x=alt.X("{}:N".format(group), title=None, axis=alt.Axis(labelAngle=0)))
+    bars = base.mark_bar(color=BLUE, cornerRadiusEnd=4, size=48).encode(
+        y=alt.Y("mean({}):Q".format(y), title="Average " + y_title),
+        tooltip=[alt.Tooltip("{}:N".format(group), title="Group"),
+                 alt.Tooltip("mean({}):Q".format(y), title="Average", format=".2f"),
+                 alt.Tooltip("count():Q", title="Events")])
+    err = base.mark_errorbar(extent="ci", color=LABEL).encode(y="{}:Q".format(y))
+    return (_zero_rule("y") + bars + err).properties(height=300)
+
+
+def run_predictions_chart(preds: pd.DataFrame, run_col: str, run_label: str) -> alt.Chart:
+    data = preds.dropna(subset=["actual", run_col])
+    lo = float(min(data["actual"].min(), data[run_col].min()))
+    hi = float(max(data["actual"].max(), data[run_col].max()))
+    diag = alt.Chart(pd.DataFrame({"a": [lo, hi], "b": [lo, hi]})).mark_line(
+        color=BASELINE, strokeDash=[4, 4], strokeWidth=2).encode(x="a:Q", y="b:Q")
+    dots = alt.Chart(data).mark_circle(size=60, color=BLUE, opacity=0.6).encode(
+        x=alt.X("{}:Q".format(run_col), title="Predicted CAR[0,1] (%), " + run_label),
+        y=alt.Y("actual:Q", title="Actual CAR[0,1] (%)"),
+        tooltip=[alt.Tooltip("ticker:N", title="Event"), alt.Tooltip("call_date:N", title="Call date"),
+                 alt.Tooltip("{}:Q".format(run_col), title="Predicted", format=".2f"),
+                 alt.Tooltip("actual:Q", title="Actual", format=".2f")])
+    return (diag + dots).properties(height=360)

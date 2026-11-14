@@ -1,0 +1,33 @@
+variable,group,first_used_in_run,definition,planned_source,units
+event_id,Key,,Unique ID for one company-quarter earnings call (primary key).,Event list (Gus),text
+ticker,Key,,Stock ticker; checked for consistency on merge.,Event list (Gus),text
+fiscal_period_end,Key,,Last day of the fiscal quarter reported; checked on merge.,Event list (Gus),date
+call_date,Key,,Date of the earnings call (event day 0).,Event list (Gus),date
+sector,Descriptive,,GICS sector.,S&P 500 roster,text
+car_0_1_pct,Outcome (Y),,CHECKPOINT OUTCOME. Cumulative abnormal return over the call day and the next trading day.,Event Study Package,%
+car_final_20s_pct,Outcome (Y),,FINAL-STUDY OUTCOME (not used in checkpoint models). Abnormal return over the 20 trading sessions after the announcement-reaction session.,Event Study Package,%
+eps_actual,Run 1: Yahoo Finance,,Reported EPS for the quarter.,Yahoo Finance,$
+eps_estimate,Run 1: Yahoo Finance,,Consensus EPS estimate before the call.,Yahoo Finance,$
+eps_surprise_usd,Run 1: Yahoo Finance,1.0,EPS actual minus consensus.,Yahoo Finance,$
+eps_surprise_pct,Run 1: Yahoo Finance,1.0,(Actual - consensus) / |consensus| x 100.,Yahoo Finance,%
+eps_beat,Run 1: Yahoo Finance,,"1 if actual EPS > consensus, else 0.",Yahoo Finance,0/1
+log_market_cap,Run 1: Yahoo Finance,1.0,"Natural log of market cap (USD), day before the call.",Yahoo Finance,log $
+price_to_book,Run 1: Yahoo Finance,1.0,Price-to-book ratio.,Yahoo Finance,x
+forward_pe,Run 1: Yahoo Finance,1.0,"Forward P/E. Yahoo gives a current snapshot only, so flagged for look-ahead risk.",Yahoo Finance,x
+profit_margin,Run 1: Yahoo Finance,1.0,"Net profit margin, latest quarter before the call.",Yahoo Finance,share
+revenue_growth,Run 1: Yahoo Finance,1.0,Year-over-year quarterly revenue growth.,Yahoo Finance,share
+earnings_growth,Run 1: Yahoo Finance,1.0,Year-over-year quarterly earnings growth.,Yahoo Finance,share
+debt_to_equity,Run 1: Yahoo Finance,1.0,Total debt / shareholders' equity.,Yahoo Finance,x
+beta,Run 1: Yahoo Finance,1.0,Market beta.,Yahoo Finance,x
+price_change_52w_pct,Run 1: Yahoo Finance,1.0,52-week price change to the day before the call.,Yahoo Finance,%
+ma50_ma200_gap_pct,Run 1: Yahoo Finance,1.0,(50-day avg / 200-day avg - 1) x 100.,Yahoo Finance,%
+avg_daily_volume,Run 1: Yahoo Finance,1.0,Average daily share volume (3 months).,Yahoo Finance,shares
+short_pct_float,Run 1: Yahoo Finance,1.0,"Short interest as % of float. Current snapshot only, so flagged for look-ahead risk.",Yahoo Finance,%
+transcript_sentiment,Run 2: dictionary text,2.0,Overall dictionary sentiment of the call.,Transcript features (Abby),-1 to 1
+management_prepared_sentiment,Run 2: dictionary text,2.0,Dictionary sentiment of management's prepared remarks only (not Q&A).,Transcript features (Abby),-1 to 1
+analyst_question_sentiment,Run 2: dictionary text,2.0,Dictionary sentiment of analyst questions.,Transcript features (Abby),-1 to 1
+sentiment_gap,Run 2: dictionary text,,"management_prepared_sentiment minus analyst_question_sentiment; blank if either is blank. Kept for description but NOT entered in the regression: it is an exact linear combination of the two sentiment columns, so OLS cannot separate the three effects.",Derived,-2 to 2
+congratulations_mentioned,Run 2: dictionary text,2.0,1 if an analyst says 'congratulations'.,Transcript features (Abby),0/1
+outlook_tone,Run 3: AI-scored,3.0,AI score of management's forward-looking tone.,Transcript features (Abby),1-5
+guidance_specificity,Run 3: AI-scored,3.0,AI score of how concrete the guidance is.,Transcript features (Abby),1-5
+data_status,Metadata,,synthetic / pilot / cohort. Every row here is synthetic.,Generator,text
