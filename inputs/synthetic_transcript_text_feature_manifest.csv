@@ -1,0 +1,21 @@
+event_id,transcript_id,ticker,company_name,call_date,fiscal_quarter,fiscal_period_end,transcript_status,transcript_input_type,transcript_source,transcript_retrieved_at_utc
+SYN-001,SYN-001,SYN001,Synthetic Company 01,2026-07-20,2026Q2,2026-04-30,complete,synthetic,Invented mock-call excerpt for dictionary features,not_applicable_synthetic
+SYN-002,SYN-002,SYN002,Synthetic Company 02,2026-07-22,2026Q2,2026-05-31,complete,synthetic,Invented mock-call excerpt for dictionary features,not_applicable_synthetic
+SYN-003,SYN-003,SYN003,Synthetic Company 03,2026-07-24,2026Q2,2026-06-30,complete,synthetic,Invented mock-call excerpt for dictionary features,not_applicable_synthetic
+SYN-004,SYN-004,SYN004,Synthetic Company 04,2026-07-26,2026Q2,2026-06-27,complete,synthetic,Invented mock-call excerpt for dictionary features,not_applicable_synthetic
+SYN-005,SYN-005,SYN005,Synthetic Company 05,2026-07-28,2026Q2,2026-04-30,complete,synthetic,Invented mock-call excerpt for dictionary features,not_applicable_synthetic
+SYN-006,SYN-006,SYN006,Synthetic Company 06,2026-07-30,2026Q2,2026-05-31,complete,synthetic,Invented mock-call excerpt for dictionary features,not_applicable_synthetic
+SYN-007,SYN-007,SYN007,Synthetic Company 07,2026-08-01,2026Q2,2026-06-30,complete,synthetic,Invented mock-call excerpt for dictionary features,not_applicable_synthetic
+SYN-008,SYN-008,SYN008,Synthetic Company 08,2026-08-03,2026Q2,2026-06-27,complete,synthetic,Invented mock-call excerpt for dictionary features,not_applicable_synthetic
+SYN-009,SYN-009,SYN009,Synthetic Company 09,2026-08-05,2026Q2,2026-04-30,complete,synthetic,Invented mock-call excerpt for dictionary features,not_applicable_synthetic
+SYN-010,SYN-010,SYN010,Synthetic Company 10,2026-08-07,2026Q2,2026-05-31,complete,synthetic,Invented mock-call excerpt for dictionary features,not_applicable_synthetic
+SYN-011,SYN-011,SYN011,Synthetic Company 11,2026-08-09,2026Q2,2026-06-30,complete,synthetic,Invented mock-call excerpt for dictionary features,not_applicable_synthetic
+SYN-012,SYN-012,SYN012,Synthetic Company 12,2026-08-11,2026Q2,2026-06-27,complete,synthetic,Invented mock-call excerpt for dictionary features,not_applicable_synthetic
+SYN-013,SYN-013,SYN013,Synthetic Company 13,2026-08-13,2026Q2,2026-04-30,complete,synthetic,Invented mock-call excerpt for dictionary features,not_applicable_synthetic
+SYN-014,SYN-014,SYN014,Synthetic Company 14,2026-08-15,2026Q2,2026-05-31,complete,synthetic,Invented mock-call excerpt for dictionary features,not_applicable_synthetic
+SYN-015,SYN-015,SYN015,Synthetic Company 15,2026-08-17,2026Q2,2026-06-30,complete,synthetic,Invented mock-call excerpt for dictionary features,not_applicable_synthetic
+SYN-016,SYN-016,SYN016,Synthetic Company 16,2026-08-19,2026Q2,2026-06-27,complete,synthetic,Invented mock-call excerpt for dictionary features,not_applicable_synthetic
+SYN-017,SYN-017,SYN017,Synthetic Company 17,2026-08-21,2026Q2,2026-04-30,complete,synthetic,Invented mock-call excerpt for dictionary features,not_applicable_synthetic
+SYN-018,SYN-018,SYN018,Synthetic Company 18,2026-08-23,2026Q2,2026-05-31,complete,synthetic,Invented mock-call excerpt for dictionary features,not_applicable_synthetic
+SYN-019,SYN-019,SYN019,Synthetic Company 19,2026-08-25,2026Q2,2026-06-30,complete,synthetic,Invented mock-call excerpt for dictionary features,not_applicable_synthetic
+SYN-020,SYN-020,SYN020,Synthetic Company 20,2026-08-27,2026Q2,2026-06-27,complete,synthetic,Invented mock-call excerpt for dictionary features,not_applicable_synthetic

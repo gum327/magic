@@ -95,20 +95,24 @@ that a reporting date automatically corresponds to a calendar Q2 fiscal end.
 
 Seeking Alpha's transcript index is publicly viewable, but its current terms
 limit use to personal, non-commercial purposes and prohibit automated
-retrieval, scraping, and data mining. Do not scrape it. A November 7, 2026
-metadata screen found 15 candidate listing leads; see
-`inputs/transcript_candidate_screen_q2_2026.csv`. They are not 15 verified or
-rights-cleared transcripts. First-party transcript PDFs for
-[JPMorganChase 2Q26](https://www.jpmorganchase.com/content/dam/jpmc/jpmorgan-chase-and-co/investor-relations/documents/quarterly-earnings/2026/2nd-quarter/2Q26-earnings-transcript.pdf)
-and [Meta Q2 2026](https://s21.q4cdn.com/399680738/files/doc_financials/2026/q2/META-Q2-2026-Earnings-Call-Transcript.pdf)
-are verified at their IR/Q4CDN URLs and were opened in a browser, but their
-text was not reviewed or retained and reuse/model rights remain unverified.
+retrieval, scraping, and data mining. Do not scrape it. A metadata screen
+started November 7 and updated November 10, 2026 found 21 candidate-company
+rows; see
+`inputs/transcript_candidate_screen_q2_2026.csv`. These are not 21 verified or
+rights-cleared transcripts. Twelve potential first-party transcript locations
+have been identified within the calendar-Q2 cohort: PDF links for Alphabet,
+AT&T, Bank of America, Citigroup, Coca-Cola, Expedia, Hilton, JPMorganChase,
+Meta, Netflix, and Visa, plus Microsoft's transcript page. Hilton and Expedia
+fiscal quarters ended June 30, 2026, confirmed by their SEC 10-Q headers. HPE's issuer PDF is outside the
+cohort because fiscal Q2 ended April 30, 2026. Transcript text was not
+reviewed or retained and reuse/model rights remain unverified. Apple and
+Intel are event-aligned, with fiscal quarters ended June 27, but their
+official results materials do not provide a verified full transcript.
+AT&T's Q2 event ending June 30 is confirmed. Microsoft IR displays its Q4
+FY2026 transcript; only the initial preview was viewed and no text was saved.
 [Amazon's official event page](https://ir.aboutamazon.com/events/event-details/2026/Q2-2026-Amazoncom-Inc-Earnings-Conference-Call/default.aspx)
-confirms a July 30 call but lists no transcript. One
-official Microsoft Investor Relations page for
-[FY26 Q4](https://www.microsoft.com/en-us/Investor/events/FY-2026/earnings-fy-2026-q4)
-was opened and confirms the July 29, 2026 call; an initial transcript preview
-was visible, but no text was saved or analyzed. Microsoft's
+and [Mastercard's official event page](https://investor.mastercard.com/events-and-presentations/events/event-details/2026/Q2-2026-Mastercard-Inc-Earnings-Conference-Call/default.aspx)
+confirm their Q2 calls but list no transcript. Microsoft's
 [website terms](https://www.microsoft.com/en-us/legal/terms-of-use) generally
 restrict copying and do not establish project-retention or external-model
 permission. Seeking Alpha's public transcript listings are not a lawful
@@ -117,15 +121,32 @@ Quartr's [mobile-app terms](https://a.storyblok.com/f/182663/x/49876bbd8f/terms-
 prohibit data-mining tools and restrict service content to internal use;
 furnishing it to a third party requires prior written approval or another
 express permission in the terms. Whether an external model or this course
-research is permitted has not been confirmed. FactSet provides an
+research is permitted has not been confirmed. Visa's IR event page links the transcript PDF for its July 28 Q3 2026 event;
+the PDF was not opened and rights remain unknown. Citigroup's official
+quarterly earnings page links its July 14 Q2 transcript PDF; only the PDF
+metadata was inspected, not transcript text, and retention/model rights remain
+unresolved. Official Goldman Sachs,
+Morgan Stanley, and IBM event pages confirm Q2 calls but list no transcript.
+Intel search results identify a third-party transcript listing, but neither
+an Intel transcript page nor the destination transcript page was verified.
+FactSet provides an
 [Academic ID request page](https://support.factset.com/academic/), but actual
 institutional transcript access and reuse terms are unknown. Get written
 authorization or verify an institutional license before obtaining, retaining,
-or submitting transcript text to any model. No rights-cleared transcript has
-been collected, and no 10–20-call coverage audit is complete. Track coverage
-and rights checks in `inputs/transcript_access_audit_template.csv`; record
-metadata only until permission is established. Do not commit transcript text
-or other restricted raw data.
+or submitting transcript text to any model. Twelve potential first-party
+transcript locations remain in the cohort (11 PDF links and Microsoft's
+transcript page); HPE's located PDF is excluded because its quarter ended
+April 30. AT&T's fiscal period alignment is confirmed. Apple and Intel are
+calendar-Q2 aligned but their official materials do not provide a verified
+full transcript. Wells Fargo is a newly recorded third-party lead only; its
+transcript destination is not verified. No source is cleared for this study's
+retention or model use. The metadata audit has 21 company candidates, but it does
+not establish usable 10–20-call coverage; leads for GS, MS, IBM, and WFC
+remain unverified.
+Track coverage and rights checks in
+`inputs/transcript_access_audit_template.csv`; record metadata only until
+permission is established. Do not commit transcript text or other restricted
+raw data.
 
 [Quartr's mobile app](https://quartr.com/products/mobile-app) advertises
 transcripts and in-app AI chat at no cost on mobile, while its transcript API
@@ -134,12 +155,99 @@ permission to retain transcript text or send it to a separate model. This is a
 possible source to ask about, but neither a systematic coverage audit nor
 research use is confirmed by the published terms.
 
+## Homework 8 dashboard fixture and shared row contract
+
+For the checkpoint, the dashboard merges three separate 20-row handoff
+fixtures. They use fictional `SYN` identifiers and are generated locally by
+`code/build_synthetic_checkpoint.py`; none contains real issuer, Yahoo, or
+event-study package observations. The transcript handoff uses the existing
+Claude scores on fictional mini-calls only. Classic sentiment values and
+congratulations flags are placeholders, not computed from text. Some blanks
+deliberately test coverage display. No transcript text is stored in the merged
+dashboard data.
+
+The normalized merge key is `event_id`, with `ticker` and `fiscal_period_end`
+checked across all sources. Each source is one row per company-quarter event;
+the outer merge keeps events absent from a component and adds a
+`*_record_present` flag. For real data, agree on the event ID across team
+handoffs before merging. Dashboard fields:
+
+The separate local text-feature pipeline is documented in
+[`docs/transcript_features/README.md`](docs/transcript_features/README.md).
+It calculates Loughran–McDonald dictionary features on the 20 fictional
+speaker-labeled excerpts and writes
+`outputs/synthetic_transcript_text_features.csv`, keyed by the same `event_id`.
+This output is separate from the dashboard fixture: the latter's classic
+sentiment columns remain synthetic placeholders until the team agrees to
+replace them with extracted features. The local pipeline makes no external
+AI/API calls.
+
+| Group | Shared columns and meaning |
+|---|---|
+| Event | `event_id`, `ticker`, `fiscal_period_end`, timezone-aware `earnings_timestamp`; one call per row |
+| Yahoo-finance X | `eps_actual`, `eps_estimate`, `eps_surprise_pct` = `(actual - estimate) / abs(estimate) * 100`, `eps_beat`, `market_cap_usd`, `sector`, and pre-call return/volatility fields |
+| Event-study Y | Normalized checkpoint fields `car_0_1_pct`, `car_0_5_pct`, `car_0_20_pct`; Gus should map the package output and confirm its event-day convention |
+| Transcript X | Placeholder classic fields `transcript_sentiment`, `management_sentiment`, `analyst_question_sentiment`, `congratulations_mentioned`; Claude-scored synthetic-call fields `language_outlook_tone`, `language_guidance_specificity`, and `transcript_score_status` |
+| Provenance | Per-source source/retrieval fields; synthetic input is labeled, retrieval dates are blank, and Claude model, effort, prompt, and run date are recorded |
+
+`transcript_sentiment`, manager/analyst sentiment, and the congratulations
+flag are synthetic UI values, not scores derived from text. The existing
+transcript checkpoint rubric covers outlook tone and guidance specificity
+only. Those fields in the fixture are the Claude Haiku 5.5 Low outputs from
+the 20 fictional development calls under prompt version 1.2; the same set was
+used for prompt tuning, so its 20/20 reference agreement is not an independent
+accuracy estimate. The separate 10-call synthetic validation is documented in
+`TRANSCRIPT_CHECKPOINT.md`. The exact Yahoo fields should be reconciled with
+Gus's myGPT list, and Kami should approve the explanatory/predictive variables
+and whether to use regression, predictive ML, or both. The dashboard does not
+fit models.
+
+For the checkpoint, the comparison can be staged as (1) Yahoo variables only,
+(2) Yahoo plus classic transcript sentiment, and (3) those variables plus
+additional transcript/AI features. Because `CAR[0,1]` includes the event day
+and following day, do not use a same-window announcement return as a
+predictor. This checkpoint fixture does not change the final study design in
+`PROPOSAL.md`, which has a separate ETF-proxy outcome plan.
+
+The generated files are:
+
+- `outputs/synthetic_yahoo_finance_variables.csv`
+- `outputs/synthetic_event_study_results.csv`
+- `outputs/synthetic_transcript_features.csv`
+- `outputs/synthetic_checkpoint_dataset.csv` — outer-merged dashboard input
+
+Regenerate all four with `python code/build_synthetic_checkpoint.py`. For
+other compatible handoffs, the shared merger is
+`code/merge_event_datasets.py`. Choose the synthetic checkpoint in the
+dashboard's Dataset menu to inspect overview, coverage, quality checks, and
+limitations; the existing Yahoo pilot remains available in that menu.
+
 ## Repository guide
 
 - `Magic_TeamProposal.ipynb` — project proposal and revised research design.
 - `PROPOSAL.md` — detailed sample, methods, and validation plan.
 - `STATUS.md` — decisions, completed work, and open dependencies.
 - `code/pead_pipeline.py` — current small Yahoo Finance pilot pipeline.
+- `code/build_synthetic_checkpoint.py` — deterministic synthetic-only
+  three-source dashboard fixture generator.
+- `code/extract_transcript_features.py` — local, dictionary-based transcript
+  feature extractor; no external model calls.
+- `docs/transcript_features/README.md` and
+  `docs/transcript_features/data_dictionary.md` — run instructions, feature
+  definitions, and provenance.
+- `inputs/synthetic_transcript_text_feature_checkpoint.jsonl`,
+  `inputs/synthetic_transcript_text_feature_manifest.csv`, and
+  `outputs/synthetic_transcript_text_features.csv` — synthetic feature-input
+  excerpts and metadata plus local dictionary scores; the output has no
+  transcript text.
+- `code/merge_event_datasets.py` — validated outer merge on shared event IDs.
+- `outputs/synthetic_yahoo_finance_variables.csv`,
+  `outputs/synthetic_event_study_results.csv`, and
+  `outputs/synthetic_transcript_features.csv` — separate 20-row synthetic
+  team handoff fixtures.
+- `outputs/synthetic_checkpoint_dataset.csv` — 20-row synthetic dashboard
+  merge; no real issuers, returns, or transcript text; AI scores use fictional
+  calls only.
 - `outputs/pead_sample.csv` — four-firm pilot output; not the final sample.
 - `inputs/q2_2026_events_template.csv` — required verified event-manifest
   columns; currently unpopulated.
@@ -147,7 +255,23 @@ research use is confirmed by the published terms.
   coverage and rights log; do not store transcript text here.
 - `inputs/transcript_candidate_screen_q2_2026.csv` — preliminary, metadata-only
   screen of transcript listing leads; not verified coverage or permission.
-- `dashboard/pead_app.py` — pilot Streamlit dashboard.
+- `TRANSCRIPT_CHECKPOINT.md` — synthetic-first prompt and scoring rubric for
+  the transcript-feature checkpoint; not the final study protocol.
+- `inputs/synthetic_transcript_checkpoint.jsonl` — 20 invented mini-call
+  transcripts for prompt testing; not company or market data.
+- `inputs/synthetic_transcript_expected_scores.csv` — reference scores for
+  those invented excerpts; do not send this file to a model.
+- `inputs/synthetic_transcript_checkpoint_claude_scores.csv` — Claude scores
+  for the synthetic checkpoint run; not study data.
+- `inputs/synthetic_transcript_validation.jsonl` — separate 10-call synthetic
+  validation set; do not treat as real event data.
+- `inputs/synthetic_transcript_validation_expected.csv` — blinded reference
+  scores; do not send this file to a model.
+- `inputs/synthetic_transcript_validation_claude_scores.csv` — Claude scores
+  from the frozen-prompt validation run; not study data.
+- `dashboard/pead_app.py` — pilot and synthetic checkpoint dashboard.
+- `dashboard/data_contract.py` — shared event schema, coverage summary, and
+  dashboard quality checks.
 - `audits/01_self_audit.md` — current pilot limitations and validation needs.
 - `tests/test_pead_pipeline.py` — pipeline unit tests.
 
@@ -158,6 +282,18 @@ Run commands from the repository root:
 ```bash
 pip install -r requirements.txt
 python code/pead_pipeline.py --as-of 2026-11-06
+python code/build_synthetic_checkpoint.py
+python code/extract_transcript_features.py \
+  --input-jsonl inputs/synthetic_transcript_text_feature_checkpoint.jsonl \
+  --manifest-csv inputs/synthetic_transcript_text_feature_manifest.csv \
+  --dictionary-csv /path/to/Loughran-McDonald_MasterDictionary_1993-2025.csv \
+  --dictionary-retrieved-date 2026-11-13 \
+  --output outputs/synthetic_transcript_text_features.csv
+python code/merge_event_datasets.py \
+  --financial outputs/synthetic_yahoo_finance_variables.csv \
+  --event-study outputs/synthetic_event_study_results.csv \
+  --transcript outputs/synthetic_transcript_features.csv \
+  --output outputs/synthetic_checkpoint_dataset.csv
 python -m unittest discover -s tests
 streamlit run dashboard/pead_app.py
 ```
