@@ -74,8 +74,26 @@ The current extractor output has `event_id`, `ticker`, and
 repository's synthetic merger uses `event_id` as the join key and verifies
 `ticker` and `fiscal_period_end`. Michelle's dashboard contract in PR #6 is
 explicitly a draft: it proposes the composite key, a required `data_status`,
-and `lang_*` feature names. The current extractor CSV does not satisfy that
-dashboard registry directly.
+and `lang_*` feature names. The original extractor CSV does not satisfy that
+dashboard registry directly. The optional CLI adapter writes a separate
+registry-compatible export without changing the original CSV:
+
+```bash
+python code/extract_transcript_features.py \
+  --input-jsonl inputs/synthetic_transcript_text_feature_checkpoint.jsonl \
+  --manifest-csv inputs/synthetic_transcript_text_feature_manifest.csv \
+  --dictionary-csv /path/to/Loughran-McDonald_MasterDictionary_1993-2025.csv \
+  --dictionary-retrieved-date 2026-11-13 \
+  --output outputs/synthetic_transcript_text_features.csv \
+  --dashboard-output outputs/transcript_features.csv \
+  --data-status synthetic
+```
+
+The adapter preserves event and provenance metadata, maps each numeric feature
+`x` to `lang_lm_x`, and adds explicit dataset-level `data_status`. It rejects
+non-synthetic labels when any input row is marked synthetic, and does not copy
+arbitrary columns that could contain transcript text. It does not invent
+`earnings_timestamp`; the financial event source remains authoritative.
 
 Recommended minimum shared contract:
 
@@ -91,9 +109,9 @@ Recommended minimum shared contract:
   an explicit dashboard adapter that maps them to `lang_*`; do not maintain
   two undocumented names for the same measure.
 
-This is a proposal, not a schema change. Until the team approves a contract
-and Michelle's registry is adapted, the synthetic event-ID merge is verified,
-but direct dashboard loading of this extractor's CSV is not.
+This is a proposal, not a team-wide schema change. The adapter is tested
+against the current PR #6 registry requirements; real-data integration still
+requires an agreed contract and the financial event timestamp.
 
 ## Provenance fields
 

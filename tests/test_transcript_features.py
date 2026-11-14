@@ -11,6 +11,7 @@ sys.path.insert(0, str(ROOT / "code"))
 
 from extract_transcript_features import (
     FEATURE_COLUMNS,
+    build_dashboard_feature_export,
     build_feature_dataset,
     extract_transcript_features,
     load_dictionary,
@@ -184,6 +185,38 @@ class TranscriptFeatureTests(unittest.TestCase):
             features["transcript_status"].value_counts().to_dict(),
             {"complete": 20},
         )
+        adapter_input = features.copy()
+        adapter_input.loc[0, "transcript_sentiment"] = None
+        adapter_input["raw_transcript_text"] = "must not be exported"
+        dashboard_features = build_dashboard_feature_export(
+            adapter_input, "synthetic"
+        )
+        self.assertEqual(len(dashboard_features), 20)
+        self.assertTrue(
+            {
+                "event_id",
+                "ticker",
+                "fiscal_period_end",
+                "data_status",
+                "lang_lm_transcript_sentiment",
+            }.issubset(dashboard_features.columns)
+        )
+        self.assertTrue(dashboard_features["data_status"].eq("synthetic").all())
+        self.assertTrue(
+            all(
+                pd.api.types.is_numeric_dtype(dashboard_features[column])
+                for column in dashboard_features
+                if column.startswith("lang_")
+            )
+        )
+        self.assertTrue(
+            pd.isna(dashboard_features.loc[0, "lang_lm_transcript_sentiment"])
+        )
+        self.assertFalse(
+            any("raw_transcript_text" in column for column in dashboard_features)
+        )
+        with self.assertRaisesRegex(ValueError, "require data_status=synthetic"):
+            build_dashboard_feature_export(adapter_input, "cohort")
         financial = pd.read_csv(ROOT / "outputs" / "synthetic_yahoo_finance_variables.csv")
         aligned = features.merge(
             financial[["event_id", "ticker", "fiscal_period_end"]],

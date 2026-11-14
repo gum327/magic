@@ -23,6 +23,7 @@ REQUIRED_MANIFEST_COLUMNS = (
     "transcript_source",
     "transcript_retrieved_at_utc",
 )
+IDENTITY_COLUMNS = ("ticker", "fiscal_period_end")
 REQUIRED_DICTIONARY_COLUMNS = ("Word", "Negative", "Positive", "Uncertainty")
 FEATURE_COLUMNS = (
     "transcript_word_count",
@@ -44,6 +45,16 @@ FEATURE_COLUMNS = (
     "analyst_question_sentiment",
     "analyst_question_count",
     "congratulations_mentioned",
+)
+DASHBOARD_DATA_STATUSES = ("synthetic", "pilot", "cohort")
+DASHBOARD_FEATURE_PREFIX = "lang_lm_"
+DASHBOARD_METADATA_COLUMNS = REQUIRED_MANIFEST_COLUMNS + (
+    "section_status",
+    "dictionary_version",
+    "dictionary_source",
+    "dictionary_retrieved_date",
+    "dictionary_sha256",
+    "transcript_feature_method",
 )
 TOKEN_PATTERN = re.compile(r"[A-Za-z]+")
 SPEAKER_PATTERN = re.compile(
@@ -393,6 +404,51 @@ def build_feature_dataset(
     )
 
 
+def build_dashboard_feature_export(features, data_status):
+    """Map extracted features to Michelle's registry contract without source text."""
+    if data_status not in DASHBOARD_DATA_STATUSES:
+        raise ValueError(
+            "data_status must be one of: {}".format(
+                ", ".join(DASHBOARD_DATA_STATUSES)
+            )
+        )
+    required = set(DASHBOARD_METADATA_COLUMNS + FEATURE_COLUMNS)
+    missing = required.difference(features.columns)
+    if missing:
+        raise ValueError(
+            "Transcript features are missing columns: {}".format(
+                ", ".join(sorted(missing))
+            )
+        )
+    nonnumeric = [
+        column
+        for column in FEATURE_COLUMNS
+        if not pd.api.types.is_numeric_dtype(features[column])
+    ]
+    if nonnumeric:
+        raise ValueError(
+            "Transcript language features must be numeric: {}".format(
+                ", ".join(nonnumeric)
+            )
+        )
+    if features["event_id"].isna().any() or features["event_id"].duplicated().any():
+        raise ValueError("Transcript feature event IDs must be present and unique.")
+    if features[list(IDENTITY_COLUMNS)].isna().any().any():
+        raise ValueError("Transcript feature identity values must be present.")
+    if features.duplicated(list(IDENTITY_COLUMNS)).any():
+        raise ValueError("Transcript features contain duplicate ticker/period rows.")
+    synthetic = features["transcript_input_type"].astype(str).str.lower().eq("synthetic")
+    if synthetic.any() and data_status != "synthetic":
+        raise ValueError("Synthetic transcript features require data_status=synthetic.")
+
+    dashboard = features.loc[:, DASHBOARD_METADATA_COLUMNS].copy()
+    dashboard["data_status"] = data_status
+    language_features = features.loc[:, FEATURE_COLUMNS].rename(
+        columns=lambda column: DASHBOARD_FEATURE_PREFIX + column
+    )
+    return pd.concat([dashboard, language_features], axis=1)
+
+
 def _sha256(file_path):
     digest = hashlib.sha256()
     with open(file_path, "rb") as source:
@@ -420,7 +476,18 @@ def main():
     )
     parser.add_argument("--dictionary-retrieved-date", required=True)
     parser.add_argument("--output", required=True, help="Event-level feature CSV")
+    parser.add_argument(
+        "--dashboard-output",
+        help="Optional export compatible with the dashboard feature registry",
+    )
+    parser.add_argument(
+        "--data-status",
+        choices=DASHBOARD_DATA_STATUSES,
+        help="Required with --dashboard-output; label for the whole export",
+    )
     args = parser.parse_args()
+    if bool(args.dashboard_output) != bool(args.data_status):
+        parser.error("--dashboard-output and --data-status must be provided together")
     features = build_feature_dataset(
         args.input_jsonl,
         args.manifest_csv,
@@ -433,6 +500,20 @@ def main():
     output_path.parent.mkdir(parents=True, exist_ok=True)
     features.to_csv(output_path, index=False)
     print("Wrote {} transcript feature rows to {}".format(len(features), output_path))
+    if args.dashboard_output:
+        dashboard_path = Path(args.dashboard_output)
+        if dashboard_path.resolve() == output_path.resolve():
+            parser.error("--dashboard-output must not overwrite --output")
+        dashboard_features = build_dashboard_feature_export(
+            features, args.data_status
+        )
+        dashboard_path.parent.mkdir(parents=True, exist_ok=True)
+        dashboard_features.to_csv(dashboard_path, index=False)
+        print(
+            "Wrote {} dashboard feature rows to {}".format(
+                len(dashboard_features), dashboard_path
+            )
+        )
 
 
 if __name__ == "__main__":
