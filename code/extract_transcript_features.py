@@ -236,10 +236,14 @@ def extract_transcript_features(record, metadata, dictionary, dictionary_metadat
         }
     else:
         parsed = _parse_transcript(text)
+        if status == "complete" and INCOMPLETE_MARKER.match(text.strip()):
+            status = "incomplete_transcript"
 
     row = {column: metadata[column] for column in REQUIRED_MANIFEST_COLUMNS}
     row["transcript_status"] = status
-    row["section_status"] = parsed["section_status"]
+    row["section_status"] = (
+        parsed["section_status"] if status == "complete" else status
+    )
     row.update(dictionary_metadata)
 
     if status != "complete":

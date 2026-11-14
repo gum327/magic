@@ -17,11 +17,11 @@ fictional mini-call excerpts, not real companies or complete calls.
 | `call_date` | ISO date | Synthetic call date from the existing checkpoint fixture. |
 | `fiscal_quarter` | string | Synthetic fiscal-quarter label (`2026Q2`). |
 | `fiscal_period_end` | ISO date | Synthetic quarter-end date; not a verified company fiscal period. |
-| `transcript_status` | category | `complete`, `incomplete_transcript`, or `missing_transcript`. `complete` means the supplied input is complete for its stated scope; in this fixture it means a complete mini-call excerpt with the required speaker sections, not a full issuer transcript. Non-complete rows have null feature values. |
+| `transcript_status` | category | `complete`, `incomplete_transcript`, or `missing_transcript`. `complete` means the supplied input is complete for its stated scope; in this fixture it means a complete mini-call excerpt with the required speaker sections, not a full issuer transcript. A leading explicit incomplete marker overrides a manifest value of `complete`. Non-complete rows have null feature values. |
 | `transcript_input_type` | category | `synthetic` for all rows in this checkpoint. |
 | `transcript_source` | string | Synthetic input description; future data should record its authorized source. |
 | `transcript_retrieved_at_utc` | string | `not_applicable_synthetic` in the fixture; future data should record the source retrieval timestamp in UTC. |
-| `section_status` | category | `complete` or semicolon-separated parser flags such as missing sections, unlabeled prefix, or unrecognized speaker labels. Missing sections and any unrecognized speaker identity keep speaker-specific features null. |
+| `section_status` | category | `complete`, the non-complete transcript status, or semicolon-separated parser flags such as missing sections, unlabeled prefix, or unrecognized speaker labels. Missing sections and any unrecognized speaker identity keep speaker-specific features null. |
 
 ## Numeric features
 
@@ -30,6 +30,9 @@ section with `N` alphabetic tokens, a positive proportion is
 `positive_word_count / N`; negative and uncertainty proportions use the same
 denominator. `transcript_sentiment` is
 `(positive_word_count - negative_word_count) / N`, bounded by -1 and +1.
+This is a dictionary-based net sentiment density per alphabetic token, not a
+positive-versus-negative ratio over dictionary hits and not the separate
+management-outlook tone score in the AI-scoring fixture.
 Category counts use the Loughran–McDonald 1993–2025 master dictionary
 membership columns. A positive flag means a word belongs to the category;
 zero and negative-year removal markers do not count as membership.
@@ -63,6 +66,34 @@ sarcasm, phrase-level context, or speaker-level attribution beyond the
 normalized labels is modeled. Unknown speaker names are not guessed to be
 management or analysts: overall text sentiment can still be calculated, but
 speaker-specific features are null and `section_status` records the issue.
+
+## Team handoff proposal (not yet approved)
+
+The current extractor output has `event_id`, `ticker`, and
+`fiscal_period_end`, plus documented `transcript_*` feature names. The
+repository's synthetic merger uses `event_id` as the join key and verifies
+`ticker` and `fiscal_period_end`. Michelle's dashboard contract in PR #6 is
+explicitly a draft: it proposes the composite key, a required `data_status`,
+and `lang_*` feature names. The current extractor CSV does not satisfy that
+dashboard registry directly.
+
+Recommended minimum shared contract:
+
+- Keep a stable `event_id` as the primary join key in each component, and
+  retain uppercase `ticker` plus ISO `fiscal_period_end` as cross-source
+  validation fields.
+- Keep the public, timezone-aware `earnings_timestamp` from the financial
+  event source authoritative; do not derive it from transcript `call_date`.
+  The merged event table must carry it.
+- Include `data_status` (`synthetic`, `pilot`, or `cohort`) in each handoff,
+  leaving synthetic rows explicitly labeled.
+- Preserve the extractor's documented `transcript_*` feature names, or add
+  an explicit dashboard adapter that maps them to `lang_*`; do not maintain
+  two undocumented names for the same measure.
+
+This is a proposal, not a schema change. Until the team approves a contract
+and Michelle's registry is adapted, the synthetic event-ID merge is verified,
+but direct dashboard loading of this extractor's CSV is not.
 
 ## Provenance fields
 

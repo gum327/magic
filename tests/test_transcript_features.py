@@ -114,6 +114,21 @@ class TranscriptFeatureTests(unittest.TestCase):
         )
         self.assertTrue(all(incomplete[column] is None for column in FEATURE_COLUMNS))
 
+    def test_incomplete_marker_overrides_complete_manifest_status(self):
+        record = {
+            "transcript": (
+                "[SYNTHETIC TRANSCRIPT IS INCOMPLETE: omitted Q&A] "
+                "CEO: Growth improves. Analyst: Risk may increase? "
+                "CFO: Results were stable."
+            )
+        }
+        row = extract_transcript_features(
+            record, self.metadata, self.dictionary, self.provenance
+        )
+        self.assertEqual(row["transcript_status"], "incomplete_transcript")
+        self.assertEqual(row["section_status"], "incomplete_transcript")
+        self.assertTrue(all(row[column] is None for column in FEATURE_COLUMNS))
+
     def test_unknown_speaker_names_are_not_assigned_to_management_or_analysts(self):
         record = {
             "transcript": (
